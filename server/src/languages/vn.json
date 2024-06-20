@@ -1,0 +1,6 @@
+{
+  "GET_ALL": {
+    "SUCCESS": "Lấy tất cả {value} thành công",
+    "FAILURE": "Lấy tất cả {value} thất bại"
+  }
+}

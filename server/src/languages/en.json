@@ -1,0 +1,6 @@
+{
+  "GET_ALL": {
+    "SUCCESS": "Get all {value} success",
+    "FAILURE": "Failed to get all {value}"
+  }
+}
