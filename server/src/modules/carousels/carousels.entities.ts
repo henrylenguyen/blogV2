@@ -10,9 +10,9 @@ class CarouselEntiy extends BaseEntities {
   name: string
   @Column({ name: 'image_url', type: 'varchar', length: 255, nullable: false, unique: true })
   imageUrl: string
-  @Column({ name: 'order', type: 'int', nullable: false })
-  order: number
-  @Column({ name: 'status', type: 'boolean', nullable: false })
+  @Column({ name: 'description', type: 'varchar', length: 255, nullable: false })
+  description: string
+  @Column({ name: 'status', type: 'boolean', nullable: false, default: true })
   status: boolean
   @Column({ name: 'is_has_video', type: 'boolean', nullable: true })
   isHasVideo?: boolean

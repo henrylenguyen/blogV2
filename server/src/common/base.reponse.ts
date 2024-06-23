@@ -1,3 +1,5 @@
+import { ApiProperty } from '@nestjs/swagger'
+
 /**
  * @class ReponseData dùng để trả về dữ liệu cho client, là class chung cho toàn bộ dự án
  * @param statusCode: number - mã trạng thái của response
@@ -10,16 +12,17 @@ export interface IReponseData<T> {
   message: string
 }
 
-export class ResponseData {
-  data?: object | [] | boolean
+export class ResponseData<T> {
+  @ApiProperty()
+  data?: T | T[]
+  @ApiProperty()
   statusCode?: number
+  @ApiProperty()
   message?: string
 
-  constructor({ data, statusCode, message }: IReponseData<object | [] | boolean>) {
+  constructor({ data, statusCode, message }: IReponseData<T>) {
     this.data = data
     this.statusCode = statusCode
     this.message = message
-
-    return this
   }
 }

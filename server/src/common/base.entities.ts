@@ -1,4 +1,4 @@
-import { BaseEntity, Column } from 'typeorm'
+import { BaseEntity, Column, PrimaryGeneratedColumn } from 'typeorm'
 
 /**
  * BaseEntities là abstract class chứa các trường cơ bản của một bảng trong database bao gồm:
@@ -13,7 +13,7 @@ import { BaseEntity, Column } from 'typeorm'
  * - version: number
  */
 export abstract class BaseEntities extends BaseEntity {
-  @Column({ name: 'id', type: 'varchar', length: 36, nullable: false, primary: true })
+  @PrimaryGeneratedColumn('uuid', { name: 'id' })
   id: string
   @Column({ name: 'created_at', type: 'timestamp', nullable: false, default: () => 'CURRENT_TIMESTAMP' })
   createdAt: Date
@@ -27,7 +27,7 @@ export abstract class BaseEntities extends BaseEntity {
   updatedBy: string
   @Column({ name: 'deleted_by', type: 'varchar', length: 255, nullable: true })
   deletedBy: string
-  @Column({ name: 'version', type: 'tinyint', nullable: false })
+  @Column({ name: 'version', type: 'tinyint', nullable: false, default: 0.1 })
   version: number
   @Column({ name: 'is_archived', type: 'boolean', nullable: false, default: false })
   isArchived: boolean

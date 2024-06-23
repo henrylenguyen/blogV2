@@ -12,4 +12,12 @@ export class CarouselsService {
   async findAll(): Promise<Carousels[]> {
     return await this.carouselsRepository.findAll()
   }
+  async createCarousels(data: Carousels): Promise<Carousels> {
+    const res = await this.carouselsRepository.exists('imageUrl', data.imageUrl)
+    if (res) {
+      return null
+    } else {
+      return await this.carouselsRepository.create(data)
+    }
+  }
 }

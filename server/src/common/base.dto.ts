@@ -1,3 +1,4 @@
+import { ApiProperty } from '@nestjs/swagger'
 import { Expose, plainToClass } from 'class-transformer'
 /**
  * Expose decorator được sử dụng để chỉ định các property mà bạn muốn expose (hiển thị) khi chuyển đổi từ class sang plain object
@@ -8,17 +9,16 @@ export abstract class BaseDTO {
   @Expose()
   createdAt: Date
   @Expose()
+  @ApiProperty()
+  createdBy: string
+  @Expose({ groups: ['update'] })
   updatedAt: Date
-  @Expose()
-  deletedAt?: Date
-  @Expose()
-  createdBy?: string
-  @Expose()
+  @Expose({ groups: ['update'] })
   updatedBy?: string
-  @Expose()
+  @Expose({ groups: ['delete'] })
+  deletedAt?: Date
+  @Expose({ groups: ['delete'] })
   deletedBy?: string
-  @Expose()
-  isDeleted?: boolean
   @Expose()
   isArchived?: boolean
   @Expose()
@@ -31,7 +31,6 @@ export abstract class BaseDTO {
     this.createdBy = null
     this.updatedBy = null
     this.deletedBy = null
-    this.isDeleted = false
     this.isArchived = false
     this.version = null
   }

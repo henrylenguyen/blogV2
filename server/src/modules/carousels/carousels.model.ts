@@ -2,7 +2,7 @@ class Carousels {
   id?: string
   name?: string
   imageUrl?: string
-  order?: number
+  description?: string
   status?: boolean
   isHasVideo?: boolean
   videoUrl?: string
@@ -33,7 +33,6 @@ class Carousels {
     id,
     name,
     imageUrl,
-    order,
     status,
     isHasVideo,
     videoUrl,
@@ -59,12 +58,12 @@ class Carousels {
     isHasLink,
     link,
     coordinateX,
-    coordinateY
+    coordinateY,
+    description
   }) {
     if (id) this.id = id
     if (name) this.name = name
     if (imageUrl) this.imageUrl = imageUrl
-    if (order) this.order = order
     if (status) this.status = status
     if (isHasVideo) this.isHasVideo = isHasVideo
     if (videoUrl) this.videoUrl = videoUrl
@@ -91,6 +90,7 @@ class Carousels {
     if (link) this.link = link
     if (coordinateX) this.coordinateX = coordinateX
     if (coordinateY) this.coordinateY = coordinateY
+    if (description) this.description = description
   }
 }
 export default Carousels

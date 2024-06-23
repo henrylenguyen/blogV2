@@ -394,16 +394,11 @@ export class BaseRepository<T extends BaseEntity, R extends Repository<T>> {
    * });
    * ```
    */
-  async exists(field: keyof T, value: any): Promise<boolean> {
-    // Tìm kiếm đối tượng dựa trên trường và giá trị
-    const result = await this.repository.findOne({ [field]: value })
 
-    // Nếu tìm thấy, trả về true
-    if (result) {
-      return true
-    }
-
-    // Nếu không tìm thấy, trả về false
-    return false
+  async exists(fieldName: keyof T, value: any): Promise<boolean> {
+    const result = await this.repository.findOne({
+      where: { [fieldName]: value } as FindOptionsWhere<T>
+    })
+    return result !== null
   }
 }
