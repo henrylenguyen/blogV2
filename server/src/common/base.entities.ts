@@ -27,7 +27,7 @@ export abstract class BaseEntities extends BaseEntity {
   updatedBy: string
   @Column({ name: 'deleted_by', type: 'varchar', length: 255, nullable: true })
   deletedBy: string
-  @Column({ name: 'version', type: 'tinyint', nullable: false, default: 0.1 })
+  @Column({ name: 'version', type: 'decimal', precision: 3, scale: 1, nullable: false, default: 0.1 })
   version: number
   @Column({ name: 'is_archived', type: 'boolean', nullable: false, default: false })
   isArchived: boolean

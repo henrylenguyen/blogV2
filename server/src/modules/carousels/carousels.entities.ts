@@ -40,7 +40,7 @@ class CarouselEntiy extends BaseEntities {
   textColor?: string // Màu text
   @Column({ name: 'text_font_size', type: 'tinyint', nullable: true })
   textFontSize?: number // Kích thước
-  @Column({ name: 'text_font_weight', type: 'tinyint', nullable: true })
+  @Column({ name: 'text_font_weight', type: 'int', nullable: true })
   textFontWeight?: number // Độ đậm của text
   @Column({ name: 'text_font_style', type: 'varchar', length: 20, nullable: true })
   textFontStyle?: string // Kiểu chữ của text

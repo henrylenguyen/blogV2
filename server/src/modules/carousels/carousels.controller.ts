@@ -1,11 +1,9 @@
 import { Body, Controller, Get, Post, Res, UsePipes } from '@nestjs/common'
 import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger'
-import { plainToClass } from 'class-transformer'
 import { Response } from 'express'
 import httpStatus from 'src/common/base.enum'
 import { IReponseData, ResponseData } from 'src/common/base.reponse'
 import CarouselDTO from 'src/modules/carousels/carousels.dto'
-import Carousels from 'src/modules/carousels/carousels.model'
 import { CarouselsService } from 'src/modules/carousels/carousels.service'
 import carouselValidationSchema from 'src/modules/carousels/carousels.validate'
 import { JoiValidationPipe } from 'validation.pipe'
@@ -29,8 +27,8 @@ class CarouselsController {
   async getListCarousels(@Res() res: Response): Promise<void> {
     try {
       const data = await this.carouselsService.findAll()
-      const responseData: IReponseData<Carousels[]> = {
-        data,
+      const responseData: IReponseData<CarouselDTO> = {
+        data: CarouselDTO.plainToClass(data),
         statusCode: 200,
         message: `GET_ALL_CAROUSELS_SUCCESS`
       }
@@ -59,7 +57,18 @@ class CarouselsController {
   @UsePipes(new JoiValidationPipe(carouselValidationSchema))
   async createCarousels(@Body() carouselDTO: CarouselDTO, @Res() res: Response): Promise<void> {
     try {
-      const data = await this.carouselsService.createCarousels(carouselDTO)
+      const { videoUrl, link, text, animationType } = carouselDTO
+      const isHasVideo = !!videoUrl
+      const isHasLink = !!link
+      const isHasText = !!text
+      const isHasAnimation = !!animationType
+      const data = await this.carouselsService.createCarousels({
+        ...carouselDTO,
+        isHasLink,
+        isHasVideo,
+        isHasText,
+        isHasAnimation
+      })
       if (!data) {
         const responseData: IReponseData<null> = {
           data: null,
@@ -69,8 +78,8 @@ class CarouselsController {
         res.status(400).json(new ResponseData(responseData))
         return
       } else {
-        const responseData: IReponseData<Carousels> = {
-          data: plainToClass(CarouselDTO, data, { excludeExtraneousValues: true }),
+        const responseData: IReponseData<CarouselDTO> = {
+          data: CarouselDTO.plainToClass(data),
           statusCode: 201,
           message: 'CREATE_CAROUSEL_SUCCESS'
         }

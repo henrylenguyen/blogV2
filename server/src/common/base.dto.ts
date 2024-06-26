@@ -9,16 +9,8 @@ export abstract class BaseDTO {
   @Expose()
   createdAt: Date
   @Expose()
-  @ApiProperty()
+  @ApiProperty({ example: 'admin' })
   createdBy: string
-  @Expose({ groups: ['update'] })
-  updatedAt: Date
-  @Expose({ groups: ['update'] })
-  updatedBy?: string
-  @Expose({ groups: ['delete'] })
-  deletedAt?: Date
-  @Expose({ groups: ['delete'] })
-  deletedBy?: string
   @Expose()
   isArchived?: boolean
   @Expose()
@@ -26,15 +18,34 @@ export abstract class BaseDTO {
   constructor() {
     this.id = null
     this.createdAt = new Date()
-    this.updatedAt = new Date()
-    this.deletedAt = new Date()
     this.createdBy = null
-    this.updatedBy = null
-    this.deletedBy = null
     this.isArchived = false
     this.version = null
   }
   static plainToClass<T>(this: new () => T, obj: Record<string, any>): T {
     return plainToClass(this, obj, { excludeExtraneousValues: true })
+  }
+}
+
+export abstract class BaseUpdateDTO extends BaseDTO {
+  @Expose()
+  updatedAt: Date
+  @Expose()
+  updatedBy: string
+  constructor() {
+    super()
+    this.updatedAt = new Date()
+    this.updatedBy = null
+  }
+}
+export abstract class BaseDeleteDTO extends BaseDTO {
+  @Expose()
+  deletedAt: Date
+  @Expose()
+  deletedBy: string
+  constructor() {
+    super()
+    this.deletedAt = new Date()
+    this.deletedBy = null
   }
 }
