@@ -70,5 +70,12 @@ class CarouselDTO extends BaseDTO {
   @Expose()
   @ApiProperty({ required: false, example: 'https://www.google.com' })
   link?: string
+  @Expose()
+  @ApiProperty({ required: false, example: new Date() })
+  startAt: Date
+  @Expose()
+  @ApiProperty({ required: false, example: new Date() })
+  endAt: Date
+  isActived: boolean
 }
 export default CarouselDTO

@@ -1,10 +1,13 @@
 import { Module } from '@nestjs/common'
 import { ConfigModule } from '@nestjs/config'
+import { APP_FILTER } from '@nestjs/core'
 import { TypeOrmModule } from '@nestjs/typeorm'
+import { AllExceptionsFilter } from 'src/common/base-log.decorator'
 import CarouselEntiy from 'src/modules/carousels/carousels.entities'
 import { CarouselsModule } from 'src/modules/carousels/carousels.module'
-import { AppController } from './app.controller'
-import { AppService } from './app.service'
+import { SharepointModule } from 'src/modules/sharepoint/sharepoint.module'
+import { TelegramModule } from 'src/modules/telegram/telegram.module'
+import { UploadModule } from 'src/modules/upload/upload.module'
 
 @Module({
   imports: [
@@ -22,9 +25,17 @@ import { AppService } from './app.service'
       entities: [CarouselEntiy],
       synchronize: true
     }),
-    CarouselsModule
+    CarouselsModule,
+    UploadModule,
+    TelegramModule,
+    SharepointModule
   ],
-  controllers: [AppController],
-  providers: [AppService]
+  controllers: [],
+  providers: [
+    {
+      provide: APP_FILTER, // Đăng ký AllExceptionsFilter để xử lý tất cả các ngoại lệ trong ứng dụng
+      useClass: AllExceptionsFilter // Sử dụng AllExceptionsFilter để xử lý tất cả các ngoại lệ trong ứng dụng
+    }
+  ]
 })
 export class AppModule {}

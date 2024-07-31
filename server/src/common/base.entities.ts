@@ -1,4 +1,4 @@
-import { BaseEntity, Column, PrimaryGeneratedColumn } from 'typeorm'
+import { BaseEntity, Column, DeleteDateColumn, PrimaryGeneratedColumn } from 'typeorm'
 
 /**
  * BaseEntities là abstract class chứa các trường cơ bản của một bảng trong database bao gồm:
@@ -19,7 +19,7 @@ export abstract class BaseEntities extends BaseEntity {
   createdAt: Date
   @Column({ name: 'updated_at', type: 'timestamp', nullable: true, onUpdate: 'CURRENT_TIMESTAMP' })
   updatedAt: Date
-  @Column({ name: 'deleted_at', type: 'timestamp', nullable: true })
+  @DeleteDateColumn({ name: 'deleted_at', type: 'timestamp', nullable: true })
   deletedAt: Date
   @Column({ name: 'created_by', type: 'varchar', length: 255, nullable: false })
   createdBy: string

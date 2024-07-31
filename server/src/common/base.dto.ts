@@ -49,3 +49,14 @@ export abstract class BaseDeleteDTO extends BaseDTO {
     this.deletedBy = null
   }
 }
+
+export abstract class BasePaginationDTO {
+  @ApiProperty({ example: 1 })
+  page: number
+  @ApiProperty({ example: 10 })
+  limit: number
+  constructor() {
+    this.page = 1
+    this.limit = 10
+  }
+}

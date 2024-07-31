@@ -40,13 +40,15 @@ export interface BaseInterfaceRepository<T> {
   findById(id: number | string): Promise<T | undefined>
   find(condition: FindOptionsWhere<BaseEntity>): Promise<T[]>
   findAndCount(condition: FindOptionsWhere<BaseEntity>): Promise<[T[], number]>
-  findByIdAndCheckDeleted(id: number | string): Promise<boolean>
   softDelete(id: number | string): Promise<boolean>
   recoverDelete(id: number | string): Promise<boolean>
   delete(id: number | string): Promise<boolean>
   create(data: T): Promise<T>
   BulkCreate(data: T[]): Promise<T[]>
-  paginate(page: number, limit: number): Promise<T[]>
+  paginate(
+    page: number,
+    limit: number
+  ): Promise<{ totalData: number; totalPage: number; pageIndex: number; dataIndex: number; data: T[] }>
   update(id: number | string, data: Partial<T>): Promise<T | undefined>
   exists(field: keyof T, value: any): Promise<boolean>
 }

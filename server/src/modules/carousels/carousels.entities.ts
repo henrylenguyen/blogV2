@@ -14,21 +14,14 @@ class CarouselEntiy extends BaseEntities {
   description: string
   @Column({ name: 'status', type: 'boolean', nullable: false, default: true })
   status: boolean
-  @Column({ name: 'is_has_video', type: 'boolean', nullable: true })
-  isHasVideo?: boolean
   @Column({ name: 'video_url', type: 'varchar', length: 255, nullable: true, unique: true })
   videoUrl?: string
-  @Column({ name: 'is_has_animation', type: 'boolean', nullable: true })
-  isHasAnimation?: boolean // Có hiệu ứng không
   @Column({ name: 'animation_type', type: 'varchar', length: 50, nullable: true })
   animationType?: string // Loại hiệu ứng
   @Column({ name: 'animation_duration', type: 'int', nullable: true })
   animationDuration?: number // Thời gian hiệu ứng
   @Column({ name: 'animation_delay', type: 'int', nullable: true })
   animationDelay?: number // Thời gian chờ hiệu ứng
-  @Column({ name: 'is_has_text', type: 'boolean', nullable: true })
-  isHasText?: boolean // Có text không
-  @Column({ name: 'text', type: 'text', nullable: true })
   text?: string // Nội dung text
   @Column({ name: 'text_position', type: 'varchar', length: 50, nullable: true })
   textPosition?: string // Vị trí hiển thị text
@@ -46,10 +39,18 @@ class CarouselEntiy extends BaseEntities {
   textFontStyle?: string // Kiểu chữ của text
   @Column({ name: 'text_font_family', type: 'varchar', length: 50, nullable: true })
   textFontFamily?: string // Font chữ của text
-  @Column({ name: 'is_has_link', type: 'boolean', nullable: true })
-  isHasLink?: boolean // Có link không
+
   @Column({ name: 'link', type: 'varchar', length: 255, nullable: true, unique: true })
   link?: string // Đường dẫn link
+
+  @Column({ name: 'start_at', type: 'timestamp', nullable: false, default: () => 'CURRENT_TIMESTAMP' })
+  startAt: Date
+
+  @Column({ name: 'end_at', type: 'timestamp', nullable: true })
+  endAt: Date
+
+  @Column({ name: 'is_actived', type: 'boolean', nullable: false, default: true })
+  isActived: boolean
 }
 
 export default CarouselEntiy

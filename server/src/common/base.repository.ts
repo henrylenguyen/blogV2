@@ -1,5 +1,14 @@
 import { InjectRepository } from '@nestjs/typeorm'
-import { BaseEntity, DeepPartial, FindOptionsWhere, ObjectLiteral, Repository } from 'typeorm'
+import {
+  BaseEntity,
+  DeepPartial,
+  DeleteResult,
+  FindOptionsWhere,
+  IsNull,
+  Not,
+  ObjectLiteral,
+  Repository
+} from 'typeorm'
 
 export class BaseRepository<T extends BaseEntity, R extends Repository<T>> {
   constructor(
@@ -135,58 +144,13 @@ export class BaseRepository<T extends BaseEntity, R extends Repository<T>> {
     })
   }
   /**
-   * Phương thức tìm kiếm dựa vào id và kiểm tra thuộc tính deleteAt.
-   *
-   * @param id - ID của đối tượng cần tìm kiếm.
-   * @returns Một Promise chứa đối tượng tìm thấy hoặc null nếu không tìm thấy hoặc đã bị xóa (deleteAt khác null).
-   * @example
-   * ```typescript
-   * // Giả sử chúng ta có một lớp UserEntity kế thừa từ BaseEntity
-   * class UserEntity extends BaseEntity {
-   *  name: string;
-   *  email: string;
-   * // các trường khác...
-   * }
-   * // Tạo một thể hiện của lớp UserEntity
-   * const userRepository = new UserEntity();
-   * // Sử dụng hàm findByIdAndCheckDeleted với id của người dùng
-   * userRepository.findByIdAndCheckDeleted(1)
-   *  .then(user => {
-   *  // user là một đối tượng chứa thông tin của người dùng có id là 1
-   *  console.log(user);
-   * })
-   * .catch(error => {
-   *  // Xử lý lỗi nếu có
-   *  console.error(error);
-   * });
-   */
-  async findByIdAndCheckDeleted(id: number | string): Promise<boolean> {
-    try {
-      // Tìm kiếm dựa vào id
-      const result = await this.findById(id)
-
-      // Nếu tìm thấy và deleteAt khác null, trả về true
-      if (Array.isArray(result) && result.length > 0 && result[0].deleteAt === null) {
-        return true
-      }
-
-      // Nếu không tìm thấy hoặc deleteAt khác null, trả về false
-      return false
-    } catch (error) {
-      // Xử lý lỗi nếu có
-      console.error(error)
-      throw error
-    }
-  }
-
-  /**
    * Soft delete là dạng xóa mềm, dữ liệu vẫn còn trong database nhưng không hiển thị ra ngoài, nó chỉ cập nhật lại trường deletedAt
    * @param id là id của dữ liệu cần xóa
    *
    */
   async softDelete(id: number | string): Promise<boolean> {
-    await this.repository.softDelete(id)
-    return this.findByIdAndCheckDeleted(id)
+    const result: DeleteResult = await this.repository.softDelete(id)
+    return result.affected > 0
   }
 
   /**
@@ -220,12 +184,7 @@ export class BaseRepository<T extends BaseEntity, R extends Repository<T>> {
     // Khôi phục dữ liệu đã bị xóa mềm
     const result = await this.repository.restore(id)
     // Kiểm tra xem việc khôi phục có thành công hay không
-    if (result.affected === 1) {
-      return true
-    }
-
-    // Nếu không thành công, trả về false
-    return false
+    return result.affected === 1
   }
 
   /**
@@ -292,11 +251,10 @@ export class BaseRepository<T extends BaseEntity, R extends Repository<T>> {
     return this.repository.save(data)
   }
   /**
-   * Phương thức lấy dữ liệu theo phân trang.
    *
-   * @param page - Số trang cần lấy dữ liệu.
-   * @param limit - Số lượng dữ liệu muốn lấy trên mỗi trang.
-   * @returns Một Promise chứa một mảng của các đối tượng tìm thấy.
+   * @param page là số trang cần phân trang
+   * @param limit là số lượng phần tử trên mỗi trang
+   * @returns trả về một object chứa thông tin phân trang
    * @example
    * ```typescript
    * // Giả sử chúng ta có một lớp UserEntity kế thừa từ BaseEntity
@@ -307,29 +265,50 @@ export class BaseRepository<T extends BaseEntity, R extends Repository<T>> {
    * }
    * // Tạo một thể hiện của lớp UserEntity
    * const userRepository = new UserEntity();
-   * // Sử dụng hàm paginate với số trang và giới hạn
+   * // Sử dụng hàm paginate với số trang là 1 và số lượng phần tử trên mỗi trang là 10
    * userRepository.paginate(1, 10)
-   * .then(users => {
-   * // users là một mảng chứa 10 người dùng đầu tiên
-   * console.log(users);
+   * .then(result => {
+   * // result là một object chứa thông tin phân trang
+   * console.log(result);
    * })
    * .catch(error => {
    * // Xử lý lỗi nếu có
    * console.error(error);
    * });
    */
-  async paginate(page: number, limit: number): Promise<T[]> {
+  async paginate(
+    page: number,
+    limit: number
+  ): Promise<{ totalData: number; totalPage: number; pageIndex: number; dataIndex: number; data: T[] }> {
     // Tính toán offset dựa trên số trang và giới hạn
     const offset = (page - 1) * limit
 
+    // Lấy tổng số lượng phần tử có trong bảng
+    const totalData = await this.repository.count()
+
     // Lấy dữ liệu từ cơ sở dữ liệu với giới hạn và offset
-    const result = await this.repository.find({
+    const data = await this.repository.find({
       skip: offset,
       take: limit
     })
 
+    // Tính tổng số trang
+    const totalPage = Math.ceil(totalData / limit)
+
+    // Tính số lượng phần tử hiện tại trên trang
+    const dataIndex = data.length
+
+    // Điều chỉnh pageIndex để không vượt quá totalPage
+    const pageIndex = page
+
     // Trả về kết quả
-    return result
+    return {
+      totalData,
+      totalPage,
+      pageIndex: Number(pageIndex),
+      dataIndex,
+      data
+    }
   }
 
   /**
@@ -400,5 +379,25 @@ export class BaseRepository<T extends BaseEntity, R extends Repository<T>> {
       where: { [fieldName]: value } as FindOptionsWhere<T>
     })
     return result !== null
+  }
+
+  async findOneWithSoftDeleted(id: number | string): Promise<T | null> {
+    return await this.repository.findOne({
+      where: { id } as unknown as FindOptionsWhere<T>,
+      withDeleted: true
+    })
+  }
+
+  async findAllWithSoftDeleted(): Promise<T[]> {
+    return await this.repository.find({
+      withDeleted: true
+    })
+  }
+
+  async findAllSoftDeleted(): Promise<T[]> {
+    return await this.repository.find({
+      where: { deleted_at: Not(IsNull()) } as unknown as FindOptionsWhere<T>,
+      withDeleted: true
+    })
   }
 }
