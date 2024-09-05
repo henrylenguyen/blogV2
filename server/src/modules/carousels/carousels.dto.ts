@@ -6,20 +6,13 @@ class CarouselDTO extends BaseDTO {
   constructor() {
     super()
   }
-  @Expose()
-  @ApiProperty({ example: 'name' })
-  name: string
-  @Expose()
-  @ApiProperty({ example: 'description' })
-  description: string
+
   @Expose()
   @ApiProperty({
     example:
       'https://images.unsplash.com/photo-1718134292837-ce1963ed20ab?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxlZGl0b3JpYWwtZmVlZHw3fHx8ZW58MHx8fHx8'
   })
   imageUrl: string
-  @Expose()
-  status: boolean
   @Expose()
   isHasVideo?: boolean
   @Expose()
@@ -76,6 +69,7 @@ class CarouselDTO extends BaseDTO {
   @Expose()
   @ApiProperty({ required: false, example: new Date() })
   endAt: Date
+  @Expose()
   isActived: boolean
 }
 export default CarouselDTO

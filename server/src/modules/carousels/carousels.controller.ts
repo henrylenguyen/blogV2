@@ -3,7 +3,7 @@ import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger'
 import { Response } from 'express'
 import { BasePaginationDTO } from 'src/common/base.dto'
 import httpStatus from 'src/common/base.enum'
-import { IReponseData, IReponsePaginationData, ResponseData, ResponsePaginationData } from 'src/common/base.reponse'
+import { IReponsePaginationData, IResponseData, ResponseData, ResponsePaginationData } from 'src/common/base.reponse'
 import { validPagination } from 'src/common/validate'
 import CarouselDTO from 'src/modules/carousels/carousels.dto'
 import { CarouselsService } from 'src/modules/carousels/carousels.service'
@@ -30,14 +30,14 @@ class CarouselsController {
   async getListCarousels(@Res() res: Response): Promise<void> {
     try {
       const data = await this.carouselsService.findAll()
-      const responseData: IReponseData<CarouselDTO> = {
+      const responseData: IResponseData<CarouselDTO> = {
         data: CarouselDTO.plainToClass(data),
         statusCode: httpStatus.SUCCESS,
         message: `GET_ALL_CAROUSELS_SUCCESS`
       }
       res.status(httpStatus.SUCCESS).json(new ResponseData(responseData))
     } catch (error) {
-      const responseData: IReponseData<null> = {
+      const responseData: IResponseData<null> = {
         data: null,
         statusCode: httpStatus.INTERNAL_SERVER_ERROR,
         message: 'GET_ALL_CAROUSELS_FAIL'
@@ -62,7 +62,7 @@ class CarouselsController {
     try {
       const data = await this.carouselsService.createCarousels(carouselDTO)
       if (data === false) {
-        const responseData: IReponseData<null> = {
+        const responseData: IResponseData<null> = {
           data: null,
           statusCode: httpStatus.BAD_REQUEST,
           message: 'IMAGE_EXIST'
@@ -70,7 +70,7 @@ class CarouselsController {
         res.status(httpStatus.BAD_REQUEST).json(new ResponseData(responseData))
         return
       } else {
-        const responseData: IReponseData<CarouselDTO> = {
+        const responseData: IResponseData<CarouselDTO> = {
           data: CarouselDTO.plainToClass(data as CarouselDTO),
           statusCode: httpStatus.CREATED,
           message: 'CREATE_CAROUSEL_SUCCESS'
@@ -79,7 +79,7 @@ class CarouselsController {
       }
     } catch (error) {
       console.log('error:', error)
-      const responseData: IReponseData<null> = {
+      const responseData: IResponseData<null> = {
         data: null,
         statusCode: httpStatus.INTERNAL_SERVER_ERROR,
         message: 'CREATE_CAROUSEL_FAIL'
@@ -116,7 +116,7 @@ class CarouselsController {
       const data = await this.carouselsService.updateCarousels(id, carouselDTO)
       console.log('data:', data)
       if (data === false) {
-        const responseData: IReponseData<null> = {
+        const responseData: IResponseData<null> = {
           data: null,
           statusCode: httpStatus.BAD_REQUEST,
           message: 'IMAGE_EXIST'
@@ -124,14 +124,14 @@ class CarouselsController {
         res.status(httpStatus.BAD_REQUEST).json(new ResponseData(responseData))
         return
       } else if (data === null) {
-        const responseData: IReponseData<null> = {
+        const responseData: IResponseData<null> = {
           data: null,
           statusCode: httpStatus.NOT_FOUND,
           message: 'ID_NOT_FOUND'
         }
         res.status(404).json(new ResponseData(responseData))
       } else {
-        const responseData: IReponseData<CarouselDTO> = {
+        const responseData: IResponseData<CarouselDTO> = {
           data: CarouselDTO.plainToClass(data as CarouselDTO),
           statusCode: httpStatus.SUCCESS,
           message: 'UPDATE_CAROUSEL_SUCCESS'
@@ -139,7 +139,7 @@ class CarouselsController {
         res.status(httpStatus.SUCCESS).json(new ResponseData(responseData))
       }
     } catch (error) {
-      const responseData: IReponseData<null> = {
+      const responseData: IResponseData<null> = {
         data: null,
         statusCode: httpStatus.INTERNAL_SERVER_ERROR,
         message: 'UPDATE_CAROUSEL_FAIL'
@@ -167,14 +167,14 @@ class CarouselsController {
     try {
       const data = await this.carouselsService.softDeleteCarousels(id)
       if (data === false) {
-        const responseData: IReponseData<boolean> = {
+        const responseData: IResponseData<boolean> = {
           data: false,
           statusCode: httpStatus.NOT_FOUND,
           message: 'ID_NOT_FOUND'
         }
         res.status(404).json(new ResponseData(responseData))
       } else {
-        const responseData: IReponseData<boolean> = {
+        const responseData: IResponseData<boolean> = {
           data: true,
           statusCode: httpStatus.SUCCESS,
           message: 'DELETE_CAROUSEL_SUCCESS'
@@ -183,7 +183,7 @@ class CarouselsController {
       }
     } catch (error) {
       console.log('error:', error)
-      const responseData: IReponseData<null> = {
+      const responseData: IResponseData<null> = {
         data: null,
         statusCode: httpStatus.INTERNAL_SERVER_ERROR,
         message: 'DELETE_CAROUSEL_FAIL'
@@ -211,14 +211,14 @@ class CarouselsController {
     try {
       const data = await this.carouselsService.recoverDeleteCarousels(id)
       if (data === false) {
-        const responseData: IReponseData<boolean> = {
+        const responseData: IResponseData<boolean> = {
           data: false,
           statusCode: httpStatus.NOT_FOUND,
           message: 'ID_NOT_FOUND'
         }
         res.status(404).json(new ResponseData(responseData))
       } else {
-        const responseData: IReponseData<boolean> = {
+        const responseData: IResponseData<boolean> = {
           data: true,
           statusCode: httpStatus.SUCCESS,
           message: 'RECOVER_CAROUSEL_SUCCESS'
@@ -227,7 +227,7 @@ class CarouselsController {
       }
     } catch (error) {
       console.log('error:', error)
-      const responseData: IReponseData<null> = {
+      const responseData: IResponseData<null> = {
         data: null,
         statusCode: httpStatus.INTERNAL_SERVER_ERROR,
         message: 'RECOVER_CAROUSEL_FAIL'
@@ -255,14 +255,14 @@ class CarouselsController {
     try {
       const data = await this.carouselsService.deleteCarousels(id)
       if (data === false) {
-        const responseData: IReponseData<boolean> = {
+        const responseData: IResponseData<boolean> = {
           data: false,
           statusCode: httpStatus.NOT_FOUND,
           message: 'ID_NOT_FOUND'
         }
         res.status(404).json(new ResponseData(responseData))
       } else {
-        const responseData: IReponseData<boolean> = {
+        const responseData: IResponseData<boolean> = {
           data: true,
           statusCode: httpStatus.SUCCESS,
           message: 'DELETE_CAROUSEL_SUCCESS'
@@ -271,7 +271,7 @@ class CarouselsController {
       }
     } catch (error) {
       console.log('error:', error)
-      const responseData: IReponseData<null> = {
+      const responseData: IResponseData<null> = {
         data: null,
         statusCode: httpStatus.INTERNAL_SERVER_ERROR,
         message: 'DELETE_CAROUSEL_FAIL'

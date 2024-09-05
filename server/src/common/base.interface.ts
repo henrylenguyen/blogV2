@@ -43,6 +43,7 @@ export interface BaseInterfaceRepository<T> {
   softDelete(id: number | string): Promise<boolean>
   recoverDelete(id: number | string): Promise<boolean>
   delete(id: number | string): Promise<boolean>
+  deleteByCondition(field: keyof T, value: any): Promise<boolean>
   create(data: T): Promise<T>
   BulkCreate(data: T[]): Promise<T[]>
   paginate(

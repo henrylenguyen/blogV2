@@ -12,6 +12,7 @@ import { UploadService } from 'src/modules/upload/upload.service'
     TelegramModule
   ],
   controllers: [UploadController],
-  providers: [UploadService]
+  providers: [UploadService],
+  exports: [UploadService]
 })
 export class UploadModule {}

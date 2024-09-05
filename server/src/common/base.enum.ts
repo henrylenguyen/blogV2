@@ -6,10 +6,16 @@ enum httpStatus {
   UNAUTHORIZED = 401,
   FORBIDDEN = 403,
   NOT_FOUND = 404,
+  ALREADY_EXIST = 409,
+  UNPROCESSABLE_ENTITY = 422,
   MANY_REQUEST = 429,
   INTERNAL_SERVER_ERROR = 500,
   SERVICE_UNAVAILABLE = 503,
   GATEWAY_TIMEOUT = 504
 }
-
+export enum status {
+  ACTIVE = 1,
+  INACTIVE = 0,
+  Locked = 2
+}
 export default httpStatus

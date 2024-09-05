@@ -220,6 +220,40 @@ export class BaseRepository<T extends BaseEntity, R extends Repository<T>> {
 
   /**
    *
+   * @param condition là điều kiện xóa
+   * @returns trả về true nếu xóa thành công, ngược lại trả về false
+   * @example
+   * ```typescript
+   * // Giả sử chúng ta có một lớp UserEntity kế thừa từ BaseEntity
+   * class UserEntity extends BaseEntity {
+   *  name: string;
+   *  email: string;
+   *  // các trường khác...
+   * }
+   * // Tạo một thể hiện của lớp UserEntity
+   * const userRepository = new UserEntity();
+   * // Sử dụng hàm deleteByCondition với điều kiện là tên người dùng
+   * userRepository.deleteByCondition({ name: 'John Doe' })
+   *  .then(isDeleted => {
+   *  // isDeleted là true nếu xóa thành công, ngược lại là false
+   *  console.log(isDeleted);
+   * })
+   * .catch(error => {
+   *  // Xử lý lỗi nếu có
+   *  console.error(error);
+   * });
+   * ```
+   */
+
+  async deleteByCondition(field: keyof T, value: any): Promise<boolean> {
+    const result = this.exists(field, value)
+    if (result) {
+      await this.repository.delete({ [field]: value } as FindOptionsWhere<T>)
+      return true
+    }
+  }
+  /**
+   *
    * @param data là dữ liệu cần tạo
    * @returns trả về dữ liệu sau khi tạo
    * @example

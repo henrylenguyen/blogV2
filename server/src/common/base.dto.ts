@@ -7,19 +7,24 @@ export abstract class BaseDTO {
   @Expose()
   id: string
   @Expose()
+  @ApiProperty({ example: 'name' })
+  name: string
+  @Expose()
+  @ApiProperty({ example: 'description' })
+  description: string
+  @Expose()
+  status: number
+  @Expose()
   createdAt: Date
   @Expose()
   @ApiProperty({ example: 'admin' })
   createdBy: string
-  @Expose()
-  isArchived?: boolean
   @Expose()
   version?: number
   constructor() {
     this.id = null
     this.createdAt = new Date()
     this.createdBy = null
-    this.isArchived = false
     this.version = null
   }
   static plainToClass<T>(this: new () => T, obj: Record<string, any>): T {

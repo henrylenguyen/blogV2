@@ -1,7 +1,7 @@
 import { ArgumentsHost, Catch, ExceptionFilter, Logger, UseFilters } from '@nestjs/common'
 import { ConfigService } from '@nestjs/config'
 import httpStatus from 'src/common/base.enum'
-import { IReponseData, ResponseData } from 'src/common/base.reponse'
+import { IResponseData, ResponseData } from 'src/common/base.reponse'
 import { TelegramService } from 'src/modules/telegram/telegram.service'
 // eslint-disable-next-line @typescript-eslint/no-var-requires
 
@@ -29,10 +29,10 @@ export class AllExceptionsFilter implements ExceptionFilter {
       path: request.url,
       method: request.method,
       message: exception.message || exception.name,
-      error: exception
+      error: exception.response || exception.message || exception.name
     }
 
-    const reponse: IReponseData<null> = {
+    const reponse: IResponseData<null> = {
       data: null,
       statusCode: httpStatus.INTERNAL_SERVER_ERROR,
       message: exception.message || exception.name
@@ -45,6 +45,9 @@ export class AllExceptionsFilter implements ExceptionFilter {
   }
 
   private async sendErrorToTelegram(errorResponse: any) {
+    const errorContent =
+      typeof errorResponse.error === 'object' ? JSON.stringify(errorResponse.error, null, 2) : errorResponse.error
+
     const message = `
     *Error Occurred:*
     \n*Status Code:* ${errorResponse.statusCode}
@@ -54,9 +57,9 @@ export class AllExceptionsFilter implements ExceptionFilter {
     \n*Timestamp:* ${errorResponse.timestamp}
     \n*Error:*
     \n\`\`\`json
-    ${JSON.stringify(errorResponse.error, null, 2)}
+    ${errorContent}
     \`\`\`
-  `
+    `
 
     try {
       await this.telegramService.sendMessage(this.chatId, message, { parse_mode: 'Markdown' })

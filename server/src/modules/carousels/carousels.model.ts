@@ -1,17 +1,8 @@
-class Carousels {
-  id?: string
-  name?: string
+import BaseModels from 'src/common/base.model'
+
+class Carousels extends BaseModels {
   imageUrl?: string
-  description?: string
-  status?: boolean
   videoUrl?: string
-  createdAt?: Date
-  updatedAt?: Date
-  deletedAt?: Date
-  createdBy?: string
-  updatedBy?: string
-  deletedBy?: string
-  version?: number
   animationType?: string // Loại hiệu ứng
   animationDuration?: number // Thời gian hiệu ứng
   animationDelay?: number // Thời gian chờ hiệu ứng
@@ -59,18 +50,21 @@ class Carousels {
     endAt,
     isActived
   }) {
-    if (id) this.id = id
-    if (name) this.name = name
+    super({
+      id,
+      name,
+      status,
+      createdAt,
+      updatedAt,
+      deletedAt,
+      createdBy,
+      updatedBy,
+      deletedBy,
+      version,
+      description
+    })
     if (imageUrl) this.imageUrl = imageUrl
-    if (status) this.status = status
     if (videoUrl) this.videoUrl = videoUrl
-    if (createdAt) this.createdAt = createdAt
-    if (updatedAt) this.updatedAt = updatedAt
-    if (deletedAt) this.deletedAt = deletedAt
-    if (createdBy) this.createdBy = createdBy
-    if (updatedBy) this.updatedBy = updatedBy
-    if (deletedBy) this.deletedBy = deletedBy
-    if (version) this.version = version
     if (animationType) this.animationType = animationType
     if (animationDuration) this.animationDuration = animationDuration
     if (animationDelay) this.animationDelay = animationDelay
@@ -84,7 +78,6 @@ class Carousels {
     if (link) this.link = link
     if (coordinateX) this.coordinateX = coordinateX
     if (coordinateY) this.coordinateY = coordinateY
-    if (description) this.description = description
     if (startAt) this.startAt = startAt
     if (endAt) this.endAt = endAt
     if (isActived) this.isActived = isActived

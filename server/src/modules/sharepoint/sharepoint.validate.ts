@@ -20,4 +20,13 @@ const sharepointValidate = (name: string) =>
         'string.max': `Mô tả ${name} không được vượt quá {#limit} ký tự.`
       })
   })
-export default sharepointValidate
+
+const sharepointDeleteSiteCollectionValidate = () =>
+  Joi.object({
+    siteId: Joi.string().required().messages({
+      'any.required': 'site id là trường bắt buộc.',
+      'string.base': 'site id phải là chuỗi.'
+    })
+  })
+
+export { sharepointDeleteSiteCollectionValidate, sharepointValidate }

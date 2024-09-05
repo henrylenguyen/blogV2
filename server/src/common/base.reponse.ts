@@ -1,4 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger'
+import httpStatus from 'src/common/base.enum'
 
 /**
  * @class ReponseData dùng để trả về dữ liệu cho client, là class chung cho toàn bộ dự án
@@ -6,12 +7,12 @@ import { ApiProperty } from '@nestjs/swagger'
  * @param data: T | T[] - dữ liệu trả về cho client
  * @param message: string - thông điệp trả về cho client
  */
-export interface IReponseData<T> {
+export interface IResponseData<T> {
   statusCode: number
   data: T | T[]
   message: string
 }
-export interface IReponsePaginationData<T> extends IReponseData<T> {
+export interface IReponsePaginationData<T> extends IResponseData<T> {
   totalData?: number
   totalPage?: number
   pageIndex?: number
@@ -26,7 +27,7 @@ export class ResponseData<T> {
   @ApiProperty()
   message?: string
 
-  constructor({ data, statusCode, message }: IReponseData<T>) {
+  constructor({ data, statusCode, message }: IResponseData<T>) {
     this.data = data
     this.statusCode = statusCode
     this.message = message
@@ -50,4 +51,42 @@ export class ResponsePaginationData<T> extends ResponseData<T> {
     this.pageIndex = pageIndex
     this.dataIndex = dataIndex
   }
+}
+
+export function ResponseMessage({
+  statusCode,
+  message,
+  data,
+  DTO
+}: {
+  statusCode: number
+  message: string
+  data?: any
+  DTO?: any
+}): IResponseData<null | typeof DTO> {
+  let responseData: IResponseData<null | typeof DTO>
+  switch (statusCode) {
+    case httpStatus.BAD_REQUEST:
+      responseData = {
+        data: null,
+        statusCode: httpStatus.BAD_REQUEST,
+        message: message
+      }
+      break
+    case httpStatus.INTERNAL_SERVER_ERROR:
+      responseData = {
+        data: null,
+        statusCode: httpStatus.INTERNAL_SERVER_ERROR,
+        message: `INTERNAL_SERVER_ERROR - ${message}`
+      }
+      break
+    default:
+      responseData = {
+        data,
+        statusCode: httpStatus.SUCCESS,
+        message: message
+      }
+      break
+  }
+  return responseData
 }

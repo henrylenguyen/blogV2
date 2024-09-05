@@ -1,19 +1,15 @@
 import { BaseEntities } from 'src/common/base.entities'
 import { Column, Entity } from 'typeorm'
 
-@Entity('carousels')
+@Entity('Carousels')
 class CarouselEntiy extends BaseEntities {
   constructor() {
     super()
   }
-  @Column({ name: 'name', type: 'varchar', length: 255, nullable: false })
-  name: string
+
   @Column({ name: 'image_url', type: 'varchar', length: 255, nullable: false, unique: true })
   imageUrl: string
-  @Column({ name: 'description', type: 'varchar', length: 255, nullable: false })
-  description: string
-  @Column({ name: 'status', type: 'boolean', nullable: false, default: true })
-  status: boolean
+
   @Column({ name: 'video_url', type: 'varchar', length: 255, nullable: true, unique: true })
   videoUrl?: string
   @Column({ name: 'animation_type', type: 'varchar', length: 50, nullable: true })
