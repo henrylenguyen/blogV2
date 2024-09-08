@@ -21,10 +21,12 @@
     "test:debug": "node --inspect-brk -r tsconfig-paths/register -r ts-node/register node_modules/.bin/jest --runInBand",
     "test:e2e": "jest --config ./test/jest-e2e.json",
     "postinstall": "husky install",
-  "typeorm": "typeorm-ts-node-commonjs -d src/data-source.ts",
+    "typeorm": "typeorm-ts-node-commonjs -d src/data-source.ts ",
     "typeorm:migration:generate": "npm run typeorm migration:generate",
     "typeorm:migration:run": "npm run typeorm migration:run",
-    "typeorm:migration:revert": "npm run typeorm migration:revert"
+    "typeorm:migration:revert": "npm run typeorm migration:revert",
+    "typeorm:migration:show": "npm run typeorm migration:show",
+    "typeorm:migration:create": "npm run typeorm migration:create"
   },
   "dependencies": {
     "@azure/identity": "^4.4.0",
@@ -51,7 +53,7 @@
     "rxjs": "^7.8.1",
     "sharp": "^0.33.4",
     "swagger-ui-express": "^5.0.1",
-    "typeorm": "^0.3.20"
+    "uuid": "^10.0.0"
   },
   "devDependencies": {
     "@babel/cli": "^7.24.8",
@@ -86,8 +88,9 @@
     "supertest": "^6.3.3",
     "ts-jest": "^29.1.0",
     "ts-loader": "^9.4.3",
-    "ts-node": "^10.9.1",
+    "ts-node": "^10.9.2",
     "tsconfig-paths": "^4.2.0",
+    "typeorm": "^0.3.20",
     "typescript": "5.0.3"
   },
   "jest": {

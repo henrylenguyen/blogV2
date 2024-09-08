@@ -1,4 +1,5 @@
 import { InjectRepository } from '@nestjs/typeorm'
+import { classToPlain } from 'class-transformer'
 import {
   BaseEntity,
   DeepPartial,
@@ -105,12 +106,43 @@ export class BaseRepository<T extends BaseEntity, R extends Repository<T>> {
    *  });
    * ```
    */
-  async find(condition: FindOptionsWhere<BaseEntity>): Promise<T[]> {
-    return this.repository.find({
-      where: condition
-    })
+  async findByCondition(where: FindOptionsWhere<T> | FindOptionsWhere<T>[]): Promise<T[]> {
+    return this.repository.findBy(where)
   }
 
+  /**
+   * Phương thức tìm một bản ghi theo điều kiện.
+   * @param where - Điều kiện tìm kiếm.
+   * @returns Một Promise chứa bản ghi tìm được hoặc null nếu không tìm thấy bản ghi nào.
+   * @example
+   * ```typescript
+   * // Giả sử chúng ta có một lớp UserEntity kế thừa từ BaseEntity
+   * class UserEntity extends BaseEntity {
+   * name: string;
+   * email: string;
+   *  // các trường khác...
+   * }
+   * // Tạo một thể hiện của lớp UserEntity
+   * const userRepository = new UserEntity();
+   * // Sử dụng hàm findOneByCondition với điều kiện là tên người dùng
+   * userRepository.findOneByCondition({ name: 'John Doe' })
+   * .then(user => {
+   * // user là một đối tượng chứa thông tin của người dùng có tên là 'John Doe'
+   * console.log(user);
+   * })
+   * .catch(error => {
+   * // Xử lý lỗi nếu có
+   * console.error(error);
+   * });
+   * ```
+   */
+  async findOneByCondition(where: FindOptionsWhere<T> | FindOptionsWhere<T>[]): Promise<Record<string, any> | null> {
+    const entity = await this.repository.findOneBy(where)
+    if (entity) {
+      return classToPlain(entity)
+    }
+    return null
+  }
   /**
    *
    * @param condition là điều kiện tìm kiếm
@@ -220,31 +252,31 @@ export class BaseRepository<T extends BaseEntity, R extends Repository<T>> {
 
   /**
    *
-   * @param condition là điều kiện xóa
-   * @returns trả về true nếu xóa thành công, ngược lại trả về false
+   * @param field là trường cần kiểm tra
+   * @param value  là giá trị cần kiểm tra
+   * @returns   trả về true nếu xóa thành công, ngược lại trả về false
    * @example
    * ```typescript
    * // Giả sử chúng ta có một lớp UserEntity kế thừa từ BaseEntity
    * class UserEntity extends BaseEntity {
-   *  name: string;
-   *  email: string;
-   *  // các trường khác...
+   * name: string;
+   * email: string;
+   * // các trường khác...
    * }
    * // Tạo một thể hiện của lớp UserEntity
    * const userRepository = new UserEntity();
-   * // Sử dụng hàm deleteByCondition với điều kiện là tên người dùng
-   * userRepository.deleteByCondition({ name: 'John Doe' })
-   *  .then(isDeleted => {
-   *  // isDeleted là true nếu xóa thành công, ngược lại là false
-   *  console.log(isDeleted);
+   * // Sử dụng hàm deleteByCondition với trường là email và giá trị là 'example@gmail.com'
+   * userRepository.deleteByCondition('email', 'example@gmail.com')
+   * .then(isDeleted => {
+   * // isDeleted là true nếu xóa thành công, ngược lại là false
+   * console.log(isDeleted);
    * })
    * .catch(error => {
-   *  // Xử lý lỗi nếu có
-   *  console.error(error);
+   * // Xử lý lỗi nếu có
+   * console.error(error);
    * });
    * ```
    */
-
   async deleteByCondition(field: keyof T, value: any): Promise<boolean> {
     const result = this.exists(field, value)
     if (result) {
@@ -252,6 +284,7 @@ export class BaseRepository<T extends BaseEntity, R extends Repository<T>> {
       return true
     }
   }
+
   /**
    *
    * @param data là dữ liệu cần tạo
@@ -428,9 +461,12 @@ export class BaseRepository<T extends BaseEntity, R extends Repository<T>> {
     })
   }
 
-  async findAllSoftDeleted(): Promise<T[]> {
+  async findAllSoftDeleted(data: FindOptionsWhere<T> | FindOptionsWhere<T>[]): Promise<T[]> {
     return await this.repository.find({
-      where: { deleted_at: Not(IsNull()) } as unknown as FindOptionsWhere<T>,
+      where: {
+        ...data,
+        deletedAt: Not(IsNull())
+      } as unknown as FindOptionsWhere<T>,
       withDeleted: true
     })
   }

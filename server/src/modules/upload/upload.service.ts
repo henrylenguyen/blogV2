@@ -42,8 +42,6 @@ export class UploadService {
     } catch (error) {
       file = null
       throw new Error(`INTERNAL_SERVER_ERROR: ${error.message}`)
-    } finally {
-      if (file) file.buffer = null
     }
     return file
   }

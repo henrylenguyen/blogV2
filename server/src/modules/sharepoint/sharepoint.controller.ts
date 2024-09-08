@@ -6,11 +6,21 @@ import httpStatus from 'src/common/base.enum'
 import { ParseFile } from 'src/common/base.pipe'
 import { IResponseData, ResponseData, ResponseMessage } from 'src/common/base.reponse'
 import {
+  SharepointCreateDocumentLibraryDTO,
+  SharepointDeleteDocumentLibraryDTO,
   SharepointDeleteSiteCollectionDTO,
   SharepointDTO,
+  SharepointGetImageDTO,
+  SharepointSoftDeleteDocumentLibraryDTO,
+  SharepointUpdateDocumentLibraryDTO,
   SharepointUploadFileDTO
 } from 'src/modules/sharepoint/sharepoint.dto'
-import { sharepointDeleteSiteCollectionValidate, sharepointValidate } from 'src/modules/sharepoint/sharepoint.validate'
+import { DocumentLibrary } from 'src/modules/sharepoint/sharepoint.model'
+import {
+  sharepointCreateDocumentLibrary,
+  sharepointDeleteSiteCollectionValidate,
+  sharepointValidate
+} from 'src/modules/sharepoint/sharepoint.validate'
 import { UploadService } from 'src/modules/upload/upload.service'
 import { JoiValidationPipe } from 'validation.pipe'
 import { SharepointService } from './sharepoint.service'
@@ -63,7 +73,7 @@ export class SharepointController {
       const responseData: IResponseData<null> = {
         data: null,
         statusCode: httpStatus.INTERNAL_SERVER_ERROR,
-        message: 'SITE_COLLECTION_CREATED_FAILED'
+        message: `INTERNAL_SERVER_ERROR ${error.message}`
       }
       res.status(httpStatus.BAD_REQUEST).json(new ResponseData(responseData))
     }
@@ -105,14 +115,12 @@ export class SharepointController {
 
         res.status(httpStatus.BAD_REQUEST).json(new ResponseData(responseData))
       } else {
-        {
-          const reponseData: IResponseData<null> = {
-            data: null,
-            statusCode: httpStatus.SUCCESS,
-            message: 'SITE_COLLECTION_DELETED_SUCCESSFULLY'
-          }
-          res.status(httpStatus.SUCCESS).json(new ResponseData(reponseData))
+        const reponseData: IResponseData<null> = {
+          data: null,
+          statusCode: httpStatus.SUCCESS,
+          message: 'SITE_COLLECTION_DELETED_SUCCESSFULLY'
         }
+        res.status(httpStatus.SUCCESS).json(new ResponseData(reponseData))
       }
     } catch (error) {
       const responseData: IResponseData<null> = {
@@ -166,14 +174,11 @@ export class SharepointController {
     status: httpStatus.BAD_REQUEST,
     description: 'Validation failed'
   })
-  async createLibrary(
-    @Param('siteId') id: string,
-    @Body(new JoiValidationPipe(sharepointValidate('document library'))) SharepointDTO: SharepointDTO,
-    @Res() res: Response
-  ): Promise<void> {
+  @UsePipes(new JoiValidationPipe(sharepointCreateDocumentLibrary))
+  async createLibrary(@Body() SharepointDTO: SharepointCreateDocumentLibraryDTO, @Res() res: Response): Promise<void> {
     try {
-      const result = await this.sharepointService.createLibrary(id, SharepointDTO)
-      const reponseData: IResponseData<null> = {
+      const result = await this.sharepointService.createLibrary(SharepointDTO)
+      const reponseData: IResponseData<DocumentLibrary> = {
         data: result,
         statusCode: httpStatus.CREATED,
         message: 'LIBRARY_CREATED_SUCCESSFULLY'
@@ -220,8 +225,8 @@ export class SharepointController {
   async getDocumentLibraries(@Param('siteId') siteId: string, @Res() res: Response) {
     try {
       const data = await this.sharepointService.getDocumentLibraries(siteId)
-      const reponseData: IResponseData<null> = {
-        data: data.value,
+      const reponseData: IResponseData<DocumentLibrary> = {
+        data,
         statusCode: httpStatus.SUCCESS,
         message: 'GET_DOCUMENT_LIBRARIES_SUCCESSFULLY'
       }
@@ -242,34 +247,30 @@ export class SharepointController {
   @ApiResponse({
     status: httpStatus.SUCCESS,
     description: 'Document library deleted successfully',
-    type: SharepointDTO
+    type: SharepointDeleteDocumentLibraryDTO
   })
   @ApiResponse({
     status: httpStatus.BAD_REQUEST,
     description: 'Validation failed'
   })
-  async deleteLibrary(
-    @Param('siteName') siteName: string,
-    @Param('libraryName') libraryName: string,
-    @Res() res: Response
-  ) {
+  async deleteLibrary(@Body() SharepointDTO: SharepointDeleteDocumentLibraryDTO, @Res() res: Response) {
     try {
-      const data = await this.sharepointService.deleteLibrary(siteName, libraryName)
-      if (data?.error) {
-        const responseData: IResponseData<null> = {
-          data: null,
-          statusCode: httpStatus.BAD_REQUEST,
-          message: `LIBRARY_DELETED_FAILED - ${data.error.message.value}`
-        }
-        res.status(httpStatus.BAD_REQUEST).json(new ResponseData(responseData))
-      } else {
-        const reponseData: IResponseData<SharepointDTO> = {
-          data: null,
-          statusCode: httpStatus.SUCCESS,
-          message: 'LIBRARY_DELETED_SUCCESSFULLY'
-        }
-        res.status(httpStatus.SUCCESS).json(new ResponseData(reponseData))
-      }
+      const data = await this.sharepointService.deleteLibrary(SharepointDTO)
+      // if (data?.error) {
+      //   const responseData: IResponseData<null> = {
+      //     data: null,
+      //     statusCode: httpStatus.BAD_REQUEST,
+      //     message: `LIBRARY_DELETED_FAILED - ${data.error.message.value}`
+      //   }
+      //   res.status(httpStatus.BAD_REQUEST).json(new ResponseData(responseData))
+      // } else {
+      //   const reponseData: IResponseData<SharepointDTO> = {
+      //     data: null,
+      //     statusCode: httpStatus.SUCCESS,
+      //     message: 'LIBRARY_DELETED_SUCCESSFULLY'
+      //   }
+      //   res.status(httpStatus.SUCCESS).json(new ResponseData(reponseData))
+      // }
     } catch (error) {
       console.log('error:', error)
       const responseData: IResponseData<null> = {
@@ -280,6 +281,117 @@ export class SharepointController {
       res.status(httpStatus.INTERNAL_SERVER_ERROR).json(new ResponseData(responseData))
     }
   }
+  // ------------------XÓA MỀM DOCUMENT LIBRARY---------------------
+  @Delete('library/:libraryId/soft-delete')
+  @ApiOperation({ summary: 'Soft delete a document library' })
+  @ApiResponse({
+    status: httpStatus.SUCCESS,
+    description: 'Document library soft deleted successfully',
+    type: SharepointSoftDeleteDocumentLibraryDTO
+  })
+  @ApiResponse({
+    status: httpStatus.BAD_REQUEST,
+    description: 'Validation failed'
+  })
+  async softDeleteLibrary(@Param('libraryId') libraryId: string, @Res() res: Response) {
+    try {
+      const data = await this.sharepointService.softDeleteLibrary(libraryId)
+      if (!data) {
+        const responseData: IResponseData<boolean> = {
+          data: false,
+          statusCode: httpStatus.NOT_FOUND,
+          message: 'ID_NOT_FOUND'
+        }
+        res.status(404).json(new ResponseData(responseData))
+      } else {
+        const responseData: IResponseData<boolean> = {
+          data: true,
+          statusCode: httpStatus.SUCCESS,
+          message: 'SOFT_DELETE_DOCUMENT_LIBRARY_SUCCESS'
+        }
+        res.status(httpStatus.SUCCESS).json(new ResponseData(responseData))
+      }
+    } catch (error) {
+      console.log('error:', error)
+      const responseData: IResponseData<null> = {
+        data: null,
+        statusCode: httpStatus.INTERNAL_SERVER_ERROR,
+        message: `SOFT_DELETED_DOCUMENT_LIBRARY_FAILED - ${error.message}`
+      }
+      res.status(httpStatus.INTERNAL_SERVER_ERROR).json(new ResponseData(responseData))
+    }
+  }
+  // ------------------KHÔI PHỤC DOCUMENT LIBRARY---------------------
+  @Patch('library/:libraryId/recover')
+  @ApiOperation({ summary: 'Recover a document library' })
+  @ApiResponse({
+    status: httpStatus.SUCCESS,
+    description: 'Document library recovered successfully',
+    type: SharepointSoftDeleteDocumentLibraryDTO
+  })
+  @ApiResponse({
+    status: httpStatus.BAD_REQUEST,
+    description: 'Validation failed'
+  })
+  async recoverLibrary(@Param('libraryId') libraryId: string, @Res() res: Response) {
+    try {
+      const data = await this.sharepointService.recoverLibrary(libraryId)
+      if (!data) {
+        const responseData: IResponseData<boolean> = {
+          data: false,
+          statusCode: httpStatus.NOT_FOUND,
+          message: 'ID_NOT_FOUND'
+        }
+        res.status(404).json(new ResponseData(responseData))
+      } else {
+        const responseData: IResponseData<boolean> = {
+          data: true,
+          statusCode: httpStatus.SUCCESS,
+          message: 'RECOVER_DOCUMENT_LIBRARY_SUCCESS'
+        }
+        res.status(httpStatus.SUCCESS).json(new ResponseData(responseData))
+      }
+    } catch (error) {
+      console.log('error:', error)
+      const responseData: IResponseData<null> = {
+        data: null,
+        statusCode: httpStatus.INTERNAL_SERVER_ERROR,
+        message: `RECOVER_DOCUMENT_LIBRARY_FAILED - ${error.message}`
+      }
+      res.status(httpStatus.INTERNAL_SERVER_ERROR).json(new ResponseData(responseData))
+    }
+  }
+  // -----------LẤY TẤT CẢ DOCUMENT LIBRARY ĐÃ BỊ XÓA MỀM---------------------
+  @Get('get-all/:siteId/deleted-document-libraries')
+  @ApiOperation({ summary: 'Get all deleted document libraries' })
+  @ApiResponse({
+    status: httpStatus.SUCCESS,
+    description: 'Get all deleted document libraries successfully',
+    type: SharepointDTO
+  })
+  @ApiResponse({
+    status: httpStatus.BAD_REQUEST,
+    description: 'Validation failed'
+  })
+  async getDeletedLibraries(@Param('siteId') siteId: string, @Res() res: Response) {
+    try {
+      const data = await this.sharepointService.getDeletedLibraries(siteId)
+      const reponseData: IResponseData<DocumentLibrary> = {
+        data,
+        statusCode: httpStatus.SUCCESS,
+        message: 'GET_DELETED_DOCUMENT_LIBRARIES_SUCCESSFULLY'
+      }
+      res.status(httpStatus.SUCCESS).json(new ResponseData(reponseData))
+    } catch (error) {
+      const responseData: IResponseData<null> = {
+        data: null,
+        statusCode: httpStatus.INTERNAL_SERVER_ERROR,
+        message: `GET_DELETED_DOCUMENT_LIBRARIES_FAILED - ${error.message}`
+      }
+      res.status(httpStatus.INTERNAL_SERVER_ERROR).json(new ResponseData(responseData))
+    }
+  }
+
   // ------------------CẬP NHẬT DOCUMENT LIBRARY---------------------
   @Patch('site/:siteName/library/:libraryName/update')
   @ApiOperation({ summary: 'Update a document library' })
@@ -292,14 +404,9 @@ export class SharepointController {
     status: httpStatus.BAD_REQUEST,
     description: 'Validation failed'
   })
-  async updateLibrary(
-    @Param('siteName') siteName: string,
-    @Param('libraryName') libraryName: string,
-    @Body() SharepointDTO: SharepointDTO,
-    @Res() res: Response
-  ) {
+  async updateLibrary(@Body() sharepointData: SharepointUpdateDocumentLibraryDTO, @Res() res: Response) {
     try {
-      const data = await this.sharepointService.updateLibrary(siteName, libraryName, SharepointDTO)
+      const data = await this.sharepointService.updateLibrary(sharepointData)
       console.log('data:', data)
       if (data?.error) {
         const responseData: IResponseData<null> = {
@@ -309,15 +416,30 @@ export class SharepointController {
         }
         res.status(httpStatus.BAD_REQUEST).json(new ResponseData(responseData))
       } else {
-        const reponseData: IResponseData<SharepointDTO> = {
-          data: null,
-          statusCode: httpStatus.SUCCESS,
-          message: 'LIBRARY_UPDATED_SUCCESSFULLY'
+        if (data) {
+          const reponseData: IResponseData<DocumentLibrary> = {
+            data,
+            statusCode: httpStatus.SUCCESS,
+            message: 'LIBRARY_UPDATED_SUCCESSFULLY'
+          }
+          res.status(httpStatus.SUCCESS).json(new ResponseData(reponseData))
+        } else if (data === null) {
+          const responseData: IResponseData<null> = {
+            data: null,
+            statusCode: httpStatus.NOT_FOUND,
+            message: `LIBRARY_UPDATED_FAILED - LIBRARY_OLD_NAME_NOT_FOUND`
+          }
+          res.status(httpStatus.NOT_FOUND).json(new ResponseData(responseData))
+        } else {
+          const responseData: IResponseData<null> = {
+            data: null,
+            statusCode: httpStatus.ALREADY_EXIST,
+            message: `LIBRARY_NAME_ALREADY_EXIST`
+          }
+          res.status(httpStatus.ALREADY_EXIST).json(new ResponseData(responseData))
         }
-        res.status(httpStatus.SUCCESS).json(new ResponseData(reponseData))
       }
     } catch (error) {
-      console.log('error:', error)
       const responseData: IResponseData<null> = {
         data: null,
         statusCode: httpStatus.INTERNAL_SERVER_ERROR,
@@ -344,7 +466,9 @@ export class SharepointController {
   })
   @ApiImageFile('file', true, {
     siteId: { type: 'string', example: '59234c93-b62b-4b10-98d8-fc57eaaaa774', required: true },
-    libraryId: { type: 'string', example: '59234c93-b62b-4b10-98d8-fc57eaaaa774', required: true }
+    description: { type: 'string', example: 'image about ...', required: true },
+    libraryId: { type: 'string', example: '59234c93-b62b-4b10-98d8-fc57eaaaa774', required: true },
+    isForceUpdate: { type: 'boolean', required: false }
   })
   async uploadFile(
     @Body() data: SharepointUploadFileDTO,
@@ -352,7 +476,6 @@ export class SharepointController {
     @Res() res: Response
   ) {
     const isValid = await this.uploadService.uploadFile(file)
-    console.log('isValid:', isValid)
     if (!isValid) {
       const responseData = ResponseMessage({
         statusCode: httpStatus.BAD_REQUEST,
@@ -361,10 +484,8 @@ export class SharepointController {
 
       res.status(httpStatus.BAD_REQUEST).json(new ResponseData(responseData))
     } else {
-      const { siteId, libraryId } = data
-
       try {
-        const result = await this.sharepointService.uploadFile(siteId, libraryId, file.originalname, file.buffer)
+        const result = await this.sharepointService.uploadFile(data, file)
         if (result) {
           const responseData = ResponseMessage({
             statusCode: httpStatus.CREATED,
@@ -381,6 +502,45 @@ export class SharepointController {
 
         res.status(httpStatus.INTERNAL_SERVER_ERROR).json(new ResponseData(responseData))
       }
+    }
+  }
+
+  @Post('/get-a-imame')
+  @ApiOperation({ summary: 'Get a image in document library' })
+  @ApiResponse({
+    status: httpStatus.SUCCESS,
+    description: 'Get a image in document library successfully',
+    type: SharepointGetImageDTO
+  })
+  @ApiResponse({
+    status: httpStatus.BAD_REQUEST,
+    description: 'Validation failed'
+  })
+  async getFile(@Body() data: SharepointGetImageDTO, @Res() res: Response) {
+    try {
+      const response = await this.sharepointService.getImageInLibrary(data)
+      if (response) {
+        const responseData = ResponseMessage({
+          statusCode: httpStatus.SUCCESS,
+          message: 'GET_IMAGE_SUCCESSFULLY',
+          data: response
+        })
+        res.status(httpStatus.SUCCESS).json(new ResponseData(responseData))
+      } else {
+        const responseData = ResponseMessage({
+          statusCode: httpStatus.BAD_REQUEST,
+          message: 'GET_IMAGE_FAILED'
+        })
+
+        res.status(httpStatus.BAD_REQUEST).json(new ResponseData(responseData))
+      }
+    } catch (error) {
+      const responseData = ResponseMessage({
+        statusCode: httpStatus.INTERNAL_SERVER_ERROR,
+        message: `GET_IMAGE_FAILED - ${error.message}`
+      })
+
+      res.status(httpStatus.INTERNAL_SERVER_ERROR).json(new ResponseData(responseData))
     }
   }
 }

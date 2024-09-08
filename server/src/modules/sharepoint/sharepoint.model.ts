@@ -37,12 +37,13 @@ export class SiteCollection extends BaseModels {
 }
 
 export class DocumentLibrary extends BaseModels {
-  siteId: string
+  siteCollectionId?: string
+  siteId?: string
   documentLibraryUrl?: string
+  documentLibraryID?: string
   constructor({
     id,
     name,
-    sharepointID,
     createdAt,
     updatedAt,
     deletedAt,
@@ -52,7 +53,10 @@ export class DocumentLibrary extends BaseModels {
     version,
     description,
     status,
-    documentLibraryUrl
+    documentLibraryUrl,
+    siteCollectionId,
+    siteId,
+    documentLibraryID
   }) {
     super({
       id,
@@ -67,8 +71,10 @@ export class DocumentLibrary extends BaseModels {
       version,
       description
     })
-    this.siteId = sharepointID
+    if (siteCollectionId) this.siteCollectionId = siteCollectionId
     if (documentLibraryUrl) this.documentLibraryUrl = documentLibraryUrl
+    if (siteId) this.siteId = siteId
+    if (documentLibraryID) this.documentLibraryID = documentLibraryID
   }
 }
 

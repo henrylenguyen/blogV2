@@ -38,8 +38,9 @@ import { BaseEntity, FindOptionsWhere } from 'typeorm'
 export interface BaseInterfaceRepository<T> {
   findAll(): Promise<T[]>
   findById(id: number | string): Promise<T | undefined>
-  find(condition: FindOptionsWhere<BaseEntity>): Promise<T[]>
+  findByCondition(where: FindOptionsWhere<T> | FindOptionsWhere<T>[]): Promise<T[]>
   findAndCount(condition: FindOptionsWhere<BaseEntity>): Promise<[T[], number]>
+  findOneByCondition(where: FindOptionsWhere<T> | FindOptionsWhere<T>[]): Promise<Record<string, any> | null>
   softDelete(id: number | string): Promise<boolean>
   recoverDelete(id: number | string): Promise<boolean>
   delete(id: number | string): Promise<boolean>
@@ -52,4 +53,5 @@ export interface BaseInterfaceRepository<T> {
   ): Promise<{ totalData: number; totalPage: number; pageIndex: number; dataIndex: number; data: T[] }>
   update(id: number | string, data: Partial<T>): Promise<T | undefined>
   exists(field: keyof T, value: any): Promise<boolean>
+  findAllSoftDeleted(data: FindOptionsWhere<T> | FindOptionsWhere<T>[]): Promise<T[]>
 }

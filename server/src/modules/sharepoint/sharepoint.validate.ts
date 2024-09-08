@@ -21,6 +21,26 @@ const sharepointValidate = (name: string) =>
       })
   })
 
+const sharepointCreateDocumentLibrary = Joi.object({
+  siteId: Joi.string().required().messages({
+    'any.required': 'site id là trường bắt buộc.',
+    'string.base': 'site id phải là chuỗi.'
+  }),
+  siteCollectionId: Joi.string().required().messages({
+    'any.required': 'site collection id là trường bắt buộc.',
+    'string.base': 'site collection id phải là chuỗi.'
+  }),
+  name: Joi.string().required().min(3).max(30).messages({
+    'any.required': `Tên document library là trường bắt buộc.`,
+    'string.min': `Tên document library phải có ít nhất {#limit} ký tự.`,
+    'string.max': `Tên document library không được vượt quá {#limit} ký tự.`
+  }),
+  description: Joi.string().required().min(3).max(30).messages({
+    'any.required': `Mô tả document library là trường bắt buộc.`,
+    'string.min': `Mô tả document library phải có ít nhất {#limit} ký tự.`,
+    'string.max': `Mô tả document library không được vượt quá {#limit} ký tự.`
+  })
+})
 const sharepointDeleteSiteCollectionValidate = () =>
   Joi.object({
     siteId: Joi.string().required().messages({
@@ -29,4 +49,4 @@ const sharepointDeleteSiteCollectionValidate = () =>
     })
   })
 
-export { sharepointDeleteSiteCollectionValidate, sharepointValidate }
+export { sharepointCreateDocumentLibrary, sharepointDeleteSiteCollectionValidate, sharepointValidate }
