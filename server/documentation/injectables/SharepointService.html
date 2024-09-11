@@ -1,0 +1,2833 @@
+<!doctype html>
+<html class="no-js" lang="">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="x-ua-compatible" content="ie=edge">
+        <title>server documentation</title>
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+
+        <link rel="icon" type="image/x-icon" href="../images/favicon.ico">
+	   <link rel="stylesheet" href="../styles/style.css">
+        <link rel="stylesheet" href="../styles/dark.css">
+    </head>
+    <body>
+          <script>
+               // Blocking script to avoid flickering dark mode
+               // Dark mode toggle button
+               var useDark = window.matchMedia('(prefers-color-scheme: dark)');
+               var darkModeState = useDark.matches;
+               var $darkModeToggleSwitchers = document.querySelectorAll('.dark-mode-switch input');
+               var $darkModeToggles = document.querySelectorAll('.dark-mode-switch');
+               var darkModeStateLocal = localStorage.getItem('compodoc_darkmode-state');
+
+               function checkToggle(check) {
+                    for (var i = 0; i < $darkModeToggleSwitchers.length; i++) {
+                         $darkModeToggleSwitchers[i].checked = check;
+                    }
+               }
+
+               function toggleDarkMode(state) {
+                    if (window.localStorage) {
+                         localStorage.setItem('compodoc_darkmode-state', state);
+                    }
+
+                    checkToggle(state);
+
+                    const hasClass = document.body.classList.contains('dark');
+
+                    if (state) {
+                         for (var i = 0; i < $darkModeToggles.length; i++) {
+                              $darkModeToggles[i].classList.add('dark');
+                         }
+                         if (!hasClass) {
+                              document.body.classList.add('dark');
+                         }
+                    } else {
+                         for (var i = 0; i < $darkModeToggles.length; i++) {
+                              $darkModeToggles[i].classList.remove('dark');
+                         }
+                         if (hasClass) {
+                              document.body.classList.remove('dark');
+                         }
+                    }
+               }
+
+               useDark.addEventListener('change', function (evt) {
+                    toggleDarkMode(evt.matches);
+               });
+               if (darkModeStateLocal) {
+                    darkModeState = darkModeStateLocal === 'true';
+               }
+               toggleDarkMode(darkModeState);
+          </script>
+
+        <div class="navbar navbar-default navbar-fixed-top d-md-none p-0">
+               <div class="d-flex">
+                    <a href="../" class="navbar-brand">server documentation</a>
+                    <button type="button" class="btn btn-default btn-menu ion-ios-menu" id="btn-menu"></button>
+               </div>
+        </div>
+
+        <div class="xs-menu menu" id="mobile-menu">
+                <div id="book-search-input" role="search"><input type="text" placeholder="Type to search"></div>            <compodoc-menu></compodoc-menu>
+        </div>
+
+        <div class="container-fluid main">
+           <div class="row main">
+               <div class="d-none d-md-block menu">
+                   <compodoc-menu mode="normal"></compodoc-menu>
+               </div>
+               <!-- START CONTENT -->
+               <div class="content injectable">
+                   <div class="content-data">
+
+
+
+
+
+
+
+
+<ol class="breadcrumb">
+  <li class="breadcrumb-item">Injectables</li>
+  <li class="breadcrumb-item" >SharepointService</li>
+</ol>
+
+<ul class="nav nav-tabs" role="tablist">
+        <li class="nav-item">
+            <a href="#info" 
+                class="nav-link"
+                class="nav-link active"
+                role="tab" id="info-tab" data-bs-toggle="tab" data-link="info">Info</a>
+        </li>
+        <li class="nav-item">
+            <a href="#source" 
+                class="nav-link"
+                
+                role="tab" id="source-tab" data-bs-toggle="tab" data-link="source">Source</a>
+        </li>
+</ul>
+
+<div class="tab-content">
+    <div class="tab-pane fade active in" id="info">
+        <p class="comment">
+            <h3>File</h3>
+        </p>
+        <p class="comment">
+            <code>src/modules/sharepoint/sharepoint.service.ts</code>
+        </p>
+
+
+
+
+
+            <section data-compodoc="block-index">
+    <h3 id="index">Index</h3>
+    <table class="table table-sm table-bordered index-table">
+        <tbody>
+                <tr>
+                    <td class="col-md-4">
+                        <h6><b>Properties</b></h6>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <ul class="index-list">
+                            <li>
+                                    <span class="modifier">Private</span>
+                                <a href="#accessToken" >accessToken</a>
+                            </li>
+                            <li>
+                                    <span class="modifier">Private</span>
+                                <a href="#accessTokenAdmin" >accessTokenAdmin</a>
+                            </li>
+                            <li>
+                                    <span class="modifier">Private</span>
+                                <a href="#cca" >cca</a>
+                            </li>
+                            <li>
+                                    <span class="modifier">Private</span>
+                                <a href="#client" >client</a>
+                            </li>
+                        </ul>
+                    </td>
+                </tr>
+
+                <tr>
+                    <td class="col-md-4">
+                        <h6><b>Methods</b></h6>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <ul class="index-list">
+                            <li>
+                                    <span class="modifier">Private</span>
+                                    <span class="modifier">Async</span>
+                                <a href="#authenticate" >authenticate</a>
+                            </li>
+                            <li>
+                                    <span class="modifier">Async</span>
+                                <a href="#createLibrary" >createLibrary</a>
+                            </li>
+                            <li>
+                                    <span class="modifier">Async</span>
+                                <a href="#createSiteCollection" >createSiteCollection</a>
+                            </li>
+                            <li>
+                                    <span class="modifier">Async</span>
+                                <a href="#deleteFilePermanently" >deleteFilePermanently</a>
+                            </li>
+                            <li>
+                                    <span class="modifier">Async</span>
+                                <a href="#deleteLibrary" >deleteLibrary</a>
+                            </li>
+                            <li>
+                                    <span class="modifier">Async</span>
+                                <a href="#deleteSiteCollection" >deleteSiteCollection</a>
+                            </li>
+                            <li>
+                                    <span class="modifier">Private</span>
+                                    <span class="modifier">Async</span>
+                                <a href="#enableSharing" >enableSharing</a>
+                            </li>
+                            <li>
+                                    <span class="modifier">Async</span>
+                                <a href="#getDeletedFilesInLibrary" >getDeletedFilesInLibrary</a>
+                            </li>
+                            <li>
+                                    <span class="modifier">Async</span>
+                                <a href="#getDeletedLibraries" >getDeletedLibraries</a>
+                            </li>
+                            <li>
+                                    <span class="modifier">Async</span>
+                                <a href="#getDocumentLibraries" >getDocumentLibraries</a>
+                            </li>
+                            <li>
+                                    <span class="modifier">Async</span>
+                                <a href="#getFilesInLibrary" >getFilesInLibrary</a>
+                            </li>
+                            <li>
+                                    <span class="modifier">Async</span>
+                                <a href="#getFilesInLibraryByPagination" >getFilesInLibraryByPagination</a>
+                            </li>
+                            <li>
+                                    <span class="modifier">Async</span>
+                                <a href="#getImageInLibrary" >getImageInLibrary</a>
+                            </li>
+                            <li>
+                                    <span class="modifier">Async</span>
+                                <a href="#getSiteCollections" >getSiteCollections</a>
+                            </li>
+                            <li>
+                                    <span class="modifier">Private</span>
+                                    <span class="modifier">Async</span>
+                                <a href="#makePatchRequest" >makePatchRequest</a>
+                            </li>
+                            <li>
+                                    <span class="modifier">Private</span>
+                                    <span class="modifier">Async</span>
+                                <a href="#makeRequest" >makeRequest</a>
+                            </li>
+                            <li>
+                                    <span class="modifier">Async</span>
+                                <a href="#recoverFileInLibrary" >recoverFileInLibrary</a>
+                            </li>
+                            <li>
+                                    <span class="modifier">Async</span>
+                                <a href="#recoverLibrary" >recoverLibrary</a>
+                            </li>
+                            <li>
+                                    <span class="modifier">Async</span>
+                                <a href="#softDeleteFileInLibrary" >softDeleteFileInLibrary</a>
+                            </li>
+                            <li>
+                                    <span class="modifier">Async</span>
+                                <a href="#softDeleteLibrary" >softDeleteLibrary</a>
+                            </li>
+                            <li>
+                                    <span class="modifier">Async</span>
+                                <a href="#testConnection" >testConnection</a>
+                            </li>
+                            <li>
+                                    <span class="modifier">Async</span>
+                                <a href="#updateLibrary" >updateLibrary</a>
+                            </li>
+                            <li>
+                                    <span class="modifier">Async</span>
+                                <a href="#uploadFile" >uploadFile</a>
+                            </li>
+                        </ul>
+                    </td>
+                </tr>
+
+
+
+
+
+        </tbody>
+    </table>
+</section>
+
+            <section data-compodoc="block-constructor">
+    <h3 id="constructor">Constructor</h3>
+        <table class="table table-sm table-bordered">
+            <tbody>
+                <tr>
+                    <td class="col-md-4">
+<code>constructor(siteCollectionRepository: <a href="../interfaces/ISiteCollection.html" target="_self">ISiteCollection</a>, documentLibraryRepository: <a href="../interfaces/IDocumentLibrary.html" target="_self">IDocumentLibrary</a>, mediaSharepointRepository: <a href="../interfaces/IMediaSharepoint.html" target="_self">IMediaSharepoint</a>, configService: ConfigService)</code>
+                    </td>
+                </tr>
+                        <tr>
+                            <td class="col-md-4">
+                                <div class="io-line">Defined in <a href="" data-line="25" class="link-to-prism">src/modules/sharepoint/sharepoint.service.ts:25</a></div>
+                            </td>
+                        </tr>
+
+                <tr>
+                    <td class="col-md-4">
+                            <div>
+                                    <b>Parameters :</b>
+                                    <table class="params">
+                                        <thead>
+                                            <tr>
+                                                <td>Name</td>
+                                                    <td>Type</td>
+                                                <td>Optional</td>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                                <tr>
+                                                        <td>siteCollectionRepository</td>
+                                                  
+                                                        <td>
+                                                                        <code><a href="../interfaces/ISiteCollection.html" target="_self" >ISiteCollection</a></code>
+                                                        </td>
+                                                  
+                                                    <td>
+                                                            No
+                                                    </td>
+                                                    
+                                                </tr>
+                                                <tr>
+                                                        <td>documentLibraryRepository</td>
+                                                  
+                                                        <td>
+                                                                        <code><a href="../interfaces/IDocumentLibrary.html" target="_self" >IDocumentLibrary</a></code>
+                                                        </td>
+                                                  
+                                                    <td>
+                                                            No
+                                                    </td>
+                                                    
+                                                </tr>
+                                                <tr>
+                                                        <td>mediaSharepointRepository</td>
+                                                  
+                                                        <td>
+                                                                        <code><a href="../interfaces/IMediaSharepoint.html" target="_self" >IMediaSharepoint</a></code>
+                                                        </td>
+                                                  
+                                                    <td>
+                                                            No
+                                                    </td>
+                                                    
+                                                </tr>
+                                                <tr>
+                                                        <td>configService</td>
+                                                  
+                                                        <td>
+                                                                    <code>ConfigService</code>
+                                                        </td>
+                                                  
+                                                    <td>
+                                                            No
+                                                    </td>
+                                                    
+                                                </tr>
+                                        </tbody>
+                                    </table>
+                            </div>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+</section>
+
+            <section data-compodoc="block-methods">
+    
+    <h3 id="methods">
+        Methods
+    </h3>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="authenticate"></a>
+                    <span class="name">
+                            <span class="modifier">Private</span>
+                            <span class="modifier">Async</span>
+                        <span ><b>authenticate</b></span>
+                        <a href="#authenticate"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+                        <span class="modifier-icon icon ion-ios-reset"></span>
+                    <code>authenticate()</code>
+                </td>
+            </tr>
+
+
+                    <tr>
+                        <td class="col-md-4">
+                            <div class="io-line">Defined in <a href="" data-line="54"
+                                    class="link-to-prism">src/modules/sharepoint/sharepoint.service.ts:54</a></div>
+                        </td>
+                    </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                        <div class="io-description">
+                            <b>Returns : </b>        <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >any</a></code>
+
+                        </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="createLibrary"></a>
+                    <span class="name">
+                            <span class="modifier">Async</span>
+                        <span ><b>createLibrary</b></span>
+                        <a href="#createLibrary"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+                        <span class="modifier-icon icon ion-ios-reset"></span>
+                    <code>createLibrary(data: <a href="../classes/SharepointCreateDocumentLibraryDTO.html" target="_self">SharepointCreateDocumentLibraryDTO</a>)</code>
+                </td>
+            </tr>
+
+
+                    <tr>
+                        <td class="col-md-4">
+                            <div class="io-line">Defined in <a href="" data-line="293"
+                                    class="link-to-prism">src/modules/sharepoint/sharepoint.service.ts:293</a></div>
+                        </td>
+                    </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                            <div class="io-description">
+                                <b>Parameters :</b>
+                                
+                                <table class="params">
+                                    <thead>
+                                        <tr>
+                                            <td>Name</td>
+                                                <td>Type</td>
+                                            <td>Optional</td>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                                <td>data</td>
+                                            <td>
+                                                            <code><a href="../classes/SharepointCreateDocumentLibraryDTO.html" target="_self" >SharepointCreateDocumentLibraryDTO</a></code>
+                                            </td>
+
+                                            <td>
+                                                    No
+                                            </td>
+
+
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        <div class="io-description">
+                            <b>Returns : </b>    <code>unknown</code>
+
+                        </div>
+                            <div class="io-description">
+                                
+                            </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="createSiteCollection"></a>
+                    <span class="name">
+                            <span class="modifier">Async</span>
+                        <span ><b>createSiteCollection</b></span>
+                        <a href="#createSiteCollection"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+                        <span class="modifier-icon icon ion-ios-reset"></span>
+                    <code>createSiteCollection(data: <a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank">any</a>)</code>
+                </td>
+            </tr>
+
+
+                    <tr>
+                        <td class="col-md-4">
+                            <div class="io-line">Defined in <a href="" data-line="212"
+                                    class="link-to-prism">src/modules/sharepoint/sharepoint.service.ts:212</a></div>
+                        </td>
+                    </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                            <div class="io-description">
+                                <b>Parameters :</b>
+                                
+                                <table class="params">
+                                    <thead>
+                                        <tr>
+                                            <td>Name</td>
+                                                <td>Type</td>
+                                            <td>Optional</td>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                                <td>data</td>
+                                            <td>
+                                                            <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >any</a></code>
+                                            </td>
+
+                                            <td>
+                                                    No
+                                            </td>
+
+
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        <div class="io-description">
+                            <b>Returns : </b>    <code>unknown</code>
+
+                        </div>
+                            <div class="io-description">
+                                
+                            </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="deleteFilePermanently"></a>
+                    <span class="name">
+                            <span class="modifier">Async</span>
+                        <span ><b>deleteFilePermanently</b></span>
+                        <a href="#deleteFilePermanently"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+                        <span class="modifier-icon icon ion-ios-reset"></span>
+                    <code>deleteFilePermanently(undefined: <a href="../classes/SharepointDeleteFileDTO.html" target="_self">SharepointDeleteFileDTO</a>)</code>
+                </td>
+            </tr>
+
+
+                    <tr>
+                        <td class="col-md-4">
+                            <div class="io-line">Defined in <a href="" data-line="633"
+                                    class="link-to-prism">src/modules/sharepoint/sharepoint.service.ts:633</a></div>
+                        </td>
+                    </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                            <div class="io-description">
+                                <b>Parameters :</b>
+                                
+                                <table class="params">
+                                    <thead>
+                                        <tr>
+                                            <td>Name</td>
+                                                <td>Type</td>
+                                            <td>Optional</td>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td>
+                                                            <code><a href="../classes/SharepointDeleteFileDTO.html" target="_self" >SharepointDeleteFileDTO</a></code>
+                                            </td>
+
+                                            <td>
+                                                    No
+                                            </td>
+
+
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        <div class="io-description">
+                            <b>Returns : </b>    <code>unknown</code>
+
+                        </div>
+                            <div class="io-description">
+                                
+                            </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="deleteLibrary"></a>
+                    <span class="name">
+                            <span class="modifier">Async</span>
+                        <span ><b>deleteLibrary</b></span>
+                        <a href="#deleteLibrary"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+                        <span class="modifier-icon icon ion-ios-reset"></span>
+                    <code>deleteLibrary(data: <a href="../classes/SharepointDeleteDocumentLibraryDTO.html" target="_self">SharepointDeleteDocumentLibraryDTO</a>)</code>
+                </td>
+            </tr>
+
+
+                    <tr>
+                        <td class="col-md-4">
+                            <div class="io-line">Defined in <a href="" data-line="379"
+                                    class="link-to-prism">src/modules/sharepoint/sharepoint.service.ts:379</a></div>
+                        </td>
+                    </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                            <div class="io-description">
+                                <b>Parameters :</b>
+                                
+                                <table class="params">
+                                    <thead>
+                                        <tr>
+                                            <td>Name</td>
+                                                <td>Type</td>
+                                            <td>Optional</td>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                                <td>data</td>
+                                            <td>
+                                                            <code><a href="../classes/SharepointDeleteDocumentLibraryDTO.html" target="_self" >SharepointDeleteDocumentLibraryDTO</a></code>
+                                            </td>
+
+                                            <td>
+                                                    No
+                                            </td>
+
+
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        <div class="io-description">
+                            <b>Returns : </b>    <code>unknown</code>
+
+                        </div>
+                            <div class="io-description">
+                                
+                            </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="deleteSiteCollection"></a>
+                    <span class="name">
+                            <span class="modifier">Async</span>
+                        <span ><b>deleteSiteCollection</b></span>
+                        <a href="#deleteSiteCollection"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+                        <span class="modifier-icon icon ion-ios-reset"></span>
+                    <code>deleteSiteCollection(undefined: <a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank">any</a>)</code>
+                </td>
+            </tr>
+
+
+                    <tr>
+                        <td class="col-md-4">
+                            <div class="io-line">Defined in <a href="" data-line="277"
+                                    class="link-to-prism">src/modules/sharepoint/sharepoint.service.ts:277</a></div>
+                        </td>
+                    </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                            <div class="io-description">
+                                <b>Parameters :</b>
+                                
+                                <table class="params">
+                                    <thead>
+                                        <tr>
+                                            <td>Name</td>
+                                                <td>Type</td>
+                                            <td>Optional</td>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td>
+                                                            <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >any</a></code>
+                                            </td>
+
+                                            <td>
+                                                    No
+                                            </td>
+
+
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        <div class="io-description">
+                            <b>Returns : </b>    <code>unknown</code>
+
+                        </div>
+                            <div class="io-description">
+                                
+                            </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="enableSharing"></a>
+                    <span class="name">
+                            <span class="modifier">Private</span>
+                            <span class="modifier">Async</span>
+                        <span ><b>enableSharing</b></span>
+                        <a href="#enableSharing"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+                        <span class="modifier-icon icon ion-ios-reset"></span>
+                    <code>enableSharing(siteSPOId: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank">string</a>)</code>
+                </td>
+            </tr>
+
+
+                    <tr>
+                        <td class="col-md-4">
+                            <div class="io-line">Defined in <a href="" data-line="171"
+                                    class="link-to-prism">src/modules/sharepoint/sharepoint.service.ts:171</a></div>
+                        </td>
+                    </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                            <div class="io-description">
+                                <b>Parameters :</b>
+                                
+                                <table class="params">
+                                    <thead>
+                                        <tr>
+                                            <td>Name</td>
+                                                <td>Type</td>
+                                            <td>Optional</td>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                                <td>siteSPOId</td>
+                                            <td>
+                                                            <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank" >string</a></code>
+                                            </td>
+
+                                            <td>
+                                                    No
+                                            </td>
+
+
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        <div class="io-description">
+                            <b>Returns : </b>    <code>unknown</code>
+
+                        </div>
+                            <div class="io-description">
+                                
+                            </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="getDeletedFilesInLibrary"></a>
+                    <span class="name">
+                            <span class="modifier">Async</span>
+                        <span ><b>getDeletedFilesInLibrary</b></span>
+                        <a href="#getDeletedFilesInLibrary"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+                        <span class="modifier-icon icon ion-ios-reset"></span>
+                    <code>getDeletedFilesInLibrary(libraryID: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank">string</a>)</code>
+                </td>
+            </tr>
+
+
+                    <tr>
+                        <td class="col-md-4">
+                            <div class="io-line">Defined in <a href="" data-line="627"
+                                    class="link-to-prism">src/modules/sharepoint/sharepoint.service.ts:627</a></div>
+                        </td>
+                    </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                            <div class="io-description">
+                                <b>Parameters :</b>
+                                
+                                <table class="params">
+                                    <thead>
+                                        <tr>
+                                            <td>Name</td>
+                                                <td>Type</td>
+                                            <td>Optional</td>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                                <td>libraryID</td>
+                                            <td>
+                                                            <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank" >string</a></code>
+                                            </td>
+
+                                            <td>
+                                                    No
+                                            </td>
+
+
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        <div class="io-description">
+                            <b>Returns : </b>    <code>unknown</code>
+
+                        </div>
+                            <div class="io-description">
+                                
+                            </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="getDeletedLibraries"></a>
+                    <span class="name">
+                            <span class="modifier">Async</span>
+                        <span ><b>getDeletedLibraries</b></span>
+                        <a href="#getDeletedLibraries"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+                        <span class="modifier-icon icon ion-ios-reset"></span>
+                    <code>getDeletedLibraries(siteSPOId: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank">string</a>)</code>
+                </td>
+            </tr>
+
+
+                    <tr>
+                        <td class="col-md-4">
+                            <div class="io-line">Defined in <a href="" data-line="422"
+                                    class="link-to-prism">src/modules/sharepoint/sharepoint.service.ts:422</a></div>
+                        </td>
+                    </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                            <div class="io-description">
+                                <b>Parameters :</b>
+                                
+                                <table class="params">
+                                    <thead>
+                                        <tr>
+                                            <td>Name</td>
+                                                <td>Type</td>
+                                            <td>Optional</td>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                                <td>siteSPOId</td>
+                                            <td>
+                                                            <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank" >string</a></code>
+                                            </td>
+
+                                            <td>
+                                                    No
+                                            </td>
+
+
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        <div class="io-description">
+                            <b>Returns : </b>    <code>unknown</code>
+
+                        </div>
+                            <div class="io-description">
+                                
+                            </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="getDocumentLibraries"></a>
+                    <span class="name">
+                            <span class="modifier">Async</span>
+                        <span ><b>getDocumentLibraries</b></span>
+                        <a href="#getDocumentLibraries"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+                        <span class="modifier-icon icon ion-ios-reset"></span>
+                    <code>getDocumentLibraries(siteSPOId: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank">string</a>)</code>
+                </td>
+            </tr>
+
+
+                    <tr>
+                        <td class="col-md-4">
+                            <div class="io-line">Defined in <a href="" data-line="428"
+                                    class="link-to-prism">src/modules/sharepoint/sharepoint.service.ts:428</a></div>
+                        </td>
+                    </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                            <div class="io-description">
+                                <b>Parameters :</b>
+                                
+                                <table class="params">
+                                    <thead>
+                                        <tr>
+                                            <td>Name</td>
+                                                <td>Type</td>
+                                            <td>Optional</td>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                                <td>siteSPOId</td>
+                                            <td>
+                                                            <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank" >string</a></code>
+                                            </td>
+
+                                            <td>
+                                                    No
+                                            </td>
+
+
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        <div class="io-description">
+                            <b>Returns : </b>    <code>unknown</code>
+
+                        </div>
+                            <div class="io-description">
+                                
+                            </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="getFilesInLibrary"></a>
+                    <span class="name">
+                            <span class="modifier">Async</span>
+                        <span ><b>getFilesInLibrary</b></span>
+                        <a href="#getFilesInLibrary"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+                        <span class="modifier-icon icon ion-ios-reset"></span>
+                    <code>getFilesInLibrary(documentSPOId: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank">string</a>)</code>
+                </td>
+            </tr>
+
+
+                    <tr>
+                        <td class="col-md-4">
+                            <div class="io-line">Defined in <a href="" data-line="440"
+                                    class="link-to-prism">src/modules/sharepoint/sharepoint.service.ts:440</a></div>
+                        </td>
+                    </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                            <div class="io-description">
+                                <b>Parameters :</b>
+                                
+                                <table class="params">
+                                    <thead>
+                                        <tr>
+                                            <td>Name</td>
+                                                <td>Type</td>
+                                            <td>Optional</td>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                                <td>documentSPOId</td>
+                                            <td>
+                                                            <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank" >string</a></code>
+                                            </td>
+
+                                            <td>
+                                                    No
+                                            </td>
+
+
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        <div class="io-description">
+                            <b>Returns : </b>    <code>unknown</code>
+
+                        </div>
+                            <div class="io-description">
+                                
+                            </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="getFilesInLibraryByPagination"></a>
+                    <span class="name">
+                            <span class="modifier">Async</span>
+                        <span ><b>getFilesInLibraryByPagination</b></span>
+                        <a href="#getFilesInLibraryByPagination"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+                        <span class="modifier-icon icon ion-ios-reset"></span>
+                    <code>getFilesInLibraryByPagination(undefined: <a href="../classes/SharepointFileByPaginationDTO.html" target="_self">SharepointFileByPaginationDTO</a>)</code>
+                </td>
+            </tr>
+
+
+                    <tr>
+                        <td class="col-md-4">
+                            <div class="io-line">Defined in <a href="" data-line="462"
+                                    class="link-to-prism">src/modules/sharepoint/sharepoint.service.ts:462</a></div>
+                        </td>
+                    </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                            <div class="io-description">
+                                <b>Parameters :</b>
+                                
+                                <table class="params">
+                                    <thead>
+                                        <tr>
+                                            <td>Name</td>
+                                                <td>Type</td>
+                                            <td>Optional</td>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td>
+                                                            <code><a href="../classes/SharepointFileByPaginationDTO.html" target="_self" >SharepointFileByPaginationDTO</a></code>
+                                            </td>
+
+                                            <td>
+                                                    No
+                                            </td>
+
+
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        <div class="io-description">
+                            <b>Returns : </b>    <code>unknown</code>
+
+                        </div>
+                            <div class="io-description">
+                                
+                            </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="getImageInLibrary"></a>
+                    <span class="name">
+                            <span class="modifier">Async</span>
+                        <span ><b>getImageInLibrary</b></span>
+                        <a href="#getImageInLibrary"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+                        <span class="modifier-icon icon ion-ios-reset"></span>
+                    <code>getImageInLibrary(data: <a href="../classes/SharepointGetImageDTO.html" target="_self">SharepointGetImageDTO</a>)</code>
+                </td>
+            </tr>
+
+
+                    <tr>
+                        <td class="col-md-4">
+                            <div class="io-line">Defined in <a href="" data-line="654"
+                                    class="link-to-prism">src/modules/sharepoint/sharepoint.service.ts:654</a></div>
+                        </td>
+                    </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                            <div class="io-description">
+                                <b>Parameters :</b>
+                                
+                                <table class="params">
+                                    <thead>
+                                        <tr>
+                                            <td>Name</td>
+                                                <td>Type</td>
+                                            <td>Optional</td>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                                <td>data</td>
+                                            <td>
+                                                            <code><a href="../classes/SharepointGetImageDTO.html" target="_self" >SharepointGetImageDTO</a></code>
+                                            </td>
+
+                                            <td>
+                                                    No
+                                            </td>
+
+
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        <div class="io-description">
+                            <b>Returns : </b>    <code>unknown</code>
+
+                        </div>
+                            <div class="io-description">
+                                
+                            </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="getSiteCollections"></a>
+                    <span class="name">
+                            <span class="modifier">Async</span>
+                        <span ><b>getSiteCollections</b></span>
+                        <a href="#getSiteCollections"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+                        <span class="modifier-icon icon ion-ios-reset"></span>
+                    <code>getSiteCollections()</code>
+                </td>
+            </tr>
+
+
+                    <tr>
+                        <td class="col-md-4">
+                            <div class="io-line">Defined in <a href="" data-line="203"
+                                    class="link-to-prism">src/modules/sharepoint/sharepoint.service.ts:203</a></div>
+                        </td>
+                    </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                        <div class="io-description">
+                            <b>Returns : </b>    <code>unknown</code>
+
+                        </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="makePatchRequest"></a>
+                    <span class="name">
+                            <span class="modifier">Private</span>
+                            <span class="modifier">Async</span>
+                        <span ><b>makePatchRequest</b></span>
+                        <a href="#makePatchRequest"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+                        <span class="modifier-icon icon ion-ios-reset"></span>
+                    <code>makePatchRequest(url: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank">string</a>, body: <a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank">any</a>, customHeaders: Record<string | string>)</code>
+                </td>
+            </tr>
+
+
+                    <tr>
+                        <td class="col-md-4">
+                            <div class="io-line">Defined in <a href="" data-line="144"
+                                    class="link-to-prism">src/modules/sharepoint/sharepoint.service.ts:144</a></div>
+                        </td>
+                    </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                            <div class="io-description">
+                                <b>Parameters :</b>
+                                
+                                <table class="params">
+                                    <thead>
+                                        <tr>
+                                            <td>Name</td>
+                                                <td>Type</td>
+                                            <td>Optional</td>
+                                                <td>Default value</td>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                                <td>url</td>
+                                            <td>
+                                                            <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank" >string</a></code>
+                                            </td>
+
+                                            <td>
+                                                    No
+                                            </td>
+
+                                            <td>
+                                            </td>
+
+                                        </tr>
+                                        <tr>
+                                                <td>body</td>
+                                            <td>
+                                                            <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >any</a></code>
+                                            </td>
+
+                                            <td>
+                                                    No
+                                            </td>
+
+                                            <td>
+                                            </td>
+
+                                        </tr>
+                                        <tr>
+                                                <td>customHeaders</td>
+                                            <td>
+                                                        <code>Record&lt;string | string&gt;</code>
+                                            </td>
+
+                                            <td>
+                                                    No
+                                            </td>
+
+                                            <td>
+                                                    <code>{}</code>
+                                            </td>
+
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        <div class="io-description">
+                            <b>Returns : </b>    <code>unknown</code>
+
+                        </div>
+                            <div class="io-description">
+                                
+                            </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="makeRequest"></a>
+                    <span class="name">
+                            <span class="modifier">Private</span>
+                            <span class="modifier">Async</span>
+                        <span ><b>makeRequest</b></span>
+                        <a href="#makeRequest"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+                        <span class="modifier-icon icon ion-ios-reset"></span>
+                    <code>makeRequest(url: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank">string</a>, method: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank">string</a>, body: <a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank">any</a>, config: <a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank">any</a>)</code>
+                </td>
+            </tr>
+
+
+                    <tr>
+                        <td class="col-md-4">
+                            <div class="io-line">Defined in <a href="" data-line="80"
+                                    class="link-to-prism">src/modules/sharepoint/sharepoint.service.ts:80</a></div>
+                        </td>
+                    </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                            <div class="io-description">
+                                <b>Parameters :</b>
+                                
+                                <table class="params">
+                                    <thead>
+                                        <tr>
+                                            <td>Name</td>
+                                                <td>Type</td>
+                                            <td>Optional</td>
+                                                <td>Default value</td>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                                <td>url</td>
+                                            <td>
+                                                            <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank" >string</a></code>
+                                            </td>
+
+                                            <td>
+                                                    No
+                                            </td>
+
+                                            <td>
+                                            </td>
+
+                                        </tr>
+                                        <tr>
+                                                <td>method</td>
+                                            <td>
+                                                            <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank" >string</a></code>
+                                            </td>
+
+                                            <td>
+                                                    No
+                                            </td>
+
+                                            <td>
+                                            </td>
+
+                                        </tr>
+                                        <tr>
+                                                <td>body</td>
+                                            <td>
+                                                            <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >any</a></code>
+                                            </td>
+
+                                            <td>
+                                                    No
+                                            </td>
+
+                                            <td>
+                                                    <code>null</code>
+                                            </td>
+
+                                        </tr>
+                                        <tr>
+                                                <td>config</td>
+                                            <td>
+                                                            <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >any</a></code>
+                                            </td>
+
+                                            <td>
+                                                    No
+                                            </td>
+
+                                            <td>
+                                                    <code>{}</code>
+                                            </td>
+
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        <div class="io-description">
+                            <b>Returns : </b>    <code>unknown</code>
+
+                        </div>
+                            <div class="io-description">
+                                
+                            </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="recoverFileInLibrary"></a>
+                    <span class="name">
+                            <span class="modifier">Async</span>
+                        <span ><b>recoverFileInLibrary</b></span>
+                        <a href="#recoverFileInLibrary"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+                        <span class="modifier-icon icon ion-ios-reset"></span>
+                    <code>recoverFileInLibrary(undefined: <a href="../classes/SharepointFileDTO.html" target="_self">SharepointFileDTO</a>)</code>
+                </td>
+            </tr>
+
+
+                    <tr>
+                        <td class="col-md-4">
+                            <div class="io-line">Defined in <a href="" data-line="600"
+                                    class="link-to-prism">src/modules/sharepoint/sharepoint.service.ts:600</a></div>
+                        </td>
+                    </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                            <div class="io-description">
+                                <b>Parameters :</b>
+                                
+                                <table class="params">
+                                    <thead>
+                                        <tr>
+                                            <td>Name</td>
+                                                <td>Type</td>
+                                            <td>Optional</td>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td>
+                                                            <code><a href="../classes/SharepointFileDTO.html" target="_self" >SharepointFileDTO</a></code>
+                                            </td>
+
+                                            <td>
+                                                    No
+                                            </td>
+
+
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        <div class="io-description">
+                            <b>Returns : </b>    <code>unknown</code>
+
+                        </div>
+                            <div class="io-description">
+                                
+                            </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="recoverLibrary"></a>
+                    <span class="name">
+                            <span class="modifier">Async</span>
+                        <span ><b>recoverLibrary</b></span>
+                        <a href="#recoverLibrary"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+                        <span class="modifier-icon icon ion-ios-reset"></span>
+                    <code>recoverLibrary(libraryId: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank">string</a>)</code>
+                </td>
+            </tr>
+
+
+                    <tr>
+                        <td class="col-md-4">
+                            <div class="io-line">Defined in <a href="" data-line="408"
+                                    class="link-to-prism">src/modules/sharepoint/sharepoint.service.ts:408</a></div>
+                        </td>
+                    </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                            <div class="io-description">
+                                <b>Parameters :</b>
+                                
+                                <table class="params">
+                                    <thead>
+                                        <tr>
+                                            <td>Name</td>
+                                                <td>Type</td>
+                                            <td>Optional</td>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                                <td>libraryId</td>
+                                            <td>
+                                                            <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank" >string</a></code>
+                                            </td>
+
+                                            <td>
+                                                    No
+                                            </td>
+
+
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        <div class="io-description">
+                            <b>Returns : </b>    <code>unknown</code>
+
+                        </div>
+                            <div class="io-description">
+                                
+                            </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="softDeleteFileInLibrary"></a>
+                    <span class="name">
+                            <span class="modifier">Async</span>
+                        <span ><b>softDeleteFileInLibrary</b></span>
+                        <a href="#softDeleteFileInLibrary"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+                        <span class="modifier-icon icon ion-ios-reset"></span>
+                    <code>softDeleteFileInLibrary(undefined: <a href="../classes/SharepointFileDTO.html" target="_self">SharepointFileDTO</a>)</code>
+                </td>
+            </tr>
+
+
+                    <tr>
+                        <td class="col-md-4">
+                            <div class="io-line">Defined in <a href="" data-line="575"
+                                    class="link-to-prism">src/modules/sharepoint/sharepoint.service.ts:575</a></div>
+                        </td>
+                    </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                            <div class="io-description">
+                                <b>Parameters :</b>
+                                
+                                <table class="params">
+                                    <thead>
+                                        <tr>
+                                            <td>Name</td>
+                                                <td>Type</td>
+                                            <td>Optional</td>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td>
+                                                            <code><a href="../classes/SharepointFileDTO.html" target="_self" >SharepointFileDTO</a></code>
+                                            </td>
+
+                                            <td>
+                                                    No
+                                            </td>
+
+
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        <div class="io-description">
+                            <b>Returns : </b>    <code>unknown</code>
+
+                        </div>
+                            <div class="io-description">
+                                
+                            </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="softDeleteLibrary"></a>
+                    <span class="name">
+                            <span class="modifier">Async</span>
+                        <span ><b>softDeleteLibrary</b></span>
+                        <a href="#softDeleteLibrary"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+                        <span class="modifier-icon icon ion-ios-reset"></span>
+                    <code>softDeleteLibrary(libraryId: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank">string</a>)</code>
+                </td>
+            </tr>
+
+
+                    <tr>
+                        <td class="col-md-4">
+                            <div class="io-line">Defined in <a href="" data-line="396"
+                                    class="link-to-prism">src/modules/sharepoint/sharepoint.service.ts:396</a></div>
+                        </td>
+                    </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                            <div class="io-description">
+                                <b>Parameters :</b>
+                                
+                                <table class="params">
+                                    <thead>
+                                        <tr>
+                                            <td>Name</td>
+                                                <td>Type</td>
+                                            <td>Optional</td>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                                <td>libraryId</td>
+                                            <td>
+                                                            <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank" >string</a></code>
+                                            </td>
+
+                                            <td>
+                                                    No
+                                            </td>
+
+
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        <div class="io-description">
+                            <b>Returns : </b>    <code>unknown</code>
+
+                        </div>
+                            <div class="io-description">
+                                
+                            </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="testConnection"></a>
+                    <span class="name">
+                            <span class="modifier">Async</span>
+                        <span ><b>testConnection</b></span>
+                        <a href="#testConnection"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+                        <span class="modifier-icon icon ion-ios-reset"></span>
+                    <code>testConnection()</code>
+                </td>
+            </tr>
+
+
+                    <tr>
+                        <td class="col-md-4">
+                            <div class="io-line">Defined in <a href="" data-line="192"
+                                    class="link-to-prism">src/modules/sharepoint/sharepoint.service.ts:192</a></div>
+                        </td>
+                    </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                        <div class="io-description">
+                            <b>Returns : </b>    <code>unknown</code>
+
+                        </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="updateLibrary"></a>
+                    <span class="name">
+                            <span class="modifier">Async</span>
+                        <span ><b>updateLibrary</b></span>
+                        <a href="#updateLibrary"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+                        <span class="modifier-icon icon ion-ios-reset"></span>
+                    <code>updateLibrary(data: <a href="../classes/SharepointUpdateDocumentLibraryDTO.html" target="_self">SharepointUpdateDocumentLibraryDTO</a>)</code>
+                </td>
+            </tr>
+
+
+                    <tr>
+                        <td class="col-md-4">
+                            <div class="io-line">Defined in <a href="" data-line="339"
+                                    class="link-to-prism">src/modules/sharepoint/sharepoint.service.ts:339</a></div>
+                        </td>
+                    </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                            <div class="io-description">
+                                <b>Parameters :</b>
+                                
+                                <table class="params">
+                                    <thead>
+                                        <tr>
+                                            <td>Name</td>
+                                                <td>Type</td>
+                                            <td>Optional</td>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                                <td>data</td>
+                                            <td>
+                                                            <code><a href="../classes/SharepointUpdateDocumentLibraryDTO.html" target="_self" >SharepointUpdateDocumentLibraryDTO</a></code>
+                                            </td>
+
+                                            <td>
+                                                    No
+                                            </td>
+
+
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        <div class="io-description">
+                            <b>Returns : </b>    <code>unknown</code>
+
+                        </div>
+                            <div class="io-description">
+                                
+                            </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="uploadFile"></a>
+                    <span class="name">
+                            <span class="modifier">Async</span>
+                        <span ><b>uploadFile</b></span>
+                        <a href="#uploadFile"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+                        <span class="modifier-icon icon ion-ios-reset"></span>
+                    <code>uploadFile(data: <a href="../classes/SharepointUploadFileDTO.html" target="_self">SharepointUploadFileDTO</a>, file: <a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank">any</a>)</code>
+                </td>
+            </tr>
+
+
+                    <tr>
+                        <td class="col-md-4">
+                            <div class="io-line">Defined in <a href="" data-line="482"
+                                    class="link-to-prism">src/modules/sharepoint/sharepoint.service.ts:482</a></div>
+                        </td>
+                    </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                            <div class="io-description">
+                                <b>Parameters :</b>
+                                
+                                <table class="params">
+                                    <thead>
+                                        <tr>
+                                            <td>Name</td>
+                                                <td>Type</td>
+                                            <td>Optional</td>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                                <td>data</td>
+                                            <td>
+                                                            <code><a href="../classes/SharepointUploadFileDTO.html" target="_self" >SharepointUploadFileDTO</a></code>
+                                            </td>
+
+                                            <td>
+                                                    No
+                                            </td>
+
+
+                                        </tr>
+                                        <tr>
+                                                <td>file</td>
+                                            <td>
+                                                            <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >any</a></code>
+                                            </td>
+
+                                            <td>
+                                                    No
+                                            </td>
+
+
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        <div class="io-description">
+                            <b>Returns : </b>    <code>unknown</code>
+
+                        </div>
+                            <div class="io-description">
+                                
+                            </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</section>
+            <section data-compodoc="block-properties">
+    
+    <h3 id="inputs">
+        Properties
+    </h3>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="accessToken"></a>
+                    <span class="name">
+                            <span class="modifier">Private</span>
+                        <span ><b>accessToken</b></span>
+                        <a href="#accessToken"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Type : </i>        <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank" >string</a></code>
+
+                    </td>
+                </tr>
+                    <tr>
+                        <td class="col-md-4">
+                                <div class="io-line">Defined in <a href="" data-line="23" class="link-to-prism">src/modules/sharepoint/sharepoint.service.ts:23</a></div>
+                        </td>
+                    </tr>
+
+
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="accessTokenAdmin"></a>
+                    <span class="name">
+                            <span class="modifier">Private</span>
+                        <span ><b>accessTokenAdmin</b></span>
+                        <a href="#accessTokenAdmin"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Type : </i>        <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank" >string</a></code>
+
+                    </td>
+                </tr>
+                    <tr>
+                        <td class="col-md-4">
+                                <div class="io-line">Defined in <a href="" data-line="24" class="link-to-prism">src/modules/sharepoint/sharepoint.service.ts:24</a></div>
+                        </td>
+                    </tr>
+
+
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="cca"></a>
+                    <span class="name">
+                            <span class="modifier">Private</span>
+                        <span ><b>cca</b></span>
+                        <a href="#cca"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Type : </i>    <code>ConfidentialClientApplication</code>
+
+                    </td>
+                </tr>
+                    <tr>
+                        <td class="col-md-4">
+                                <div class="io-line">Defined in <a href="" data-line="25" class="link-to-prism">src/modules/sharepoint/sharepoint.service.ts:25</a></div>
+                        </td>
+                    </tr>
+
+
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="client"></a>
+                    <span class="name">
+                            <span class="modifier">Private</span>
+                        <span ><b>client</b></span>
+                        <a href="#client"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Type : </i>    <code>Client</code>
+
+                    </td>
+                </tr>
+                    <tr>
+                        <td class="col-md-4">
+                                <div class="io-line">Defined in <a href="" data-line="22" class="link-to-prism">src/modules/sharepoint/sharepoint.service.ts:22</a></div>
+                        </td>
+                    </tr>
+
+
+        </tbody>
+    </table>
+</section>
+
+    </div>
+
+
+    <div class="tab-pane fade  tab-source-code" id="source">
+        <pre class="line-numbers compodoc-sourcecode"><code class="language-typescript">import { ConfidentialClientApplication } from &#x27;@azure/msal-node&#x27;
+import { Client } from &#x27;@microsoft/microsoft-graph-client&#x27;
+import { Inject, Injectable } from &#x27;@nestjs/common&#x27;
+import { ConfigService } from &#x27;@nestjs/config&#x27;
+import { status } from &#x27;src/common/base.enum&#x27;
+import { getConfig } from &#x27;src/config&#x27;
+import {
+  SharepointCreateDocumentLibraryDTO,
+  SharepointDeleteDocumentLibraryDTO,
+  SharepointDeleteFileDTO,
+  SharepointFileByPaginationDTO,
+  SharepointFileDTO,
+  SharepointGetImageDTO,
+  SharepointUpdateDocumentLibraryDTO,
+  SharepointUploadFileDTO
+} from &#x27;src/modules/sharepoint/sharepoint.dto&#x27;
+import { IDocumentLibrary, IMediaSharepoint, ISiteCollection } from &#x27;src/modules/sharepoint/sharepoint.interface&#x27;
+import { v4 as uuidv4 } from &#x27;uuid&#x27;
+
+@Injectable()
+export class SharepointService {
+  private client: Client
+  private accessToken: string
+  private accessTokenAdmin: string
+  private cca: ConfidentialClientApplication
+
+  constructor(
+    @Inject(&#x27;ISiteCollectionRepository&#x27;)
+    private readonly siteCollectionRepository: ISiteCollection,
+    @Inject(&#x27;IDocumentLibraryRepository&#x27;)
+    private readonly documentLibraryRepository: IDocumentLibrary,
+    @Inject(&#x27;IMediaSharepointRepository&#x27;)
+    private readonly mediaSharepointRepository: IMediaSharepoint,
+    private configService: ConfigService
+  ) {
+    const config &#x3D; getConfig(configService)
+    this.cca &#x3D; new ConfidentialClientApplication(config)
+
+    this.client &#x3D; Client.init({
+      authProvider: async (done) &#x3D;&gt; {
+        const result &#x3D; await this.cca.acquireTokenByClientCredential({
+          scopes: config.scopes
+        })
+        if (result.accessToken) {
+          done(null, result.accessToken)
+        } else {
+          done(new Error(&#x27;Failed to get access token&#x27;), null)
+        }
+      }
+    })
+    this.authenticate()
+  }
+
+  private async authenticate() {
+    const clientId &#x3D; this.configService.get(&#x27;AZURE_CLIENT_ID&#x27;)
+    const resource &#x3D; this.configService.get(&#x27;AZURE_RESOURCE&#x27;)
+    const resourceAdmin &#x3D; this.configService.get(&#x27;AZURE_ADMIN_RESOURCE&#x27;)
+    const clientSecret &#x3D; this.configService.get(&#x27;AZURE_CLIENT_SECRET&#x27;)
+    const params &#x3D; new URLSearchParams()
+    params.append(&#x27;grant_type&#x27;, &#x27;client_credentials&#x27;)
+    params.append(&#x27;client_secret&#x27;, clientSecret)
+    params.append(&#x27;client_id&#x27;, clientId)
+    params.append(&#x27;scope&#x27;, resource + &#x27;/.default&#x27;)
+
+    const result &#x3D; await this.cca.acquireTokenByClientCredential({
+      scopes: [resource + &#x27;/.default&#x27;]
+    })
+    const resultAdmin &#x3D; await this.cca.acquireTokenByClientCredential({
+      scopes: [resourceAdmin + &#x27;/.default&#x27;]
+    })
+
+    if (result.accessToken &amp;&amp; resultAdmin.accessToken) {
+      this.accessTokenAdmin &#x3D; resultAdmin.accessToken
+      this.accessToken &#x3D; result.accessToken
+    } else {
+      throw new Error(&#x27;Failed to get access token&#x27;)
+    }
+  }
+  // -------------------TẠO MỘT PHƯƠNG THỨC MỚI ĐỂ GỌI API SHAREPOINT---------------------------
+  private async makeRequest(url: string, method: string, body: any &#x3D; null, config: any &#x3D; {}) {
+    const headers &#x3D; {
+      Authorization: &#x60;Bearer ${this.accessToken}&#x60;,
+      Accept: &#x27;application/json;odata&#x3D;verbose&#x27;,
+      &#x27;Content-Type&#x27;: &#x27;application/json;odata&#x3D;verbose&#x27;,
+      ...config
+    }
+
+    let response &#x3D; await fetch(url, {
+      method,
+      headers,
+      body: body ? JSON.stringify(body) : null
+    })
+
+    const contentType &#x3D; response.headers.get(&#x27;Content-Type&#x27;)
+
+    // Check if the response is binary (octet-stream or any specific binary type like image/jpeg)
+    const isBinaryResponse &#x3D; contentType &amp;&amp; contentType.includes(&#x27;application/octet-stream&#x27;)
+
+    if (isBinaryResponse) {
+      // Process binary data
+      const binaryData &#x3D; await response.arrayBuffer() // Read the response as a binary buffer
+      console.log(&#x27;Binary data received:&#x27;, binaryData)
+      return binaryData
+    } else {
+      // Process text or JSON data
+      const text &#x3D; await response.text()
+      console.log(&#x27;text:&#x27;, text)
+
+      if (text) {
+        try {
+          const responseData &#x3D; JSON.parse(text)
+          if (responseData.error_description &amp;&amp; responseData.error_description.includes(&#x27;The token is expired&#x27;)) {
+            console.log(&#x27;Token expired. Refreshing token...&#x27;)
+
+            // Refresh the token
+            await this.authenticate()
+
+            // Update the headers with the new token
+            headers.Authorization &#x3D; &#x60;Bearer ${this.accessToken}&#x60;
+
+            // Retry the request with the new token
+            response &#x3D; await fetch(url, {
+              method,
+              headers,
+              body: body ? JSON.stringify(body) : null
+            })
+
+            const retryText &#x3D; await response.text()
+            return retryText ? JSON.parse(retryText) : null
+          }
+
+          return responseData
+        } catch (error) {
+          console.error(&#x27;Error parsing response as JSON:&#x27;, error.message)
+          throw new Error(&#x27;Failed to parse JSON response&#x27;)
+        }
+      } else {
+        return null
+      }
+    }
+  }
+
+  // --------------TẠO MỘT PHƯƠNG THỨC ĐỂ GỌI API PATCH SHAREPOINT ADMIN---------------------------
+  private async makePatchRequest(url: string, body: any, customHeaders: Record&lt;string, string&gt; &#x3D; {}) {
+    const headers &#x3D; {
+      Authorization: &#x60;Bearer ${this.accessTokenAdmin}&#x60;,
+      Accept: &#x27;application/json&#x27;,
+      &#x27;Accept-Language&#x27;: &#x27;en,vi;q&#x3D;0.9,fr-FR;q&#x3D;0.8,fr;q&#x3D;0.7,en-US;q&#x3D;0.6,ar;q&#x3D;0.5&#x27;,
+      &#x27;Content-Type&#x27;: &#x27;application/json&#x27;,
+      &#x27;OData-Version&#x27;: &#x27;4.0&#x27;,
+      Referer: &#x27;https://henlladev1812-admin.sharepoint.com&#x27;, // thêm đúng Referer
+      ...customHeaders // các header bổ sung từ cURL
+    }
+
+    const response &#x3D; await fetch(url, {
+      method: &#x27;PATCH&#x27;,
+      headers,
+      body: JSON.stringify(body)
+    })
+
+    const text &#x3D; await response.text()
+    console.log(&#x27;Response text patch:&#x27;, text)
+
+    if (text) {
+      return JSON.parse(text)
+    } else {
+      return null
+    }
+  }
+
+  private async enableSharing(siteSPOId: string) {
+    const url &#x3D; &#x60;${this.configService.get(&#x27;AZURE_DOMAIN_ADMIN_MANAGER_ENDPOINT&#x27;)}/sites(&#x27;${siteSPOId}&#x27;)&#x60;
+    const body &#x3D; {
+      SharingCapability: 2 // anyone
+    }
+
+    const customHeaders &#x3D; {
+      OriginalCorrelationId: &#x27;1d1f4ea1-707e-3000-a9ec-f7fffcf4516c&#x27;,
+      SDKVersion: &#x27;SPFx/TenantAdmin/6e1c1298-7b8e-4a08-a24f-769aafae45c5&#x27;
+      // thêm các header từ cURL
+    }
+
+    const response &#x3D; await this.makePatchRequest(url, body, customHeaders)
+
+    try {
+      return response
+    } catch (error) {
+      throw new Error(error)
+    }
+  }
+  // ------------------CÁC PHƯƠNG THỨC SHAREPOINT---------------------------
+  async testConnection() {
+    try {
+      const response &#x3D; await this.client.api(&#x27;/sites&#x27;).get()
+      console.log(this.accessToken)
+      return response
+    } catch (error) {
+      throw new Error(&#x60;Failed to connect to SharePoint: ${error.message}&#x60;)
+    }
+  }
+
+  // -----------------Lấy tất cả các site collection---------------------------
+  async getSiteCollections() {
+    try {
+      return await this.siteCollectionRepository.findAll()
+    } catch (error) {
+      throw new Error(&#x60;Failed to get site collections: ${error.message}&#x60;)
+    }
+  }
+
+  // -------------------Tạo một site collection mới---------------------------
+  async createSiteCollection(data: any) {
+    const { name, description } &#x3D; data
+    const response &#x3D; await this.siteCollectionRepository.exists(&#x27;name&#x27;, name)
+    if (response) {
+      return false
+    } else {
+      const url &#x3D; &#x60;${this.configService.get(&#x27;AZURE_API_SITE_MANAGER_ENDPOINT&#x27;)}/create&#x60;
+      const site &#x3D; {
+        request: {
+          Title: name,
+          Url: &#x60;${this.configService.get&lt;string&gt;(&#x27;AZURE_SITE_ENDPOINT&#x27;)}/${name}&#x60;,
+          Lcid: 1033, // English
+          ShareByEmailEnabled: false,
+          Classification: &#x27;Low Business Impact&#x27;,
+          Description: description,
+          WebTemplate: this.configService.get(&#x27;AZURE_WEB_TEMPLATE&#x27;),
+          SiteDesignId: this.configService.get(&#x27;AZURE_SITE_DESIGN_ID&#x27;),
+          Owner: this.configService.get(&#x27;AZURE_OWNER&#x27;),
+          WebTemplateExtensionId: &#x27;00000000-0000-0000-0000-000000000000&#x27;
+        }
+      }
+
+      const res: Promise&lt;{
+        d: {
+          Create: {
+            __metadata: {
+              type: string
+            }
+            SiteId: string
+            SiteStatus: number
+            SiteUrl: string
+          }
+        }
+      }&gt; &#x3D; this.makeRequest(url, &#x27;POST&#x27;, site)
+
+      const result &#x3D; await res
+      if (result &amp;&amp; result.d.Create.SiteStatus &#x3D;&#x3D;&#x3D; 2) {
+        const dataResponse &#x3D; result.d.Create
+
+        // Bước 2: Bật chia sẻ cho site collection mới tạo
+        const res &#x3D; await this.enableSharing(dataResponse.SiteId)
+        try {
+          if (res?.IsComplete) {
+            const dataResponse &#x3D; result.d.Create
+            return await this.siteCollectionRepository.create({
+              siteSPOId: dataResponse.SiteId,
+              name,
+              status: status.ACTIVE,
+              createdBy: &#x27;admin&#x27;,
+              siteCollectionUrl: dataResponse.SiteUrl,
+              description
+            })
+          } else {
+            throw new Error(&#x27;Failed to enable sharing on the site&#x27;)
+          }
+        } catch (error) {
+          throw new Error(error)
+        }
+      } else {
+        throw new Error(&#x27;Failed to create site collection&#x27;)
+      }
+    }
+  }
+
+  // -------------------Xóa site collection---------------------------
+  async deleteSiteCollection({ siteSPOId }: any) {
+    const url &#x3D; &#x60;${this.configService.get&lt;string&gt;(&#x27;AZURE_API_SITE_MANAGER_ENDPOINT&#x27;)}/delete&#x60;
+    const site &#x3D; {
+      siteId: siteSPOId
+    }
+
+    const res &#x3D; await this.makeRequest(url, &#x27;POST&#x27;, site)
+    if (res &amp;&amp; res.d) {
+      return await this.siteCollectionRepository.deleteByCondition(&#x27;siteSPOId&#x27;, siteSPOId)
+    } else if (res &amp;&amp; res.error) {
+      return res
+    } else {
+      throw new Error(&#x27;Failed to delete site collection&#x27;)
+    }
+  }
+  // -------------------Tạo một document library mới---------------------------
+  async createLibrary(data: SharepointCreateDocumentLibraryDTO) {
+    const { siteSPOId, siteCollectionId, name, description } &#x3D; data
+    const library &#x3D; {
+      displayName: name,
+      description,
+      list: {
+        template: &#x27;documentLibrary&#x27;
+      }
+    }
+
+    const exist &#x3D; await this.siteCollectionRepository.exists(&#x27;id&#x27;, siteCollectionId)
+    console.log(&#x27;exist:&#x27;, exist)
+    if (exist) {
+      // Tạo Document Library và lấy thông tin ban đầu
+      const res &#x3D; await this.client.api(&#x60;/sites/${siteSPOId}/lists&#x60;).post(JSON.stringify(library))
+
+      try {
+        if (res) {
+          // Gọi Graph API để lấy ID mã hóa (driveId)
+          const driveRes &#x3D; await this.client.api(&#x60;/sites/${siteSPOId}/drives&#x60;).get()
+
+          // Tìm &#x60;driveId&#x60; tương ứng với Document Library
+          const drive &#x3D; driveRes.value.find((d) &#x3D;&gt; d.name &#x3D;&#x3D;&#x3D; name)
+          const driveId &#x3D; drive ? drive.id : null
+
+          // Tạo bản ghi Document Library trong cơ sở dữ liệu
+          return await this.documentLibraryRepository.create({
+            siteCollectionId,
+            siteSPOId,
+            name,
+            description,
+            documentLibraryUrl: res.webUrl,
+            status: status.ACTIVE,
+            createdBy: &#x27;admin&#x27;,
+            documentSPOId: driveId
+          })
+        }
+      } catch (error) {
+        throw new Error(error)
+      }
+    } else {
+      return false
+    }
+  }
+
+  // -------------------Cập nhật document library---------------------------
+  async updateLibrary(data: SharepointUpdateDocumentLibraryDTO) {
+    const { description, libraryOldName, libraryNewName, siteName, libraryId } &#x3D; data
+    const findLibraryOldName &#x3D; await this.documentLibraryRepository.findOneByCondition({
+      name: libraryOldName
+    })
+    if (findLibraryOldName) {
+      const findLibrary &#x3D; await this.documentLibraryRepository.findOneByCondition({
+        name: libraryNewName
+      })
+      if (!findLibrary) {
+        const url &#x3D; &#x60;${this.configService.get&lt;string&gt;(&#x27;AZURE_SITE_ENDPOINT&#x27;)}/${siteName}/_api/web/lists/GetByTitle(&#x27;${libraryOldName}&#x27;)&#x60;
+        const library &#x3D; {
+          __metadata: { type: &#x27;SP.List&#x27; },
+          Description: description,
+          Title: libraryNewName
+        }
+        const res &#x3D; await this.makeRequest(url, &#x27;POST&#x27;, library, { &#x27;X-HTTP-Method&#x27;: &#x27;MERGE&#x27;, &#x27;If-Match&#x27;: &#x27;*&#x27; })
+
+        try {
+          if (res &#x3D;&#x3D;&#x3D; null) {
+            return await this.documentLibraryRepository.update(libraryId, {
+              name: libraryNewName,
+              description,
+              updatedBy: &#x27;admin&#x27;,
+              documentLibraryUrl: &#x60;${this.configService.get&lt;string&gt;(&#x27;AZURE_SITE_ENDPOINT&#x27;)}/${siteName}/${libraryNewName}&#x60;
+            })
+          } else {
+            return res
+          }
+        } catch (error) {
+          throw new Error(error)
+        }
+      } else {
+        return false
+      }
+    } else {
+      return null
+    }
+  }
+  // -------------------Xóa document library---------------------------
+  async deleteLibrary(data: SharepointDeleteDocumentLibraryDTO) {
+    const { libraryName, siteName, siteSPOId } &#x3D; data
+    const url &#x3D; &#x60;${this.configService.get&lt;string&gt;(&#x27;AZURE_SITE_ENDPOINT&#x27;)}/${siteName}/_api/web/lists/GetByTitle(&#x27;${libraryName}&#x27;)&#x60;
+    const res &#x3D; await this.makeRequest(url, &#x27;POST&#x27;, null, { &#x27;X-HTTP-Method&#x27;: &#x27;DELETE&#x27;, &#x27;If-Match&#x27;: &#x27;*&#x27; })
+
+    try {
+      if (res?.error) {
+        return res.error
+      } else {
+        return await this.documentLibraryRepository.deleteByCondition(&#x27;siteCollectionId&#x27;, siteSPOId)
+      }
+    } catch (error) {
+      throw new Error(error)
+    }
+  }
+  // -------------------Xóa mềm document library---------------------------
+
+  async softDeleteLibrary(libraryId: string) {
+    const res &#x3D; await this.documentLibraryRepository.softDelete(libraryId)
+    if (res) {
+      await this.documentLibraryRepository.update(libraryId, {
+        status: status.INACTIVE,
+        deletedBy: &#x27;admin&#x27;
+      })
+      return true
+    }
+    return false
+  }
+  // -------------------Khôi phục document library---------------------------
+  async recoverLibrary(libraryId: string) {
+    const res &#x3D; await this.documentLibraryRepository.recoverDelete(libraryId)
+    if (res) {
+      await this.documentLibraryRepository.update(libraryId, {
+        status: status.ACTIVE,
+        updatedBy: &#x27;admin&#x27;,
+        deletedAt: null,
+        deletedBy: null
+      })
+      return true
+    }
+    return false
+  }
+  // ------Lấy tất cả document library đã bị xóa mềm---------------------------
+  async getDeletedLibraries(siteSPOId: string) {
+    return await this.documentLibraryRepository.findAllSoftDeleted({
+      siteSPOId
+    })
+  }
+  // -----------------Lấy tất cả các document library---------------------------
+  async getDocumentLibraries(siteSPOId: string) {
+    try {
+      // return await this.client.api(&#x60;/sites/${siteSPOId}/drives&#x60;).get()
+      return await this.documentLibraryRepository.findByCondition({
+        siteSPOId
+      })
+    } catch (error) {
+      throw new Error(&#x60;Failed to get document libraries: ${error.message}&#x60;)
+    }
+  }
+
+  // -----------------Lấy tất cả các file trong document library---------------------------
+  async getFilesInLibrary(documentSPOId: string) {
+    try {
+      // return await this.client.api(&#x60;/sites/${siteSPOId}/drives/${libraryId}/root/children&#x60;).get()
+      const res &#x3D; await this.mediaSharepointRepository.findByCondition({
+        documentSPOId
+      })
+      const resLibrary &#x3D; await this.documentLibraryRepository.findOneByCondition({
+        documentSPOId
+      })
+      if (res) {
+        return res.map((item) &#x3D;&gt; ({
+          ...item,
+          siteName: resLibrary.documentLibraryUrl.split(&#x27;/&#x27;)[4],
+          libraryName: resLibrary.documentLibraryUrl.split(&#x27;/&#x27;)[5]
+        }))
+      }
+    } catch (error) {
+      throw new Error(&#x60;Failed to get files in library: ${error.message}&#x60;)
+    }
+  }
+
+  // ------Lấy tất cả file trong document library theo phân trang---------------------------
+  async getFilesInLibraryByPagination({ documentLibraryId, page, limit }: SharepointFileByPaginationDTO) {
+    try {
+      const resLibrary &#x3D; await this.documentLibraryRepository.findOneByCondition({
+        id: documentLibraryId
+      })
+      if (resLibrary) {
+        const res &#x3D; await this.mediaSharepointRepository.paginate(page, limit)
+
+        return res.data.map((item) &#x3D;&gt; ({
+          ...item,
+          siteName: resLibrary.documentLibraryUrl.split(&#x27;/&#x27;)[4],
+          libraryName: resLibrary.documentLibraryUrl.split(&#x27;/&#x27;)[5]
+        }))
+      }
+    } catch (error) {
+      throw new Error(&#x60;Failed to get files in library: ${error.message}&#x60;)
+    }
+  }
+
+  // -----------------Upload file vào document library---------------------------
+  async uploadFile(data: SharepointUploadFileDTO, file: any) {
+    const { siteSPOId, documentSPOId, description, isForceUpdate } &#x3D; data
+    const { originalname, buffer, mimetype, size } &#x3D; file
+    const extension &#x3D; originalname.split(&#x27;.&#x27;).pop()
+    const existData &#x3D; await this.mediaSharepointRepository.findOneByCondition({
+      name: originalname.split(&#x27;.&#x27;).shift()
+    })
+    const existLibrary &#x3D; await this.documentLibraryRepository.findOneByCondition({ documentSPOId })
+    if (!existLibrary) {
+      throw new Error(&#x27;Document library not found&#x27;)
+    }
+    if (existData) {
+      if (isForceUpdate) {
+        return await this.mediaSharepointRepository.update(existData.id, {
+          documentSPOId: documentSPOId,
+          name: originalname.split(&#x27;.&#x27;).shift(), // Tên file
+          updatedBy: &#x27;admin&#x27;,
+          status: status.ACTIVE,
+          size,
+          type: mimetype,
+          mediaUrl: existData.mediaUrl,
+          mediaExtension: extension,
+          description
+        })
+      } else {
+        const newName &#x3D; &#x60;${originalname.split(&#x27;.&#x27;).shift()}_${uuidv4()}.${extension}&#x60;
+        const res &#x3D; await this.client
+          .api(&#x60;/sites/${siteSPOId}/drives/${documentSPOId}/root:/${newName}:/content&#x60;)
+          .put(buffer)
+        const shareLinkResponse &#x3D; await this.client
+          .api(&#x60;/sites/${siteSPOId}/drives/${documentSPOId}/items/${res.id}/createLink&#x60;)
+          .post({
+            type: &#x27;view&#x27;, // hoặc &#x27;edit&#x27; nếu bạn muốn cấp quyền chỉnh sửa
+            scope: &#x27;anonymous&#x27; // Tạo liên kết công khai
+          })
+
+        // Lấy liên kết công khai từ kết quả trả về
+        const publicUrl &#x3D; shareLinkResponse.link.webUrl
+        try {
+          if (res) {
+            return await this.mediaSharepointRepository.create({
+              documentSPOId,
+              name: newName.split(&#x27;.&#x27;).shift(), // Tên file
+              createdBy: &#x27;admin&#x27;,
+              status: status.ACTIVE,
+              size,
+              type: mimetype,
+              mediaUrl: publicUrl,
+              mediaExtension: extension,
+              description,
+              documentLibraryId: existLibrary.id
+            })
+          }
+        } catch (error) {
+          throw new Error(error)
+        }
+      }
+    } else {
+      const res &#x3D; await this.client
+        .api(&#x60;/sites/${siteSPOId}/drives/${documentSPOId}/root:/${originalname}:/content&#x60;)
+        .put(buffer)
+
+      try {
+        if (res) {
+          const shareLinkResponse &#x3D; await this.client
+            .api(&#x60;/sites/${siteSPOId}/drives/${documentSPOId}/items/${res.id}/createLink&#x60;)
+            .post({
+              type: &#x27;view&#x27;, // hoặc &#x27;edit&#x27; nếu bạn muốn cấp quyền chỉnh sửa
+              scope: &#x27;anonymous&#x27; // Tạo liên kết công khai
+            })
+
+          // Lấy liên kết công khai từ kết quả trả về
+          const publicUrl &#x3D; shareLinkResponse.link.webUrl
+          return await this.mediaSharepointRepository.create({
+            documentSPOId: documentSPOId,
+            name: originalname.split(&#x27;.&#x27;).shift(), // Tên file
+            createdBy: &#x27;admin&#x27;,
+            status: status.ACTIVE,
+            size,
+            type: mimetype,
+            mediaUrl: publicUrl,
+            mediaExtension: extension,
+            description,
+            documentLibraryId: existLibrary.id
+          })
+        }
+      } catch (error) {
+        throw new Error(error)
+      }
+    }
+    file.buffer &#x3D; null // Xóa bộ đệm
+  }
+  // -----------------Xóa mềm file khỏi document library---------------------------
+  async softDeleteFileInLibrary({ fileIds }: SharepointFileDTO) {
+    console.log(&#x27;fileIds:&#x27;, fileIds)
+    const ids &#x3D; Array.isArray(fileIds) ? fileIds : [fileIds]
+    const res &#x3D; await Promise.all(
+      ids.map(async (fileId) &#x3D;&gt; {
+        return await this.mediaSharepointRepository.softDelete(fileId)
+      })
+    )
+    if (res) {
+      const result &#x3D; await Promise.all(
+        ids.map(async (fileId) &#x3D;&gt; {
+          return await this.mediaSharepointRepository.update(fileId, {
+            status: status.INACTIVE,
+            deletedBy: &#x27;admin&#x27;
+          })
+        })
+      )
+      if (result) {
+        return true
+      }
+
+      return false
+    }
+  }
+  // -----------------Khôi phục lại file  document library---------------------------
+  async recoverFileInLibrary({ fileIds }: SharepointFileDTO) {
+    const ids &#x3D; Array.isArray(fileIds) ? fileIds : [fileIds]
+
+    const res &#x3D; await Promise.all(
+      ids.map(async (fileId) &#x3D;&gt; {
+        return await this.mediaSharepointRepository.recoverDelete(fileId)
+      })
+    )
+    if (res) {
+      const result &#x3D; await Promise.all(
+        ids.map(async (fileId) &#x3D;&gt; {
+          return await this.mediaSharepointRepository.update(fileId, {
+            status: status.ACTIVE,
+            updatedBy: &#x27;admin&#x27;,
+            deletedAt: null,
+            deletedBy: null
+          })
+        })
+      )
+      if (result) {
+        return true
+      }
+
+      return false
+    }
+  }
+  // -----------------Lấy tất cả file đã bị xóa mềm trong document library---------------------------
+  async getDeletedFilesInLibrary(libraryID: string) {
+    return await this.mediaSharepointRepository.findAllSoftDeleted({
+      documentSPOId: libraryID
+    })
+  }
+  // -----------------Xóa vĩnh viễn file khỏi document library---------------------------
+  async deleteFilePermanently({ siteSPOId, fileSPOIds }: SharepointDeleteFileDTO) {
+    const ids &#x3D; Array.isArray(fileSPOIds) ? fileSPOIds : [fileSPOIds]
+    const res &#x3D; await Promise.all(
+      ids.map(async (fileId) &#x3D;&gt; {
+        return await this.client.api(&#x60;/sites/${siteSPOId}/drive/items/${fileId}&#x60;).delete()
+      })
+    )
+    console.log(&#x27;res:&#x27;, res)
+    if (res) {
+      const result &#x3D; await Promise.all(
+        ids.map(async (fileId) &#x3D;&gt; {
+          return await this.mediaSharepointRepository.deleteByCondition(&#x27;id&#x27;, fileId)
+        })
+      )
+      if (result) {
+        return true
+      }
+    }
+    return false
+  }
+  // -----------------Lấy file trong document library---------------------------
+  async getImageInLibrary(data: SharepointGetImageDTO) {
+    const { fileId, documentLibraryName, siteCollectionName } &#x3D; data
+    try {
+      const res &#x3D; await this.mediaSharepointRepository.findOneByCondition({
+        id: fileId
+      })
+      if (res) {
+        const imageName &#x3D; &#x60;${res.name}.${res.mediaExtension}&#x60;
+
+        const url &#x3D; &#x60;${this.configService.get(&#x27;AZURE_SITE_ENDPOINT&#x27;)}/${siteCollectionName}/_api/web/GetFileByServerRelativeUrl(&#x27;/sites/${siteCollectionName}/${documentLibraryName}/${imageName}&#x27;)/$value?binaryStringResponseBody&#x3D;true&#x60;
+        const responseData &#x3D; await this.makeRequest(url, &#x27;GET&#x27;, null, {
+          Accept: &#x27;image/jpeg&#x27;
+        })
+
+        return responseData
+      }
+      return null
+    } catch (error) {
+      throw new Error(&#x60;Failed to get images in library: ${error.message}&#x60;)
+    }
+  }
+}
+</code></pre>
+    </div>
+
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+                   </div><div class="search-results">
+    <div class="has-results">
+        <h1 class="search-results-title"><span class='search-results-count'></span> results matching "<span class='search-query'></span>"</h1>
+        <ul class="search-results-list"></ul>
+    </div>
+    <div class="no-results">
+        <h1 class="search-results-title">No results matching "<span class='search-query'></span>"</h1>
+    </div>
+</div>
+</div>
+               <!-- END CONTENT -->
+           </div>
+       </div>
+
+          <label class="dark-mode-switch">
+               <input type="checkbox">
+               <span class="slider">
+                    <svg class="slider-icon" viewBox="0 0 24 24" fill="none" height="20" stroke="#000" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" width="20" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M21 12.79A9 9 0 1111.21 3 7 7 0 0021 12.79z"></path>
+                    </svg>
+               </span>
+          </label>
+
+       <script>
+            var COMPODOC_CURRENT_PAGE_DEPTH = 1;
+            var COMPODOC_CURRENT_PAGE_CONTEXT = 'injectable';
+            var COMPODOC_CURRENT_PAGE_URL = 'SharepointService.html';
+            var MAX_SEARCH_RESULTS = 15;
+       </script>
+
+       <script>
+               $darkModeToggleSwitchers = document.querySelectorAll('.dark-mode-switch input');
+               checkToggle(darkModeState);
+               if ($darkModeToggleSwitchers.length > 0) {
+                    for (var i = 0; i < $darkModeToggleSwitchers.length; i++) {
+                         $darkModeToggleSwitchers[i].addEventListener('change', function (event) {
+                              darkModeState = !darkModeState;
+                              toggleDarkMode(darkModeState);
+                         });
+                    }
+               }
+          </script>
+
+       <script src="../js/libs/custom-elements.min.js"></script>
+       <script src="../js/libs/lit-html.js"></script>
+
+       <script src="../js/menu-wc.js" defer></script>
+       <script nomodule src="../js/menu-wc_es5.js" defer></script>
+
+       <script src="../js/libs/bootstrap-native.js"></script>
+
+       <script src="../js/libs/es6-shim.min.js"></script>
+       <script src="../js/libs/EventDispatcher.js"></script>
+       <script src="../js/libs/promise.min.js"></script>
+       <script src="../js/libs/zepto.min.js"></script>
+
+       <script src="../js/compodoc.js"></script>
+
+       <script src="../js/tabs.js"></script>
+       <script src="../js/menu.js"></script>
+       <script src="../js/libs/clipboard.min.js"></script>
+       <script src="../js/libs/prism.js"></script>
+       <script src="../js/sourceCode.js"></script>
+          <script src="../js/search/search.js"></script>
+          <script src="../js/search/lunr.min.js"></script>
+          <script src="../js/search/search-lunr.js"></script>
+          <script src="../js/search/search_index.js"></script>
+       <script src="../js/lazy-load-graphs.js"></script>
+
+
+    </body>
+</html>

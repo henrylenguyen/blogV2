@@ -20,8 +20,11 @@
     "forceConsistentCasingInFileNames": false,
     "noFallthroughCasesInSwitch": false,
     "resolveJsonModule": true,
+    "moduleResolution": "node",
     "paths": {
-      "src/*": ["./src/*"] // Đảm bảo 'src' được định nghĩa đúng
+      "src/*": ["./src/*"],
+      "@common/*": ["./src/common/*"],
+      "@modules/*": ["./src/modules/*"]
     }
   },
   "include": ["src/**/*.ts"],

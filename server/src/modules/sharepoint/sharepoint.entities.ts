@@ -1,5 +1,5 @@
-import { BaseEntities } from 'src/common/base.entities'
 import { Column, Entity, JoinColumn, ManyToOne, OneToMany } from 'typeorm'
+import { BaseEntities } from '../../common/base.entities'
 
 @Entity('SiteCollection')
 class SiteCollectionEntity extends BaseEntities {
@@ -10,8 +10,8 @@ class SiteCollectionEntity extends BaseEntities {
   @Column({ name: 'site_collection_url', type: 'varchar', length: 255, nullable: true, unique: true })
   siteCollectionUrl?: string
 
-  @Column({ name: 'site_id', type: 'varchar', length: 255, nullable: true, unique: true })
-  siteId: string
+  @Column({ name: 'site_SPO_Id', type: 'varchar', length: 255, nullable: true, unique: true })
+  siteSPOId: string
 
   @OneToMany(() => DocumentLibraryEntity, (documentLibrary) => documentLibrary.siteCollection)
   documentLibraries: DocumentLibraryEntity[] // Mối quan hệ 1-N với DocumentLibraryEntity
@@ -25,21 +25,21 @@ class DocumentLibraryEntity extends BaseEntities {
   @Column({ name: 'site_collection_id', type: 'varchar', nullable: false })
   siteCollectionId: string
 
-  @Column({ name: 'site_id', type: 'varchar', length: 255, nullable: true })
-  siteId: string
+  @Column({ name: 'site_SPO_Id', type: 'varchar', length: 255, nullable: true })
+  siteSPOId: string
 
   @ManyToOne(() => SiteCollectionEntity, (siteCollection) => siteCollection.documentLibraries)
   @JoinColumn({ name: 'site_collection_id' }) // Chỉ định cột khóa ngoại trong bảng DocumentLibrary
   siteCollection: SiteCollectionEntity // Mối quan hệ N-1 với SiteCollectionEntity
 
-  @OneToMany(() => MediaSharepointEntity, (mediaSharepoint) => mediaSharepoint.documentLibrary)
-  mediaSharepoints: MediaSharepointEntity[] // Mối quan hệ 1-N với MediaSharepointEntity
-
   @Column({ name: 'document_library_url', type: 'varchar', length: 255, nullable: true, unique: true })
   documentLibraryUrl?: string
 
-  @Column({ name: 'document_library_id', type: 'varchar', length: 255, nullable: false })
-  documentLibraryID: string
+  @OneToMany(() => MediaSharepointEntity, (mediaSharepoint) => mediaSharepoint.documentLibrary)
+  mediaSharepoints: MediaSharepointEntity[] // Mối quan hệ 1-N với MediaSharepointEntity
+
+  @Column({ name: 'document_SPO_Id', type: 'varchar', length: 255, nullable: false })
+  documentSPOId: string
 }
 @Entity('MediaSharepoint')
 class MediaSharepointEntity extends BaseEntities {
@@ -54,17 +54,20 @@ class MediaSharepointEntity extends BaseEntities {
   type?: string
   @Column({ name: 'media_size', type: 'int', nullable: true })
   size?: number
-  @Column({ name: 'media_slug', type: 'varchar', length: 255, nullable: false, unique: true })
-  mediaSlug: string
-  @Column({ name: 'media_thumbnail', type: 'varchar', length: 255, nullable: true })
-  mediaThumbnail?: string
+  @Column({ name: 'image_path', type: 'varchar', length: 255, nullable: true })
+  imagePath?: string
   @Column({ name: 'media_extension', type: 'varchar', length: 10, nullable: true }) // Đuôi file
   mediaExtension?: string
   @Column({ name: 'media_video_duration', type: 'int', nullable: true })
   totalVideoDuration?: number // Tổng thời lượng video
 
+  @Column({ name: 'document_SPO_Id', type: 'varchar', nullable: false })
+  documentSPOId: string
   @Column({ name: 'document_library_id', type: 'varchar', nullable: false }) // Định nghĩa cột khóa ngoại
-  documentLibraryID: string
+  documentLibraryId: string
+
+  @Column({ name: 'file_SPO_Id', type: 'varchar', length: 255, nullable: true })
+  fileSPOId?: string
 
   @ManyToOne(() => DocumentLibraryEntity, (documentLibrary) => documentLibrary.mediaSharepoints)
   @JoinColumn({ name: 'document_library_id' }) // Chỉ định cột khóa ngoại trong bảng MediaSharepoint

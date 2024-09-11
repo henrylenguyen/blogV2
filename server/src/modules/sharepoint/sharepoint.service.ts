@@ -7,6 +7,9 @@ import { getConfig } from 'src/config'
 import {
   SharepointCreateDocumentLibraryDTO,
   SharepointDeleteDocumentLibraryDTO,
+  SharepointDeleteFileDTO,
+  SharepointFileByPaginationDTO,
+  SharepointFileDTO,
   SharepointGetImageDTO,
   SharepointUpdateDocumentLibraryDTO,
   SharepointUploadFileDTO
@@ -88,35 +91,52 @@ export class SharepointService {
       body: body ? JSON.stringify(body) : null
     })
 
-    // Check if the response has an error indicating the token is expired
-    const text = await response.text()
-    console.log('text:', text)
+    const contentType = response.headers.get('Content-Type')
 
-    if (text) {
-      const responseData = JSON.parse(text)
-      if (responseData.error_description && responseData.error_description.includes('The token is expired')) {
-        console.log('Token expired. Refreshing token...')
+    // Check if the response is binary (octet-stream or any specific binary type like image/jpeg)
+    const isBinaryResponse = contentType && contentType.includes('application/octet-stream')
 
-        // Refresh the token
-        await this.authenticate()
-
-        // Update the headers with the new token
-        headers.Authorization = `Bearer ${this.accessToken}`
-
-        // Retry the request with the new token
-        response = await fetch(url, {
-          method,
-          headers,
-          body: body ? JSON.stringify(body) : null
-        })
-
-        const retryText = await response.text()
-        return retryText ? JSON.parse(retryText) : null
-      }
-
-      return responseData
+    if (isBinaryResponse) {
+      // Process binary data
+      const binaryData = await response.arrayBuffer() // Read the response as a binary buffer
+      console.log('Binary data received:', binaryData)
+      return binaryData
     } else {
-      return null
+      // Process text or JSON data
+      const text = await response.text()
+      console.log('text:', text)
+
+      if (text) {
+        try {
+          const responseData = JSON.parse(text)
+          if (responseData.error_description && responseData.error_description.includes('The token is expired')) {
+            console.log('Token expired. Refreshing token...')
+
+            // Refresh the token
+            await this.authenticate()
+
+            // Update the headers with the new token
+            headers.Authorization = `Bearer ${this.accessToken}`
+
+            // Retry the request with the new token
+            response = await fetch(url, {
+              method,
+              headers,
+              body: body ? JSON.stringify(body) : null
+            })
+
+            const retryText = await response.text()
+            return retryText ? JSON.parse(retryText) : null
+          }
+
+          return responseData
+        } catch (error) {
+          console.error('Error parsing response as JSON:', error.message)
+          throw new Error('Failed to parse JSON response')
+        }
+      } else {
+        return null
+      }
     }
   }
 
@@ -148,8 +168,8 @@ export class SharepointService {
     }
   }
 
-  private async enableSharing(siteId: string) {
-    const url = `${this.configService.get('AZURE_DOMAIN_ADMIN_MANAGER_ENDPOINT')}/sites('${siteId}')`
+  private async enableSharing(siteSPOId: string) {
+    const url = `${this.configService.get('AZURE_DOMAIN_ADMIN_MANAGER_ENDPOINT')}/sites('${siteSPOId}')`
     const body = {
       SharingCapability: 2 // anyone
     }
@@ -172,6 +192,7 @@ export class SharepointService {
   async testConnection() {
     try {
       const response = await this.client.api('/sites').get()
+      console.log(this.accessToken)
       return response
     } catch (error) {
       throw new Error(`Failed to connect to SharePoint: ${error.message}`)
@@ -233,7 +254,7 @@ export class SharepointService {
           if (res?.IsComplete) {
             const dataResponse = result.d.Create
             return await this.siteCollectionRepository.create({
-              siteId: dataResponse.SiteId,
+              siteSPOId: dataResponse.SiteId,
               name,
               status: status.ACTIVE,
               createdBy: 'admin',
@@ -253,15 +274,15 @@ export class SharepointService {
   }
 
   // -------------------Xóa site collection---------------------------
-  async deleteSiteCollection({ siteId }: any) {
+  async deleteSiteCollection({ siteSPOId }: any) {
     const url = `${this.configService.get<string>('AZURE_API_SITE_MANAGER_ENDPOINT')}/delete`
     const site = {
-      siteId
+      siteId: siteSPOId
     }
 
     const res = await this.makeRequest(url, 'POST', site)
     if (res && res.d) {
-      return await this.siteCollectionRepository.deleteByCondition('siteId', siteId)
+      return await this.siteCollectionRepository.deleteByCondition('siteSPOId', siteSPOId)
     } else if (res && res.error) {
       return res
     } else {
@@ -270,7 +291,7 @@ export class SharepointService {
   }
   // -------------------Tạo một document library mới---------------------------
   async createLibrary(data: SharepointCreateDocumentLibraryDTO) {
-    const { siteId, siteCollectionId, name, description } = data
+    const { siteSPOId, siteCollectionId, name, description } = data
     const library = {
       displayName: name,
       description,
@@ -279,32 +300,38 @@ export class SharepointService {
       }
     }
 
-    // Tạo Document Library và lấy thông tin ban đầu
-    const res = await this.client.api(`/sites/${siteId}/lists`).post(JSON.stringify(library))
+    const exist = await this.siteCollectionRepository.exists('id', siteCollectionId)
+    console.log('exist:', exist)
+    if (exist) {
+      // Tạo Document Library và lấy thông tin ban đầu
+      const res = await this.client.api(`/sites/${siteSPOId}/lists`).post(JSON.stringify(library))
 
-    try {
-      if (res) {
-        // Gọi Graph API để lấy ID mã hóa (driveId)
-        const driveRes = await this.client.api(`/sites/${siteId}/drives`).get()
+      try {
+        if (res) {
+          // Gọi Graph API để lấy ID mã hóa (driveId)
+          const driveRes = await this.client.api(`/sites/${siteSPOId}/drives`).get()
 
-        // Tìm `driveId` tương ứng với Document Library
-        const drive = driveRes.value.find((d) => d.name === name)
-        const driveId = drive ? drive.id : null
+          // Tìm `driveId` tương ứng với Document Library
+          const drive = driveRes.value.find((d) => d.name === name)
+          const driveId = drive ? drive.id : null
 
-        // Tạo bản ghi Document Library trong cơ sở dữ liệu
-        return await this.documentLibraryRepository.create({
-          siteCollectionId,
-          siteId,
-          name,
-          description,
-          documentLibraryUrl: res.webUrl,
-          status: status.ACTIVE,
-          createdBy: 'admin',
-          documentLibraryID: driveId
-        })
+          // Tạo bản ghi Document Library trong cơ sở dữ liệu
+          return await this.documentLibraryRepository.create({
+            siteCollectionId,
+            siteSPOId,
+            name,
+            description,
+            documentLibraryUrl: res.webUrl,
+            status: status.ACTIVE,
+            createdBy: 'admin',
+            documentSPOId: driveId
+          })
+        }
+      } catch (error) {
+        throw new Error(error)
       }
-    } catch (error) {
-      throw new Error(error)
+    } else {
+      return false
     }
   }
 
@@ -350,7 +377,7 @@ export class SharepointService {
   }
   // -------------------Xóa document library---------------------------
   async deleteLibrary(data: SharepointDeleteDocumentLibraryDTO) {
-    const { libraryName, siteName, siteId } = data
+    const { libraryName, siteName, siteSPOId } = data
     const url = `${this.configService.get<string>('AZURE_SITE_ENDPOINT')}/${siteName}/_api/web/lists/GetByTitle('${libraryName}')`
     const res = await this.makeRequest(url, 'POST', null, { 'X-HTTP-Method': 'DELETE', 'If-Match': '*' })
 
@@ -358,7 +385,7 @@ export class SharepointService {
       if (res?.error) {
         return res.error
       } else {
-        return await this.documentLibraryRepository.deleteByCondition('siteCollectionId', siteId)
+        return await this.documentLibraryRepository.deleteByCondition('siteCollectionId', siteSPOId)
       }
     } catch (error) {
       throw new Error(error)
@@ -392,43 +419,81 @@ export class SharepointService {
     return false
   }
   // ------Lấy tất cả document library đã bị xóa mềm---------------------------
-  async getDeletedLibraries(siteId: string) {
+  async getDeletedLibraries(siteSPOId: string) {
     return await this.documentLibraryRepository.findAllSoftDeleted({
-      siteId
+      siteSPOId
     })
   }
   // -----------------Lấy tất cả các document library---------------------------
-  async getDocumentLibraries(siteId: string) {
+  async getDocumentLibraries(siteSPOId: string) {
     try {
-      return await this.client.api(`/sites/${siteId}/drives`).get()
-      // return await this.documentLibraryRepository.findByCondition({
-      //   siteId
-      // })
+      // return await this.client.api(`/sites/${siteSPOId}/drives`).get()
+      return await this.documentLibraryRepository.findByCondition({
+        siteSPOId
+      })
     } catch (error) {
       throw new Error(`Failed to get document libraries: ${error.message}`)
     }
   }
 
-  async getFilesInLibrary(siteId: string, libraryId: string) {
+  // -----------------Lấy tất cả các file trong document library---------------------------
+  async getFilesInLibrary(documentSPOId: string) {
     try {
-      return await this.client.api(`/sites/${siteId}/drives/${libraryId}/root/children`).get()
+      // return await this.client.api(`/sites/${siteSPOId}/drives/${libraryId}/root/children`).get()
+      const res = await this.mediaSharepointRepository.findByCondition({
+        documentSPOId
+      })
+      const resLibrary = await this.documentLibraryRepository.findOneByCondition({
+        documentSPOId
+      })
+      if (res) {
+        return res.map((item) => ({
+          ...item,
+          siteName: resLibrary.documentLibraryUrl.split('/')[4],
+          libraryName: resLibrary.documentLibraryUrl.split('/')[5]
+        }))
+      }
     } catch (error) {
       throw new Error(`Failed to get files in library: ${error.message}`)
     }
   }
 
+  // ------Lấy tất cả file trong document library theo phân trang---------------------------
+  async getFilesInLibraryByPagination({ documentLibraryId, page, limit }: SharepointFileByPaginationDTO) {
+    try {
+      const resLibrary = await this.documentLibraryRepository.findOneByCondition({
+        id: documentLibraryId
+      })
+      if (resLibrary) {
+        const res = await this.mediaSharepointRepository.paginate(page, limit)
+
+        return res.data.map((item) => ({
+          ...item,
+          siteName: resLibrary.documentLibraryUrl.split('/')[4],
+          libraryName: resLibrary.documentLibraryUrl.split('/')[5]
+        }))
+      }
+    } catch (error) {
+      throw new Error(`Failed to get files in library: ${error.message}`)
+    }
+  }
+
+  // -----------------Upload file vào document library---------------------------
   async uploadFile(data: SharepointUploadFileDTO, file: any) {
-    const { siteId, libraryId, description, isForceUpdate } = data
+    const { siteSPOId, documentSPOId, description, isForceUpdate } = data
     const { originalname, buffer, mimetype, size } = file
     const extension = originalname.split('.').pop()
     const existData = await this.mediaSharepointRepository.findOneByCondition({
       name: originalname.split('.').shift()
     })
-
+    const existLibrary = await this.documentLibraryRepository.findOneByCondition({ documentSPOId })
+    if (!existLibrary) {
+      throw new Error('Document library not found')
+    }
     if (existData) {
       if (isForceUpdate) {
         return await this.mediaSharepointRepository.update(existData.id, {
-          documentLibraryID: libraryId,
+          documentSPOId: documentSPOId,
           name: originalname.split('.').shift(), // Tên file
           updatedBy: 'admin',
           status: status.ACTIVE,
@@ -436,36 +501,35 @@ export class SharepointService {
           type: mimetype,
           mediaUrl: existData.mediaUrl,
           mediaExtension: extension,
-          mediaSlug: existData.mediaSlug,
           description
         })
       } else {
         const newName = `${originalname.split('.').shift()}_${uuidv4()}.${extension}`
-        const res = await this.client.api(`/sites/${siteId}/drives/${libraryId}/root:/${newName}:/content`).put(buffer)
+        const res = await this.client
+          .api(`/sites/${siteSPOId}/drives/${documentSPOId}/root:/${newName}:/content`)
+          .put(buffer)
         const shareLinkResponse = await this.client
-          .api(`/sites/${siteId}/drives/${libraryId}/items/${res.id}/createLink`)
+          .api(`/sites/${siteSPOId}/drives/${documentSPOId}/items/${res.id}/createLink`)
           .post({
             type: 'view', // hoặc 'edit' nếu bạn muốn cấp quyền chỉnh sửa
             scope: 'anonymous' // Tạo liên kết công khai
           })
-        console.log('shareLinkResponse:', shareLinkResponse)
 
         // Lấy liên kết công khai từ kết quả trả về
         const publicUrl = shareLinkResponse.link.webUrl
-        console.log('publicUrl:', publicUrl)
         try {
           if (res) {
             return await this.mediaSharepointRepository.create({
-              documentLibraryID: libraryId,
+              documentSPOId,
               name: newName.split('.').shift(), // Tên file
               createdBy: 'admin',
               status: status.ACTIVE,
               size,
               type: mimetype,
-              mediaUrl: res.webUrl,
+              mediaUrl: publicUrl,
               mediaExtension: extension,
-              mediaSlug: newName.split('.').shift(),
-              description
+              description,
+              documentLibraryId: existLibrary.id
             })
           }
         } catch (error) {
@@ -474,22 +538,31 @@ export class SharepointService {
       }
     } else {
       const res = await this.client
-        .api(`/sites/${siteId}/drives/${libraryId}/root:/${originalname}:/content`)
+        .api(`/sites/${siteSPOId}/drives/${documentSPOId}/root:/${originalname}:/content`)
         .put(buffer)
 
       try {
         if (res) {
+          const shareLinkResponse = await this.client
+            .api(`/sites/${siteSPOId}/drives/${documentSPOId}/items/${res.id}/createLink`)
+            .post({
+              type: 'view', // hoặc 'edit' nếu bạn muốn cấp quyền chỉnh sửa
+              scope: 'anonymous' // Tạo liên kết công khai
+            })
+
+          // Lấy liên kết công khai từ kết quả trả về
+          const publicUrl = shareLinkResponse.link.webUrl
           return await this.mediaSharepointRepository.create({
-            documentLibraryID: libraryId,
+            documentSPOId: documentSPOId,
             name: originalname.split('.').shift(), // Tên file
             createdBy: 'admin',
             status: status.ACTIVE,
             size,
             type: mimetype,
-            mediaUrl: res.webUrl,
+            mediaUrl: publicUrl,
             mediaExtension: extension,
-            mediaSlug: `${uuidv4()}.${extension}`,
-            description
+            description,
+            documentLibraryId: existLibrary.id
           })
         }
       } catch (error) {
@@ -498,31 +571,103 @@ export class SharepointService {
     }
     file.buffer = null // Xóa bộ đệm
   }
+  // -----------------Xóa mềm file khỏi document library---------------------------
+  async softDeleteFileInLibrary({ fileIds }: SharepointFileDTO) {
+    console.log('fileIds:', fileIds)
+    const ids = Array.isArray(fileIds) ? fileIds : [fileIds]
+    const res = await Promise.all(
+      ids.map(async (fileId) => {
+        return await this.mediaSharepointRepository.softDelete(fileId)
+      })
+    )
+    if (res) {
+      const result = await Promise.all(
+        ids.map(async (fileId) => {
+          return await this.mediaSharepointRepository.update(fileId, {
+            status: status.INACTIVE,
+            deletedBy: 'admin'
+          })
+        })
+      )
+      if (result) {
+        return true
+      }
+
+      return false
+    }
+  }
+  // -----------------Khôi phục lại file  document library---------------------------
+  async recoverFileInLibrary({ fileIds }: SharepointFileDTO) {
+    const ids = Array.isArray(fileIds) ? fileIds : [fileIds]
+
+    const res = await Promise.all(
+      ids.map(async (fileId) => {
+        return await this.mediaSharepointRepository.recoverDelete(fileId)
+      })
+    )
+    if (res) {
+      const result = await Promise.all(
+        ids.map(async (fileId) => {
+          return await this.mediaSharepointRepository.update(fileId, {
+            status: status.ACTIVE,
+            updatedBy: 'admin',
+            deletedAt: null,
+            deletedBy: null
+          })
+        })
+      )
+      if (result) {
+        return true
+      }
+
+      return false
+    }
+  }
+  // -----------------Lấy tất cả file đã bị xóa mềm trong document library---------------------------
+  async getDeletedFilesInLibrary(libraryID: string) {
+    return await this.mediaSharepointRepository.findAllSoftDeleted({
+      documentSPOId: libraryID
+    })
+  }
+  // -----------------Xóa vĩnh viễn file khỏi document library---------------------------
+  async deleteFilePermanently({ siteSPOId, fileSPOIds }: SharepointDeleteFileDTO) {
+    const ids = Array.isArray(fileSPOIds) ? fileSPOIds : [fileSPOIds]
+    const res = await Promise.all(
+      ids.map(async (fileId) => {
+        return await this.client.api(`/sites/${siteSPOId}/drive/items/${fileId}`).delete()
+      })
+    )
+    console.log('res:', res)
+    if (res) {
+      const result = await Promise.all(
+        ids.map(async (fileId) => {
+          return await this.mediaSharepointRepository.deleteByCondition('id', fileId)
+        })
+      )
+      if (result) {
+        return true
+      }
+    }
+    return false
+  }
+  // -----------------Lấy file trong document library---------------------------
   async getImageInLibrary(data: SharepointGetImageDTO) {
     const { fileId, documentLibraryName, siteCollectionName } = data
     try {
       const res = await this.mediaSharepointRepository.findOneByCondition({
         id: fileId
       })
-      console.log('res:', res)
       if (res) {
-        //  "mediaUrl": "https://henlladev1812.sharepoint.com/sites/name15/Shared%20Documents/H%C3%83%C2%ACnh%2013.jpg",
-        const imageName = res.mediaUrl.split('/').pop()
-        console.log('imageName:', imageName)
+        const imageName = `${res.name}.${res.mediaExtension}`
 
-        //`https://yzx43.sharepoint.com/sites/FamilyTree/_api/web/GetFileByServerRelativeUrl('/sites/FamilyTree/Avatars/${imageName}')/$value?binaryStringResponseBody=true`,
-        try {
-          const url = `${this.configService.get('AZURE_SITE_ENDPOINT')}/${siteCollectionName}/_api/web/GetFileByServerRelativeUrl('/sites/${siteCollectionName}/${documentLibraryName}/${imageName}')/$value?binaryStringResponseBody=true`
-          const responseData = await this.makeRequest(url, 'GET', null, {
-            'Content-Type': 'image/jpeg',
-            Accept: 'image/jpeg'
-          })
-          // console.log('responseData:', responseData)
-        } catch (error) {
-          throw new Error(`Failed to get image in library: ${error.message}`)
-        }
-        return res
+        const url = `${this.configService.get('AZURE_SITE_ENDPOINT')}/${siteCollectionName}/_api/web/GetFileByServerRelativeUrl('/sites/${siteCollectionName}/${documentLibraryName}/${imageName}')/$value?binaryStringResponseBody=true`
+        const responseData = await this.makeRequest(url, 'GET', null, {
+          Accept: 'image/jpeg'
+        })
+
+        return responseData
       }
+      return null
     } catch (error) {
       throw new Error(`Failed to get images in library: ${error.message}`)
     }

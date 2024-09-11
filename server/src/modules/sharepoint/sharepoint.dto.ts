@@ -8,7 +8,7 @@ class SharepointDTO {
 }
 class SharepointCreateDocumentLibraryDTO {
   @ApiProperty({ required: true, example: '59234c93-b62b-4b10-98d8-fc57eaaaa774' })
-  siteId: string
+  siteSPOId: string
   @ApiProperty({ required: true, example: '9234c93-b62b-4b10-98d8-fc57eaaaa774' })
   siteCollectionId: string
   @ApiProperty({ required: true, example: 'name' })
@@ -18,17 +18,35 @@ class SharepointCreateDocumentLibraryDTO {
 }
 class SharepointDeleteSiteCollectionDTO {
   @ApiProperty({ required: true, example: '59234c93-b62b-4b10-98d8-fc57eaaaa774' })
-  siteId: string
+  siteSPOId: string
 }
 class SharepointSoftDeleteDocumentLibraryDTO {
   @ApiProperty({ required: true, example: '59234c93-b62b-4b10-98d8-fc57eaaaa774' })
-  libraryId: string
+  documentLibraryId: string
+}
+class SharepointFileDTO {
+  @ApiProperty({ required: true, example: '59234c93-b62b-4b10-98d8-fc57eaaaa774' })
+  fileIds: string | string[]
+}
+class SharepointFileByPaginationDTO {
+  @ApiProperty({ required: true, example: 1 })
+  page: number
+  @ApiProperty({ required: true, example: 10 })
+  limit: number
+  @ApiProperty({ required: true, example: '59234c93-b62b-4b10-98d8-fc57eaaaa774' })
+  documentLibraryId: string
+}
+class SharepointDeleteFileDTO {
+  @ApiProperty({ required: true, example: '59234c93-b62b-4b10-98d8-fc57eaaaa774' })
+  siteSPOId: string
+  @ApiProperty({ required: true, example: '59234c93-b62b-4b10-98d8-fc57eaaaa774' })
+  fileSPOIds: string | string[]
 }
 class SharepointUploadFileDTO {
   @ApiProperty({ required: true, example: '59234c93-b62b-4b10-98d8-fc57eaaaa774' })
-  siteId: string
+  siteSPOId: string
   @ApiProperty({ required: true, example: '59234c93-b62b-4b10-98d8-fc57eaaaa774' })
-  libraryId: string
+  documentSPOId: string
   @ApiProperty({ required: true, example: 'image about ...' })
   description: string
   @ApiProperty({ required: false })
@@ -38,7 +56,7 @@ class SharepointUploadFileDTO {
 }
 class SharepointDeleteDocumentLibraryDTO {
   @ApiProperty({ required: true, example: '59234c93-b62b-4b10-98d8-fc57eaaaa774' })
-  siteId: string
+  siteSPOId: string
   @ApiProperty({ required: true, example: 'name' })
   siteName: string
   @ApiProperty({ required: true, example: 'name' })
@@ -63,15 +81,17 @@ class SharepointGetImageDTO {
   siteCollectionName: string
   @ApiProperty({ required: true, example: 'documentlibraryname' })
   documentLibraryName: string
-
 }
 export {
   SharepointCreateDocumentLibraryDTO,
   SharepointDeleteDocumentLibraryDTO,
   SharepointDeleteSiteCollectionDTO,
   SharepointDTO,
+  SharepointFileDTO,
+  SharepointGetImageDTO,
   SharepointSoftDeleteDocumentLibraryDTO,
   SharepointUpdateDocumentLibraryDTO,
   SharepointUploadFileDTO,
-  SharepointGetImageDTO
+  SharepointDeleteFileDTO,
+  SharepointFileByPaginationDTO
 }

@@ -1,4 +1,4 @@
-import { BaseEntities } from 'src/common/base.entities'
+import { BaseEntities } from '../../common/base.entities'
 import { Column, Entity } from 'typeorm'
 
 @Entity('Carousels')

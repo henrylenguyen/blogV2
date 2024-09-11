@@ -2,12 +2,12 @@ import BaseModels from 'src/common/base.model'
 
 export class SiteCollection extends BaseModels {
   siteCollectionUrl?: string
-  siteId?: string
+  siteSPOId?: string
   constructor({
     id,
     name,
     siteCollectionUrl,
-    siteId,
+    siteSPOId,
     createdAt,
     updatedAt,
     deletedAt,
@@ -32,15 +32,16 @@ export class SiteCollection extends BaseModels {
       description
     })
     if (siteCollectionUrl) this.siteCollectionUrl = siteCollectionUrl
-    if (siteId) this.siteId = siteId
+    if (siteSPOId) this.siteSPOId = siteSPOId
   }
 }
 
 export class DocumentLibrary extends BaseModels {
   siteCollectionId?: string
-  siteId?: string
+  siteSPOId?: string
   documentLibraryUrl?: string
-  documentLibraryID?: string
+  documentSPOId?: string
+
   constructor({
     id,
     name,
@@ -55,8 +56,8 @@ export class DocumentLibrary extends BaseModels {
     status,
     documentLibraryUrl,
     siteCollectionId,
-    siteId,
-    documentLibraryID
+    siteSPOId,
+    documentSPOId
   }) {
     super({
       id,
@@ -73,8 +74,8 @@ export class DocumentLibrary extends BaseModels {
     })
     if (siteCollectionId) this.siteCollectionId = siteCollectionId
     if (documentLibraryUrl) this.documentLibraryUrl = documentLibraryUrl
-    if (siteId) this.siteId = siteId
-    if (documentLibraryID) this.documentLibraryID = documentLibraryID
+    if (siteSPOId) this.siteSPOId = siteSPOId
+    if (documentSPOId) this.documentSPOId = documentSPOId
   }
 }
 
@@ -82,22 +83,22 @@ export class MediaSharepoint extends BaseModels {
   mediaUrl: string
   type?: string
   size?: number
-  mediaSlug: string
-  mediaThumbnail?: string
+  imagePath?: string
   mediaExtension?: string
   totalVideoDuration?: number
-  documentLibraryID: string
+  documentSPOId: string
+  documentLibraryId: string
+  fileSPOId?: string
   constructor({
     id,
     name,
     mediaUrl,
     type,
     size,
-    mediaSlug,
-    mediaThumbnail,
+    imagePath,
     mediaExtension,
     totalVideoDuration,
-    documentLibraryID,
+    documentSPOId,
     createdAt,
     updatedAt,
     deletedAt,
@@ -106,7 +107,9 @@ export class MediaSharepoint extends BaseModels {
     deletedBy,
     version,
     description,
-    status
+    status,
+    documentLibraryId,
+    fileSPOId
   }) {
     super({
       id,
@@ -124,10 +127,11 @@ export class MediaSharepoint extends BaseModels {
     this.mediaUrl = mediaUrl
     this.type = type
     this.size = size
-    this.mediaSlug = mediaSlug
-    this.mediaThumbnail = mediaThumbnail
+    this.imagePath = imagePath
     this.mediaExtension = mediaExtension
     this.totalVideoDuration = totalVideoDuration
-    this.documentLibraryID = documentLibraryID
+    this.documentSPOId = documentSPOId
+    this.documentLibraryId = documentLibraryId
+    this.fileSPOId = fileSPOId
   }
 }

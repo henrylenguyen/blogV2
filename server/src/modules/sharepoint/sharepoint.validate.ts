@@ -22,7 +22,7 @@ const sharepointValidate = (name: string) =>
   })
 
 const sharepointCreateDocumentLibrary = Joi.object({
-  siteId: Joi.string().required().messages({
+  siteSPOId: Joi.string().required().messages({
     'any.required': 'site id là trường bắt buộc.',
     'string.base': 'site id phải là chuỗi.'
   }),
@@ -43,7 +43,7 @@ const sharepointCreateDocumentLibrary = Joi.object({
 })
 const sharepointDeleteSiteCollectionValidate = () =>
   Joi.object({
-    siteId: Joi.string().required().messages({
+    siteSPOId: Joi.string().required().messages({
       'any.required': 'site id là trường bắt buộc.',
       'string.base': 'site id phải là chuỗi.'
     })
