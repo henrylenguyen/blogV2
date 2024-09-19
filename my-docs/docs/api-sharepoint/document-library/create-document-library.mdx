@@ -1,0 +1,68 @@
+---
+title: Tạo mới thư mục
+tags:
+  - document-library
+---
+
+<Admonition type="info" title="POST">
+  ```json
+  /sharepoint/create/document-library
+  ```
+</Admonition>
+
+### Dữ liệu truyền vào:
+
+```json
+{
+  "siteSPOId": "",
+  "siteCollectionId": "",
+  "name": "",
+  "description": ""
+}
+```
+
+Trong đó:
+
+* **siteSPOId:** là ID của site collection
+* **siteCollectionId: ** Là Id của bảng document library, nó là ID này 👇
+
+![](/img/docs/site-collection.png)
+
+* **name:** tên của thư mục
+* **description: **mô tả thư mục
+
+<Admonition type="note" title="Tại sao lại phải truyền tận 2 id?">
+  * siteCollectionId: là id của cột trong database, dùng để truy vấn dữ liệu nội bộ
+  * siteSPOId: là id trên sharepoint online 
+</Admonition>
+
+### Dữ liệu trả về
+
+```json
+{
+  "data": {
+    "siteCollectionId": "336b4535-e39f-4128-99f6-7e4b02245f57",
+    "siteSPOId": "356f5e1d-450e-434f-b683-757bab3007f3",
+    "name": "name",
+    "description": "description",
+    "documentLibraryUrl": "https://henlladev1812.sharepoint.com/sites/name122/name",
+    "status": 1,
+    "createdBy": "admin",
+    "documentSPOId": "b!HV5vNQ5FT0O2g3V7qzAH8_oDOpm12-NDun5-_34W_Vtm_e45PHvnTYk7Jgc_pr9L",
+    "updatedAt": null,
+    "updatedBy": null,
+    "deletedBy": null,
+    "id": "d47e7ec2-8ac3-4353-ab15-a58050b8201b",
+    "createdAt": "2024-09-13T07:34:34.000Z",
+    "deletedAt": null,
+    "version": "0.1"
+  },
+  "statusCode": 201,
+  "message": "LIBRARY_CREATED_SUCCESSFULLY"
+}
+```
+
+Trong đó: 
+
+* documentLibraryUrl là đường dẫn thư mục trên sharepoint online
+* documentSPOId: là id của thư mục trên sharepoint online

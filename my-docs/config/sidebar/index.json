@@ -6,28 +6,53 @@
       "_template": "doc"
     },
     {
-      "title": "Tutorial - Basics",
-      "link": "generated",
+      "title": "Sharepoint",
+      "link": "doc",
+      "docLink": "docs/api-sharepoint/intro.mdx",
       "items": [
         {
-          "document": "docs/tutorial-basics/create-a-page.mdx",
-          "_template": "doc"
+          "title": "Document library",
+          "link": "none",
+          "items": [
+            {
+              "document": "docs/api-sharepoint/document-library/create-document-library.mdx",
+              "label": "Tạo mới kho chứa",
+              "_template": "doc"
+            },
+            {
+              "document": "docs/api-sharepoint/document-library/get-all-deleted-document-libraries.mdx",
+              "label": "Lấy danh sách thư mục đã bị xóa",
+              "_template": "doc"
+            },
+            {
+              "document": "docs/api-sharepoint/document-library/get-all-document-libraries.mdx",
+              "label": "Lấy danh sách thư mục",
+              "_template": "doc"
+            }
+          ],
+          "_template": "category"
         },
         {
-          "document": "docs/tutorial-basics/create-a-document.mdx",
-          "_template": "doc"
-        },
-        {
-          "document": "docs/tutorial-basics/create-a-blog-post.mdx",
-          "_template": "doc"
-        },
-        {
-          "document": "docs/tutorial-basics/deploy-your-site.mdx",
-          "_template": "doc"
-        },
-        {
-          "document": "docs/tutorial-basics/congratulations.mdx",
-          "_template": "doc"
+          "title": "Site collection",
+          "link": "none",
+          "items": [
+            {
+              "document": "docs/api-sharepoint/site-collection/delete-site-collection.mdx",
+              "label": "Xóa kho chứa",
+              "_template": "doc"
+            },
+            {
+              "document": "docs/api-sharepoint/site-collection/get-all-site-collection.mdx",
+              "label": "Lấy danh sách kho chứa",
+              "_template": "doc"
+            },
+            {
+              "document": "docs/api-sharepoint/site-collection/create-site-collection.mdx",
+              "label": "Tạo mới kho chứa",
+              "_template": "doc"
+            }
+          ],
+          "_template": "category"
         }
       ],
       "_template": "category"

@@ -1,0 +1,67 @@
+---
+title: Lấy toàn bộ danh sách kho chứa
+description: api /sharepoint/get-all/site-collections
+tags:
+  - site-collection
+---
+
+<Admonition type="info" title="GET">
+  ```json
+  /sharepoint/get-all/site-collections
+  ```
+</Admonition>
+
+Dữ liệu truyền vào: Không
+
+Dữ liệu trả về: 
+
+```json
+{
+  "data": [
+    {
+      "id": "336b4535-e39f-4128-99f6-7e4b02245f57",
+      "createdAt": "2024-09-11T02:44:13.000Z",
+      "updatedAt": null,
+      "deletedAt": null,
+      "createdBy": "admin",
+      "updatedBy": null,
+      "deletedBy": null,
+      "version": "0.1",
+      "status": 1,
+      "name": "test",
+      "description": "description",
+      "siteCollectionUrl": "https://henlladev1812.sharepoint.com/sites/test",
+      "siteSPOId": "356f5e1d-450e-434f-b683-757bab3007f3"
+    }
+  ],
+  "statusCode": 200,
+  "message": "GET_SITE_COLLECTIONS_SUCCESSFULLY"
+}
+```
+
+TypeScript của dữ liệu: 
+
+```typescript
+export interface DataResponse {
+  data: dataSiteCollection[]
+  statusCode: number
+  message: string
+}
+
+export interface dataSiteCollection {
+  id: string
+  createdAt: string
+  updatedAt: any
+  deletedAt: any
+  createdBy: string
+  updatedBy: any
+  deletedBy: any
+  version: string
+  status: number
+  name: string
+  description: string
+  siteCollectionUrl?: string
+  siteSPOId?: string
+}
+
+```

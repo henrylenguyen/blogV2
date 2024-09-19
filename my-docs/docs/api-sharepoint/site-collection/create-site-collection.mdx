@@ -1,0 +1,57 @@
+---
+title: Tạo mới kho chứa
+tags:
+  - site-collection
+---
+
+<Admonition type="info" title="POST">
+  ```json
+  /sharepoint/create/site-collection
+  ```
+</Admonition>
+
+### Dữ liệu truyền vào:
+
+```json
+{
+  name: '',
+  description: ''
+}
+```
+
+Trong đó:
+
+* Name: là tên của kho chứa
+* Description: mô tả kho chứa
+
+###
+
+### Dữ liệu trả về:
+
+```json
+
+{
+  "data": {
+    "siteSPOId": "e63ca0b6-bcf2-4410-a36b-3e71659757c9",
+    "name": "name21",
+    "status": 1,
+    "createdBy": "admin",
+    "siteCollectionUrl": "https://henlladev1812.sharepoint.com/sites/name21",
+    "description": "description",
+    "updatedAt": null,
+    "updatedBy": null,
+    "deletedBy": null,
+    "id": "6924bd37-1377-499a-afb0-7c4e786232e7",
+    "createdAt": "2024-09-13T01:01:10.000Z",
+    "deletedAt": null,
+    "version": "0.1"
+  },
+  "statusCode": 201,
+  "message": "SITE_COLLECTION_CREATED_SUCCESSFULLY"
+}
+```
+
+Trong đó: 
+
+* siteSPOId: là id của site collection (trên sharepoint)
+* siteCollectionUrl: là đường dẫn url của site collection

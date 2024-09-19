@@ -269,7 +269,7 @@ export class SharepointController {
 
   // ------------------TẠO MỚI DOCUMENT LIBRARY---------------------
 
-  @Post('site/:siteSPOId/library')
+  @Post('/create/document-library')
   @ApiOperation({ summary: 'Create a new document library' })
   @ApiResponse({
     status: httpStatus.CREATED,

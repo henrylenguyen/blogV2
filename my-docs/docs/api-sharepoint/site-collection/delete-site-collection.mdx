@@ -1,0 +1,33 @@
+---
+title: Xóa kho chứa
+tags:
+  - site-collection
+---
+
+<Admonition type="info" title="DELETE">
+  ```json
+  /sharepoint/delete/site-collection
+  ```
+</Admonition>
+
+### Dữ liệu truyền vào:
+
+```json
+{
+  "siteSPOId": ""
+}
+```
+
+Trong đó:
+
+* siteSPOId: là ID của site collection
+
+### Dữ liệu trả về
+
+```json
+{
+  "data": null,
+  "statusCode": 200,
+  "message": "SITE_COLLECTION_DELETED_SUCCESSFULLY"
+}
+```

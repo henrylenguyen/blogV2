@@ -65,7 +65,7 @@ const getItem = (item) => {
 };
 
 const sidebars = {
-  tutorialSidebar: sidebarData.items.flatMap((item) => {
+  tutorialSidebar: sidebarData.items?.flatMap((item) => {
     return getItem(item);
   }),
 };
