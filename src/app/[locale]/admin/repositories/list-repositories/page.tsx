@@ -1,8 +1,9 @@
+import { TableContainer } from "@/components/layouts/table";
 
 const ListRepositoryPage = () => {
   return (
     <div>
-      hehe
+      <TableContainer/>
     </div>
   );
 };

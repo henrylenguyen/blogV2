@@ -1,4 +1,4 @@
-import { ColumnModel } from "@/components/layouts/table";
+import { ColumnModel } from "@/components/layouts/table/types";
 
 // ColumnModel.ts
 export const columns: ColumnModel[] = [
