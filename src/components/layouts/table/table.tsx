@@ -4,7 +4,6 @@ import {
   Column,
   ColumnDef,
   ColumnFiltersState,
-  Header,
   SortingState,
   flexRender,
   getCoreRowModel,
@@ -16,7 +15,7 @@ import {
   getSortedRowModel,
   useReactTable
 } from '@tanstack/react-table'
-import React, { useState } from 'react'
+import React, { HTMLProps, useState } from 'react'
 import './index.css'
 interface TableProps {
   data: any[]
@@ -24,12 +23,39 @@ interface TableProps {
 }
 
 const Table: React.FC<TableProps> = ({ data, columns }) => {
+  console.log("data:", data)
   const [globalFilter, setGlobalFilter] = useState('')
   const [sorting, setSorting] = useState<SortingState>([])
   const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([])
+  const [columnVisibility, setColumnVisibility] = React.useState({}) // ẩn hiện cột
+  const [rowSelection, setRowSelection] = React.useState({}) // check hàng
 
   const columns2 = React.useMemo<ColumnDef<UserData, any>[]>(
     () => [
+      {
+        id: 'select',
+        header: ({ table }) => (
+          <IndeterminateCheckbox
+            {...{
+              checked: table.getIsAllRowsSelected(),
+              indeterminate: table.getIsSomeRowsSelected(),
+              onChange: table.getToggleAllRowsSelectedHandler()
+            }}
+          />
+        ),
+        cell: ({ row }) => (
+          <div className='px-1'>
+            <IndeterminateCheckbox
+              {...{
+                checked: row.getIsSelected(),
+                disabled: !row.getCanSelect(),
+                indeterminate: row.getIsSomeSelected(),
+                onChange: row.getToggleSelectedHandler()
+              }}
+            />
+          </div>
+        )
+      },
       {
         accessorKey: 'firstName',
         cell: (info) => info.getValue()
@@ -78,17 +104,15 @@ const Table: React.FC<TableProps> = ({ data, columns }) => {
     state: {
       sorting,
       globalFilter,
-      columnFilters
+      columnFilters,
+      columnVisibility,
+      rowSelection // chọn hàng
     },
     onColumnFiltersChange: setColumnFilters,
     getCoreRowModel: getCoreRowModel(),
     getFilteredRowModel: getFilteredRowModel(),
     getSortedRowModel: getSortedRowModel(),
     getPaginationRowModel: getPaginationRowModel(),
-    defaultColumn: {
-      minSize: 30, // Cập nhật để cho phép cột nhỏ hơn chữ (tối thiểu 30px)
-      maxSize: 800
-    },
     columnResizeMode: 'onChange',
     getFacetedRowModel: getFacetedRowModel(),
     getFacetedUniqueValues: getFacetedUniqueValues(),
@@ -96,20 +120,55 @@ const Table: React.FC<TableProps> = ({ data, columns }) => {
     debugTable: true,
     debugHeaders: true,
     debugColumns: false,
-    onSortingChange: setSorting
+    onSortingChange: setSorting,
+    onColumnVisibilityChange: setColumnVisibility, // Ẩn hiện cột,
+    enableRowSelection: true, // chọn tất cả
+    onRowSelectionChange: setRowSelection
   })
-
 
   return (
     <div className='p-2'>
-      <div style={{ direction: table.options.columnResizeDirection }}>
-        <div className=''>
+      <div className='inline-block border border-black shadow rounded'>
+        <div className='px-1 border-b border-black'>
+          <label>
+            <input
+              {...{
+                type: 'checkbox',
+                checked: table.getIsAllColumnsVisible(),
+                onChange: table.getToggleAllColumnsVisibilityHandler()
+              }}
+            />{' '}
+            Toggle All
+          </label>
+        </div>
+        {table.getAllLeafColumns().map((column) => {
+          return (
+            <div key={column.id} className='px-1'>
+              <label>
+                <input
+                  {...{
+                    type: 'checkbox',
+                    checked: column.getIsVisible(),
+                    onChange: column.getToggleVisibilityHandler()
+                  }}
+                />{' '}
+                {column.id}
+              </label>
+            </div>
+          )
+        })}
+      </div>
+      <div
+        style={{ direction: table.options.columnResizeDirection }}
+        className='max-w-full overflow-x-scroll overflow-y-hidden'
+      >
+        <div className='w-full'>
           <div
             {...{
-              className: 'divTable',
-              style: {
-                width: table.getTotalSize()
-              }
+              className: 'divTable w-full',
+              // style: {
+              //   width: table.getTotalSize()
+              // }
             }}
           >
             <div className='thead'>
@@ -176,10 +235,69 @@ const Table: React.FC<TableProps> = ({ data, columns }) => {
             </div>
           </div>
         </div>
-        <div className='h-4' />
-        <div className='text-xl'>{'<div/> (absolute positioning)'}</div>
       </div>
-      <div className='h-4' />
+      {/* Phân trang */}
+      <div className='flex items-center gap-2'>
+        <button
+          className='border rounded p-1'
+          onClick={() => table.setPageIndex(0)}
+          disabled={!table.getCanPreviousPage()}
+        >
+          {'<<'}
+        </button>
+        <button
+          className='border rounded p-1'
+          onClick={() => table.previousPage()}
+          disabled={!table.getCanPreviousPage()}
+        >
+          {'<'}
+        </button>
+        <button className='border rounded p-1' onClick={() => table.nextPage()} disabled={!table.getCanNextPage()}>
+          {'>'}
+        </button>
+        <button
+          className='border rounded p-1'
+          onClick={() => table.setPageIndex(table.getPageCount() - 1)}
+          disabled={!table.getCanNextPage()}
+        >
+          {'>>'}
+        </button>
+        <span className='flex items-center gap-1'>
+          <div>Page</div>
+          <strong>
+            {table.getState().pagination.pageIndex + 1} of {table.getPageCount()}
+          </strong>
+        </span>
+        <span className='flex items-center gap-1'>
+          | Go to page:
+          <input
+            type='number'
+            min='1'
+            max={table.getPageCount()}
+            defaultValue={table.getState().pagination.pageIndex + 1}
+            onChange={(e) => {
+              const page = e.target.value ? Number(e.target.value) - 1 : 0
+              table.setPageIndex(page)
+            }}
+            className='border p-1 rounded w-16'
+          />
+        </span>
+        <select
+          value={table.getState().pagination.pageSize}
+          onChange={(e) => {
+            table.setPageSize(Number(e.target.value))
+          }}
+        >
+          {[10, 20, 30, 40, 50].map((pageSize) => (
+            <option key={pageSize} value={pageSize}>
+              Show {pageSize}
+            </option>
+          ))}
+        </select>
+      </div>
+      <div>
+        {Object.keys(rowSelection).length} of {table.getPreFilteredRowModel().rows.length} Total Rows Selected
+      </div>
       <pre>
         {JSON.stringify(
           {
@@ -190,6 +308,18 @@ const Table: React.FC<TableProps> = ({ data, columns }) => {
           2
         )}
       </pre>
+      {/* <div>
+        <button
+          className='border rounded p-2 mb-2'
+          onClick={() => console.info('table.getSelectedRowModel().flatRows', table.getSelectedRowModel().flatRows)}
+        >
+          Log table.getSelectedRowModel().flatRows
+        </button>
+      </div> */}
+      <div>
+        <label>Row Selection State:</label>
+        <pre>{JSON.stringify(table.getState().rowSelection, null, 2)}</pre>
+      </div>
     </div>
   )
 }
@@ -289,4 +419,20 @@ function DebouncedInput({
   }, [value])
 
   return <input {...props} value={value} onChange={(e) => setValue(e.target.value)} />
+}
+
+function IndeterminateCheckbox({
+  indeterminate,
+  className = '',
+  ...rest
+}: { indeterminate?: boolean } & HTMLProps<HTMLInputElement>) {
+  const ref = React.useRef<HTMLInputElement>(null!)
+
+  React.useEffect(() => {
+    if (typeof indeterminate === 'boolean') {
+      ref.current.indeterminate = !rest.checked && indeterminate
+    }
+  }, [ref, indeterminate])
+
+  return <input type='checkbox' ref={ref} className={className + ' cursor-pointer'} {...rest} />
 }
