@@ -1,0 +1,122 @@
+table,
+.divTable {
+  border: 1px solid lightgray;
+  width: fit-content;
+}
+
+tr,
+.tr {
+  display: flex;
+}
+
+tr,
+.tr {
+  width: fit-content;
+  height: 30px;
+}
+
+th,
+.th,
+td,
+.td {
+  box-shadow: inset 0 0 0 1px lightgray;
+  padding: 0.25rem;
+}
+
+th,
+.th {
+  padding: 2px 4px;
+  position: relative;
+  font-weight: bold;
+  text-align: center;
+  height: 30px;
+}
+
+td,
+.td {
+  height: 30px;
+  /* Giúp ẩn phần nội dung vượt quá kích thước cột */
+  overflow: hidden;
+  /* Giữ nội dung trên một dòng, tránh xuống dòng */
+  white-space: nowrap;
+  /* Thêm dấu "..." khi nội dung bị cắt */
+  text-overflow: ellipsis;
+  z-index: 1;
+  // background-color: white
+}
+// th[style*="position: sticky"],
+// td[style*="position: sticky"] {
+//   background: white;
+//   /* Giữ nền trắng cho các cột bị khóa */
+//   box-shadow: inset -1px 0 0 0 #ddd, 1px 0 0 0 #ddd;
+//   /* Thêm bóng đổ để phân biệt các cột khóa */
+// }
+
+.sticky-column {
+  position: sticky;
+  // background-color: white;
+  /* Giữ cột nổi phía trên */
+  z-index: 2;
+  /* Đảm bảo cột bị khóa nổi lên trên */
+}
+
+.no-scroll {
+  overflow: hidden;
+}
+.resizer {
+  position: absolute;
+  top: 0;
+  height: 100%;
+  right: 0;
+  width: 5px;
+  background: rgba(0, 0, 0, 0.5);
+  cursor: col-resize;
+  user-select: none;
+  touch-action: none;
+}
+
+.resizer.isResizing {
+  background: blue;
+  opacity: 1;
+}
+
+@media (hover: hover) {
+  .resizer {
+    opacity: 0;
+  }
+
+  *:hover>.resizer {
+    opacity: 1;
+  }
+}
+
+
+.scroll-container {
+  /* Kích hoạt scroll ngang */
+  overflow-y: hidden;
+  /* Ẩn scroll dọc (nếu cần) */
+  white-space: nowrap;
+  /* Đảm bảo nội dung không xuống dòng */
+}
+
+/* Custom scrollbar chỉ áp dụng cho trục ngang */
+.scroll-container::-webkit-scrollbar {
+  height: 5px;
+  /* Chiều cao của scrollbar ngang */
+  background-color: #ffff;
+  /* Màu nền scrollbar */
+}
+
+/* Custom scrollbar thumb */
+.scroll-container::-webkit-scrollbar-thumb {
+  background-color: #888;
+  /* Màu thumb */
+  border-radius: 10px;
+  /* Bo góc của thumb */
+}
+
+/* Hover effect */
+.scroll-container::-webkit-scrollbar-thumb:hover {
+  background-color: #555;
+  /* Màu thumb khi hover */
+}
