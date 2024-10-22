@@ -18,8 +18,9 @@ import {
   useReactTable
 } from '@tanstack/react-table'
 import React, { useState } from 'react'
+import { useTranslation } from 'react-i18next'
 import './index.scss'
-
+import { ArrowLeftToLine, ArrowRightToLine, MoveLeft, MoveRight } from 'lucide-react'
 
 interface TableProps {
   data: UserData[]
@@ -55,6 +56,7 @@ const TableComponent: React.FC<TableProps> = ({
   const [rowSelection, setRowSelection] = React.useState({}) // check hàng
   const [lockedColumn, setLockedColumn] = useState<number>(-1)
 
+  const { t } = useTranslation()
   const handleLockChange = (columnIndex: number) => {
     if (lockedColumn !== null && columnIndex === lockedColumn) {
       // Nếu click vào cột cuối đang bị lock, unlock cột đó nhưng giữ các cột trước
@@ -69,7 +71,6 @@ const TableComponent: React.FC<TableProps> = ({
   }
 
   const flatData = React.useMemo<ColumnDef<UserData, any>[]>(() => {
-    // Check if row selection is enabled
     const selectionColumn = isRowSelection
       ? {
           id: 'select',
@@ -83,15 +84,16 @@ const TableComponent: React.FC<TableProps> = ({
           cell: ({ row }) => (
             <input type='checkbox' checked={row.getIsSelected()} onChange={row.getToggleSelectedHandler()} />
           ),
-          size: 50
+          size: 50 // chiều rộng mặc định của cột chọn hàng
         }
       : null
 
     const dataColumns = columns.map((columnModel: ColumnModel) => {
-      const { key, label, sortable, render, searchable, filterOtions } = columnModel
+      const { key, label, sortable, render, searchable, filterOtions, columnWidth } = columnModel
       const sortType = columnModel.sortType || 'text'
       let sortingFn
 
+      // Kiểm tra loại sắp xếp cho cột
       if (sortType === 'text') {
         sortingFn = sortTextFn
       } else if (sortType === 'number') {
@@ -104,74 +106,19 @@ const TableComponent: React.FC<TableProps> = ({
         accessorKey: key,
         header: () => (
           <div className='flex gap-2 flex-shrink-0 w-full h-full justify-between items-center'>
-            <span className='flex-shrink-0'>{label}</span>
-            {sortable && !searchable && !filterOtions && (
-              <FilterDropdown
-                sortType={sortType}
-                isSort
-                onChange={(value) => {
-                  if (value === null) {
-                    table.resetSorting(true)
-                  } else {
-                    setSorting([{ id: key, desc: value === 'desc' }])
-                  }
-                }}
-              />
-            )}
-            {sortable && (searchable || filterOtions) && (
-              <MultiFilter
-                onSortChange={(value) => {
-                  if (value === null) {
-                    table.resetSorting(true)
-                  } else {
-                    setSorting([{ id: key, desc: value === 'desc' }])
-                  }
-                }}
-                onFilterChange={(value) => {
-                  if (value === null) {
-                    setColumnFilters([])
-                  } else {
-                    setColumnFilters([{ id: key, value }])
-                  }
-                }}
-                onSearchChange={(value) =>
-                  setColumnFilters((prevFilters) => [...prevFilters.filter((f) => f.id !== key), { id: key, value }])
-                }
-                filterOptions={filterOtions?.map((value) => ({ label: value, value }))}
-                isSort={sortable}
-                sortType={sortType}
-                isSearch={searchable}
-              />
-            )}
-            {filterOtions && !searchable && !sortable && (
-              <FilterDropdown
-                optionFilter={filterOtions.map((value) => ({ label: value, value }))}
-                onChange={(value) => {
-                  if (value === null) {
-                    setColumnFilters([])
-                  } else {
-                    setColumnFilters([{ id: key, value }])
-                  }
-                }}
-              />
-            )}
-            {searchable && !sortable && !filterOtions && (
-              <SearchDropdown
-                onChange={(value) =>
-                  setColumnFilters((prevFilters) => [...prevFilters.filter((f) => f.id !== key), { id: key, value }])
-                }
-              />
-            )}
+            <span className='flex-shrink-0'>{t(label)}</span>
+            {/* Các logic điều kiện khác */}
           </div>
         ),
         cell: render ? (info) => render(info.row.original) : (info) => info.getValue(),
-        sortingFn: sortable ? sortingFn : undefined
+        sortingFn: sortable ? sortingFn : undefined,
+        size: columnWidth ? parseInt(columnWidth, 10) : 250 // Set size nếu columnWidth tồn tại
       }
     })
 
-    // Conditionally include the selection column
     return selectionColumn ? [selectionColumn, ...dataColumns] : dataColumns
   }, [columns, isRowSelection])
+
 
   const calculateLeftOffset = (columnIndex: number) => {
     let leftOffset = 0
@@ -273,25 +220,86 @@ const TableComponent: React.FC<TableProps> = ({
           </>
         )}
       </div>
-      <div className='flex max-w-[1200px]'>
-        {/* Div for locked columns */}
-        <div className='locked-columns min-w-fit' style={{ overflow: 'hidden', position: 'relative' }}>
-          <table>
-            <thead>
-              {table.getHeaderGroups().map((headerGroup) => (
-                <tr key={headerGroup.id}>
-                  {headerGroup.headers.map(
-                    (header, columnIndex) =>
-                      lockedColumn !== null &&
-                      columnIndex <= lockedColumn && (
+      <div className='min-h-[500px] bg-secondary-dark rounded-xl py-6 border border-secondary-gray'>
+        <div className='flex min-h-[500px]'>
+          {/* Div for locked columns */}
+          <div className='locked-columns min-w-fit' style={{ overflow: 'hidden', position: 'relative' }}>
+            <table>
+              <thead>
+                {table.getHeaderGroups().map((headerGroup) => (
+                  <tr key={headerGroup.id}>
+                    {headerGroup.headers.map(
+                      (header, columnIndex) =>
+                        lockedColumn !== null &&
+                        columnIndex <= lockedColumn && (
+                          <th
+                            key={header.id}
+                            className='flex'
+                            style={{
+                              width: header.getSize(),
+                              position: 'sticky',
+                              left: calculateLeftOffset(columnIndex), // Calculate the left offset dynamically
+                              zIndex: 10
+                            }}
+                          >
+                            {header.isPlaceholder
+                              ? null
+                              : flexRender(header.column.columnDef.header, header.getContext())}
+                            <div
+                              {...{
+                                onDoubleClick: () => header.column.resetSize(),
+                                onMouseDown: resizable ? header.getResizeHandler() : undefined, // Chỉ kích hoạt nếu resizable = true
+                                onTouchStart: resizable ? header.getResizeHandler() : undefined, // Chỉ kích hoạt nếu resizable = true
+                                className: resizable
+                                  ? `resizer ${table.options.columnResizeDirection} ${header.column.getIsResizing() ? 'isResizing' : ''}`
+                                  : ''
+                              }}
+                            />
+                          </th>
+                        )
+                    )}
+                  </tr>
+                ))}
+              </thead>
+              <tbody>
+                {table.getRowModel().rows.map((row) => (
+                  <tr key={row.id}>
+                    {row.getVisibleCells().map(
+                      (cell, columnIndex) =>
+                        lockedColumn !== null &&
+                        columnIndex <= lockedColumn && (
+                          <td
+                            key={cell.id}
+                            style={{
+                              width: cell.column.getSize(),
+                              position: 'sticky',
+                              left: calculateLeftOffset(columnIndex),
+                              zIndex: 10
+                            }}
+                          >
+                            {flexRender(cell.column.columnDef.cell, cell.getContext())}
+                          </td>
+                        )
+                    )}
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+
+          {/* Div for scrollable columns */}
+          <div className='scroll-container overflow-x-auto '>
+            <table>
+              <thead>
+                {table.getHeaderGroups().map((headerGroup) => (
+                  <tr key={headerGroup.id} className='h-[50px]'>
+                    {headerGroup.headers.map((header, columnIndex) =>
+                      lockedColumn === null || columnIndex > lockedColumn ? (
                         <th
                           key={header.id}
                           className='flex'
                           style={{
-                            width: header.getSize(),
-                            position: 'sticky',
-                            left: calculateLeftOffset(columnIndex), // Calculate the left offset dynamically
-                            zIndex: 10
+                            width: header.getSize()
                           }}
                         >
                           {header.isPlaceholder
@@ -308,153 +316,108 @@ const TableComponent: React.FC<TableProps> = ({
                             }}
                           />
                         </th>
-                      )
-                  )}
-                </tr>
-              ))}
-            </thead>
-            <tbody>
-              {table.getRowModel().rows.map((row) => (
-                <tr key={row.id}>
-                  {row.getVisibleCells().map(
-                    (cell, columnIndex) =>
-                      lockedColumn !== null &&
-                      columnIndex <= lockedColumn && (
+                      ) : null
+                    )}
+                  </tr>
+                ))}
+              </thead>
+              <tbody>
+                {table.getRowModel().rows.map((row) => (
+                  <tr key={row.id}>
+                    {row.getVisibleCells().map((cell, columnIndex) =>
+                      lockedColumn === null || columnIndex > lockedColumn ? (
                         <td
                           key={cell.id}
                           style={{
-                            width: cell.column.getSize(),
-                            position: 'sticky',
-                            left: calculateLeftOffset(columnIndex),
-                            zIndex: 10
+                            width: cell.column.getSize()
                           }}
                         >
                           {flexRender(cell.column.columnDef.cell, cell.getContext())}
                         </td>
-                      )
-                  )}
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
-
-        {/* Div for scrollable columns */}
-        <div className='scroll-container overflow-x-auto '>
-          <table>
-            <thead>
-              {table.getHeaderGroups().map((headerGroup) => (
-                <tr key={headerGroup.id}>
-                  {headerGroup.headers.map((header, columnIndex) =>
-                    lockedColumn === null || columnIndex > lockedColumn ? (
-                      <th
-                        key={header.id}
-                        className='flex'
-                        style={{
-                          width: header.getSize()
-                        }}
-                      >
-                        {header.isPlaceholder ? null : flexRender(header.column.columnDef.header, header.getContext())}
-                        <div
-                          {...{
-                            onDoubleClick: () => header.column.resetSize(),
-                            onMouseDown: resizable ? header.getResizeHandler() : undefined, // Chỉ kích hoạt nếu resizable = true
-                            onTouchStart: resizable ? header.getResizeHandler() : undefined, // Chỉ kích hoạt nếu resizable = true
-                            className: resizable
-                              ? `resizer ${table.options.columnResizeDirection} ${header.column.getIsResizing() ? 'isResizing' : ''}`
-                              : ''
-                          }}
-                        />
-                      </th>
-                    ) : null
-                  )}
-                </tr>
-              ))}
-            </thead>
-            <tbody>
-              {table.getRowModel().rows.map((row) => (
-                <tr key={row.id}>
-                  {row.getVisibleCells().map((cell, columnIndex) =>
-                    lockedColumn === null || columnIndex > lockedColumn ? (
-                      <td
-                        key={cell.id}
-                        style={{
-                          width: cell.column.getSize()
-                        }}
-                      >
-                        {flexRender(cell.column.columnDef.cell, cell.getContext())}
-                      </td>
-                    ) : null
-                  )}
-                </tr>
-              ))}
-            </tbody>
-          </table>
+                      ) : null
+                    )}
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
         </div>
       </div>
 
       {/* Phân trang */}
-      <div className='flex items-center gap-2'>
-        <button
-          className='border rounded p-1'
-          onClick={() => table.setPageIndex(0)}
-          disabled={!table.getCanPreviousPage()}
-        >
-          {'<<'}
-        </button>
-        <button
-          className='border rounded p-1'
-          onClick={() => table.previousPage()}
-          disabled={!table.getCanPreviousPage()}
-        >
-          {'<'}
-        </button>
-        <button className='border rounded p-1' onClick={() => table.nextPage()} disabled={!table.getCanNextPage()}>
-          {'>'}
-        </button>
-        <button
-          className='border rounded p-1'
-          onClick={() => table.setPageIndex(table.getPageCount() - 1)}
-          disabled={!table.getCanNextPage()}
-        >
-          {'>>'}
-        </button>
-        <span className='flex items-center gap-1'>
-          <div>Page</div>
-          <strong>
-            {table.getState().pagination.pageIndex + 1} of {table.getPageCount()}
-          </strong>
-        </span>
-        <span className='flex items-center gap-1'>
-          | Go to page:
-          <input
-            type='number'
-            min='1'
-            max={table.getPageCount()}
-            defaultValue={table.getState().pagination.pageIndex + 1}
-            onChange={(e) => {
-              const page = e.target.value ? Number(e.target.value) - 1 : 0
-              table.setPageIndex(page)
-            }}
-            className='border p-1 rounded w-16'
-          />
-        </span>
-        {isShowNumberPerPage && (
-          <select
-            value={table.getState().pagination.pageSize}
-            onChange={(e) => {
-              table.setPageSize(Number(e.target.value))
-            }}
-          >
-            {[10, 20, 30, 40, 50].map((pageSize) => (
-              <option key={pageSize} value={pageSize}>
-                Show {pageSize}
-              </option>
-            ))}
-          </select>
-        )}
+      <div className='flex items-center gap-2 mt-8 justify-between'>
+        <div className='flex gap-3'>
+          <div className='flex items-center gap-1'>
+            <span>{t('page')}</span>
+            <strong>
+              {table.getState().pagination.pageIndex + 1} {t('of')} {table.getPageCount()}
+            </strong>
+          </div>
+          <div className='flex items-center gap-2'>
+            <span>| {t('goToPage')}:</span>
+            <input
+              type='number'
+              min='1'
+              max={table.getPageCount()}
+              defaultValue={table.getState().pagination.pageIndex + 1}
+              onChange={(e) => {
+                const page = e.target.value ? Number(e.target.value) - 1 : 0
+                table.setPageIndex(page)
+              }}
+              className='border rounded-md p-2 bg-neutral-700 w-[70px] h-[30px] flex items-center justify-center '
+            />
+          </div>
+        </div>
+        <div className='flex gap-4 items-center'>
+          {isShowNumberPerPage && (
+            <div className='flex gap-4 items-center'>
+              <label>{t('rowsPerPage')}</label>
+              <select
+                value={table.getState().pagination.pageSize}
+                onChange={(e) => table.setPageSize(Number(e.target.value))}
+                className='rounded-md p-2 bg-neutral-700 w-[70px] h-[40px] cursor-pointer'
+              >
+                {[10, 20, 50, 100].map((pageSize) => (
+                  <option key={pageSize} value={pageSize}>
+                    {pageSize}
+                  </option>
+                ))}
+              </select>
+            </div>
+          )}
+          <div className='flex gap-2'>
+            <button
+              className='border rounded-md p-2 bg-neutral-700 w-[40px] h-[30px] flex items-center justify-center cursor-pointer'
+              onClick={() => table.setPageIndex(0)}
+              disabled={!table.getCanPreviousPage()}
+            >
+              <ArrowLeftToLine className='w-[15px] h-[15px]' />
+            </button>
+            <button
+              className='border rounded-md p-2 bg-neutral-700 w-[40px] h-[30px] flex items-center justify-center cursor-pointer'
+              onClick={() => table.previousPage()}
+              disabled={!table.getCanPreviousPage()}
+            >
+              <MoveLeft className='w-[15px] h-[15px]' />
+            </button>
+            <button
+              className='border rounded-md p-2 bg-neutral-700 w-[40px] h-[30px] flex items-center justify-center cursor-pointer'
+              onClick={() => table.nextPage()}
+              disabled={!table.getCanNextPage()}
+            >
+              <MoveRight className='w-[15px] h-[15px]' />
+            </button>
+            <button
+              className='border rounded-md p-2 bg-neutral-700 w-[40px] h-[30px] flex items-center justify-center cursor-pointer'
+              onClick={() => table.setPageIndex(table.getPageCount() - 1)}
+              disabled={!table.getCanNextPage()}
+            >
+              <ArrowRightToLine className='w-[15px] h-[15px]' />
+            </button>
+          </div>
+        </div>
       </div>
-      <div>
+      {/* <div>
         {Object.keys(rowSelection).length} of {table.getPreFilteredRowModel().rows.length} Total Rows Selected
       </div>
       <pre>
@@ -466,7 +429,7 @@ const TableComponent: React.FC<TableProps> = ({
           null,
           2
         )}
-      </pre>
+      </pre> */}
       {/* <div>
         <button
           className='border rounded p-2 mb-2'
@@ -475,10 +438,10 @@ const TableComponent: React.FC<TableProps> = ({
           Log table.getSelectedRowModel().flatRows
         </button>
       </div> */}
-      <div>
+      {/* <div>
         <label>Row Selection State:</label>
         <pre>{JSON.stringify(table.getState().rowSelection, null, 2)}</pre>
-      </div>
+      </div> */}
     </div>
   )
 }

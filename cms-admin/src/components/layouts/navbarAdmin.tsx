@@ -29,9 +29,10 @@ import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@/
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 import Search from '@/components/ui/search'
 import { cn } from '@/lib/utils'
+import { AlignJustify } from 'lucide-react'
 import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import { NavLink, useLocation, useParams } from 'react-router-dom'
+import { NavLink, useLocation } from 'react-router-dom'
 
 interface INavbarProps {}
 
@@ -199,8 +200,8 @@ const accoutLink = [
 ]
 
 const NavbarAdmin: React.FunctionComponent<INavbarProps> = (props) => {
+  const [open, setOpen] = useState(true)
   const router = useLocation().pathname.replace('/', '')
-  console.log("router:", router)
   const { t } = useTranslation()
   const [search, setSearch] = useState(navLink)
 
@@ -215,44 +216,95 @@ const NavbarAdmin: React.FunctionComponent<INavbarProps> = (props) => {
       .filter((nav) => nav.links && nav.links.length > 0) // Filter out nav objects with no matching links
     setSearch(searchResult)
   }
+  const handleToggleSideBar = () => {
+    setOpen((prev) => !prev)
+  }
   return (
-    <nav className='w-[300px] flex-shrink-0 p-5 flex flex-col gap-5 max-h-screen hover:overflow-y-auto overflow-hidden'>
-      <div>
-        <NavLink to='/' className='hover:no-underline flex gap-3 items-center'>
-          <img src='/logo.png' alt='logo' className='object-cover block w-[40px] h-[40px]' />
-          <h1 className='text-3xl  font-bold'>Henlladev</h1>
-        </NavLink>
-      </div>
-      <div>
-        <Search placeHolder={t('search in menu')} onSearch={handleSearch} />
-      </div>
-      <div className='flex flex-col text-neutral-400 '>
-        {search.map((nav, index) => {
-          const defaultValue = nav.links?.find((link) => link.href === router) ? `item-${index}` : ''
-          return (
-            <Accordion key={index} type='single' collapsible defaultValue={defaultValue}>
-              <AccordionItem value={`item-${index}`} className='border-none'>
+    <>
+      {open && (
+        <nav className='w-[300px] flex-shrink-0 p-5 flex flex-col gap-5 max-h-screen hover:overflow-y-auto overflow-hidden'>
+          <div className='flex justify-between items-center'>
+            <NavLink to='/' className='hover:no-underline flex gap-3 items-center'>
+              <img src='/logo.png' alt='logo' className='object-cover block w-[40px] h-[40px]' />
+              <h1 className='text-3xl  font-bold'>Henlladev</h1>
+            </NavLink>
+            <button onClick={handleToggleSideBar}>
+              <AlignJustify className='w-[30px] h-[30px] flex-shrink-0' />
+            </button>
+          </div>
+          <div>
+            <Search placeHolder={t('search in menu')} onSearch={handleSearch} />
+          </div>
+          <div className='flex flex-col text-neutral-400 '>
+            {search.map((nav, index) => {
+              const defaultValue = nav.links?.find((link) => link.href === router) ? `item-${index}` : ''
+              return (
+                <Accordion key={index} type='single' collapsible defaultValue={defaultValue}>
+                  <AccordionItem value={`item-${index}`} className='border-none'>
+                    <AccordionTrigger className=' hover:text-primary-purple capitalize text-[16px] hover:no-underline'>
+                      <div className='flex items-center gap-3'>
+                        {nav.icon}
+                        {t(nav.title)}
+                      </div>
+                    </AccordionTrigger>
+                    <AccordionContent>
+                      <ul>
+                        {nav.links?.map((link, index) => {
+                          return (
+                            <li key={index} className='pl-8'>
+                              <NavLink
+                                to={link.href}
+                                className={({ isActive }) =>
+                                  cn(
+                                    ' h-[52px] w-full leading-10 flex items-center capitalize  text-[16px]  gap-3 ',
+                                    isActive ? 'text-primary-purple' : 'text-neutral-400'
+                                  )
+                                }
+                              >
+                                {link.icon}
+                                {t(link.title)}
+                              </NavLink>
+                            </li>
+                          )
+                        })}
+                      </ul>
+                    </AccordionContent>
+                  </AccordionItem>
+                </Accordion>
+              )
+            })}
+          </div>
+          <div className='border-t border-neutral-100/40 py-4'>
+            <Accordion type='single' collapsible>
+              <AccordionItem value={`item-avatar`} className='border-none'>
                 <AccordionTrigger className=' hover:text-primary-purple capitalize text-[16px] hover:no-underline'>
                   <div className='flex items-center gap-3'>
-                    {nav.icon}
-                    {t(nav.title)}
+                    <Avatar>
+                      <AvatarImage src='https://github.com/shadcn.png' />
+                      <AvatarFallback>CN</AvatarFallback>
+                    </Avatar>
+                    <div className='flex flex-col items-start gap-2'>
+                      <p className='text-[20px]'>Shadcn</p>
+                      <p className='text-[13px] text-neutral-400'>{t('account settings')}</p>
+                    </div>
                   </div>
                 </AccordionTrigger>
                 <AccordionContent>
                   <ul>
-                    {nav.links?.map((link, index) => {
+                    {accoutLink?.map((link, index) => {
                       return (
-                        <li key={index} className='pl-8'>
+                        <li
+                          key={index}
+                          className='pl-8 flex gap-3 items-center hover:text-primary-purple text-neutral-400'
+                        >
+                          {link.icon}
                           <NavLink
                             to={link.href}
-                            className={({ isActive }) =>
-                              cn(
-                                ' h-[52px] w-full leading-10 flex items-center capitalize  text-[16px]  gap-3 ',
-                                isActive ? 'text-primary-purple' : 'text-neutral-400'
-                              )
-                            }
+                            className={cn(
+                              ' h-[52px] w-full leading-10 flex items-center capitalize  text-[16px]'
+                              // router === link.href ? 'text-primary-purple' : ''
+                            )}
                           >
-                            {link.icon}
                             {t(link.title)}
                           </NavLink>
                         </li>
@@ -262,48 +314,17 @@ const NavbarAdmin: React.FunctionComponent<INavbarProps> = (props) => {
                 </AccordionContent>
               </AccordionItem>
             </Accordion>
-          )
-        })}
-      </div>
-      <div className='border-t border-neutral-100/40 py-4'>
-        <Accordion type='single' collapsible>
-          <AccordionItem value={`item-avatar`} className='border-none'>
-            <AccordionTrigger className=' hover:text-primary-purple capitalize text-[16px] hover:no-underline'>
-              <div className='flex items-center gap-3'>
-                <Avatar>
-                  <AvatarImage src='https://github.com/shadcn.png' />
-                  <AvatarFallback>CN</AvatarFallback>
-                </Avatar>
-                <div className='flex flex-col items-start gap-2'>
-                  <p className='text-[20px]'>Shadcn</p>
-                  <p className='text-[13px] text-neutral-400'>{t('account settings')}</p>
-                </div>
-              </div>
-            </AccordionTrigger>
-            <AccordionContent>
-              <ul>
-                {accoutLink?.map((link, index) => {
-                  return (
-                    <li key={index} className='pl-8 flex gap-3 items-center hover:text-primary-purple text-neutral-400'>
-                      {link.icon}
-                      <NavLink
-                        to={link.href}
-                        className={cn(
-                          ' h-[52px] w-full leading-10 flex items-center capitalize  text-[16px]'
-                          // router === link.href ? 'text-primary-purple' : ''
-                        )}
-                      >
-                        {t(link.title)}
-                      </NavLink>
-                    </li>
-                  )
-                })}
-              </ul>
-            </AccordionContent>
-          </AccordionItem>
-        </Accordion>
-      </div>
-    </nav>
+          </div>
+        </nav>
+      )}
+      {!open && (
+        <div className='w-[80px] mt-5 flex-shrink-0'>
+          <button onClick={handleToggleSideBar} className='w-full flex justify-center'>
+            <AlignJustify className='w-[30px] h-[30px] flex-shrink-0' />
+          </button>
+        </div>
+      )}
+    </>
   )
 }
 

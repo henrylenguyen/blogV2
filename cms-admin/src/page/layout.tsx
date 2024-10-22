@@ -8,7 +8,7 @@ const LayoutAdmin: React.FunctionComponent<ILayoutAdminProps> = ({ children }) =
   return (
     <div className='relative container w-full min-h-screen mx-auto flex bg-neutral-800 text-white'>
       <NavbarAdmin />
-      <main>
+      <main className='p-6 w-full h-screen overflow-x-hidden'>
         <Outlet />
       </main>
     </div>

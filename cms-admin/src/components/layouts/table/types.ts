@@ -17,6 +17,7 @@ export interface ColumnModel {
   sortType?: 'text' | 'date' | 'number' // Các loại sắp xếp khả dụng cho cột này
   filterOtions?: string[] // Các tùy chọn bộ lọc cho cột này
   searchable?: boolean // Có thể tìm kiếm cột này hay không
+  columnWidth?: string // Chiều rộng của cột
 }
 
 export interface UserData {

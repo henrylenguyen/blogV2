@@ -1,6 +1,6 @@
 table,
 .divTable {
-  border: 1px solid lightgray;
+  // border: 1px solid lightgray;
   width: fit-content;
 }
 
@@ -13,19 +13,22 @@ tr,
 .tr {
   width: fit-content;
   height: 30px;
+
+}
+tbody {
+  tr,.tr {
+    height: 60px;
+    align-items: center;
+    &:nth-child(odd) {
+      @apply bg-neutral-700;
+    }
+  }
 }
 
-th,
-.th,
-td,
-.td {
-  box-shadow: inset 0 0 0 1px lightgray;
-  padding: 0.25rem;
-}
 
 th,
 .th {
-  padding: 2px 4px;
+  padding: 2px 30px;
   position: relative;
   font-weight: bold;
   text-align: center;
@@ -34,7 +37,8 @@ th,
 
 td,
 .td {
-  height: 30px;
+  padding: 2px 30px;
+  @apply text-neutral-400;
   /* Giúp ẩn phần nội dung vượt quá kích thước cột */
   overflow: hidden;
   /* Giữ nội dung trên một dòng, tránh xuống dòng */
@@ -42,15 +46,8 @@ td,
   /* Thêm dấu "..." khi nội dung bị cắt */
   text-overflow: ellipsis;
   z-index: 1;
-  // background-color: white
 }
-// th[style*="position: sticky"],
-// td[style*="position: sticky"] {
-//   background: white;
-//   /* Giữ nền trắng cho các cột bị khóa */
-//   box-shadow: inset -1px 0 0 0 #ddd, 1px 0 0 0 #ddd;
-//   /* Thêm bóng đổ để phân biệt các cột khóa */
-// }
+
 
 .sticky-column {
   position: sticky;
@@ -63,6 +60,7 @@ td,
 .no-scroll {
   overflow: hidden;
 }
+
 .resizer {
   position: absolute;
   top: 0;

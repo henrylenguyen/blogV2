@@ -41,5 +41,19 @@
   "high-low": "Cao - Thấp",
   "sort": "Sắp xếp",
   "filter": "Lọc",
-  "search in columns": "Tìm kiếm trong cột..."
+  "search in columns": "Tìm kiếm trong cột...",
+  "createdAt": "Ngày tạo",
+  "updatedAt": "Ngày cập nhật",
+  "deletedAt": "Ngày xóa",
+  "createdBy": "Người tạo",
+  "updatedBy": "Người cập nhật",
+  "deletedBy": "Người xóa",
+  "status": "Trạng thái",
+  "name": "Tên",
+  "title": "Tiêu đề",
+  "description": "Mô tả",
+  "rowsPerPage": "Số dòng trên trang",
+  "page": "Trang",
+  "of": "trên",
+  "goToPage": "Đi đến trang"
 }

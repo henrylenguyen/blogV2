@@ -1,9 +1,19 @@
 {
+  "parser": "@typescript-eslint/parser",
+  "parserOptions": {
+    "ecmaVersion": 2020, // Đảm bảo hỗ trợ ECMAScript 2020
+    "sourceType": "module" // Sử dụng ECMAScript modules
+  },
+  "extends": [
+    "eslint:recommended",
+    "plugin:@typescript-eslint/recommended", // Sử dụng các rule cơ bản của TypeScript
+    "plugin:prettier/recommended" // Sử dụng Prettier cho việc format code
+  ],
+  "plugins": ["@typescript-eslint", "prettier"],
   "rules": {
-    "prettier/prettier": "error", // Đảm bảo Prettier chạy đúng quy tắc
+    "prettier/prettier": "error",
     "@typescript-eslint/explicit-module-boundary-types": "off",
     "@typescript-eslint/no-unused-vars": "warn",
     "react/react-in-jsx-scope": "off"
   }
 }
-

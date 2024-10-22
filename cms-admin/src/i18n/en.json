@@ -41,5 +41,19 @@
     "high-low": "High - Low",
     "sort": "Sort",
     "filter": "Filter",
-    "search in columns": "Search in columns..."
+    "search in columns": "Search in columns...",
+    "createdAt": "Created at",
+    "updatedAt": "Updated at",
+    "deletedAt": "Deleted at",
+    "createdBy": "Created by",
+    "updatedBy": "Updated by",
+    "deletedBy": "Deleted by",
+    "status": "Status",
+    "name": "Name",
+    "title": "Title",
+    "description": "Description",
+    "rowsPerPage": "Rows per page",
+    "page": "Page",
+    "of": "of",
+    "goToPage": "Go to page"
 }
