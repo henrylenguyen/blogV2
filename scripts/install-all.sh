@@ -8,4 +8,8 @@ cd ../frontend && npm install
 echo "Installing dependencies for backend..."
 cd ../server && npm install
 
+echo "Installing dependencies for booking meeting..."
+cd ../book-meeting && npm install
+
 echo "All dependencies installed!"
+.

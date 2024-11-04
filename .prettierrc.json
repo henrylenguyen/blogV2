@@ -1,11 +1,47 @@
 {
   "arrowParens": "always",
-  "semi": false,
-  "trailingComma": "none",
-  "tabWidth": 2,
+  "bracketSpacing": true,
+  "editor.codeActionsOnSave": {
+    "source.fixAll.eslint": true
+  },
+  "editor.defaultFormatter": "esbenp.prettier-vscode",
+  "editor.formatOnSave": true,
+  "embeddedLanguageFormatting": "auto",
   "endOfLine": "auto",
-  "useTabs": false,
-  "singleQuote": true,
+  "htmlWhitespaceSensitivity": "css",
+  "insertPragma": false,
+  "jsxBracketSameLine": false,
+  "jsxSingleQuote": true,
+  "overrides": [
+    {
+      "files": "*.json",
+      "options": {
+        "printWidth": 200
+      }
+    }
+  ],
+  "plugins": [
+    "prettier-plugin-sort-json",
+    "@ianvs/prettier-plugin-sort-imports",
+    "prettier-plugin-packagejson",
+    "prettier-plugin-css-order",
+    "prettier-plugin-organize-imports",
+    "prettier-plugin-tailwindcss"
+  ],
+  "prettier.configPath": ".prettierrc.json",
+  "prettier.disableLanguages": ["javascript", "javascriptreact"],
+  "prettier.ignorePath": ".prettierignore",
+  "prettier.requireConfig": false,
+  "prettier.useEditorConfig": false,
   "printWidth": 120,
-  "jsxSingleQuote": true
+  "proseWrap": "preserve",
+  "quoteProps": "as-needed",
+  "requirePragma": false,
+  "semi": false,
+  "singleQuote": true,
+  "tabWidth": 2,
+  "tailwindConfig": "**/tailwind.config.js",
+  "trailingComma": "none",
+  "useTabs": false,
+  "vueIndentScriptAndStyle": false
 }
