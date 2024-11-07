@@ -13,3 +13,5 @@ data/
 /my-docs/node_modules/
 /server/node_modules/
 /server/dist/
+/book-meetings/node_modules/
+/book-meetings/dist/
