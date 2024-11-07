@@ -137,12 +137,12 @@ const MultiFilter: React.FunctionComponent<IMultiFilterProps> = ({
     <div className='flex items-center gap-2'>
       <DropdownMenu open={open} onOpenChange={setOpen}>
         <DropdownMenuTrigger asChild>
-          <div className='flex-shrink-0 w-[18px] flex items-center h-full justify-center outline-none border-none '>
+          <div className='flex h-full w-[18px] flex-shrink-0 items-center justify-center border-none outline-none'>
             <Filter className='h-[18px] w-[18px] cursor-pointer' onClick={() => setOpen(true)} />
           </div>
         </DropdownMenuTrigger>
         <DropdownMenuContent className='w-[300px]'>
-          <DropdownMenuGroup className='py-3 flex flex-col gap-3 text-[16px]'>
+          <DropdownMenuGroup className='flex flex-col gap-3 py-3 text-[16px]'>
             {isSearch && (
               <DropdownMenuSub>
                 <Search

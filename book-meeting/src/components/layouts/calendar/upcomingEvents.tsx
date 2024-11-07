@@ -12,7 +12,6 @@ import { NavLink, useLocation } from 'react-router-dom'
 // eslint-disable-next-line prettier/prettier
 interface UpcomingEventsProps { }
 const UpcomingEvents: React.FC<UpcomingEventsProps> = () => {
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const { dataAppointment, dataEvents, isLoading } = useFetchAppointmentsAndEvents()
   const { language } = useLanguage()
   const location = useLocation().pathname.split('/')[2]

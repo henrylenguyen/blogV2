@@ -33,8 +33,8 @@ export const columns: ColumnModel[] = [
     label: '',
     render: (row) => (
       <div className='flex space-x-2'>
-        <button className='bg-blue-500 text-white px-2 py-1 rounded'>Edit</button>
-        <button className='bg-red-500 text-white px-2 py-1 rounded'>Delete</button>
+        <button className='rounded bg-blue-500 px-2 py-1 text-white'>Edit</button>
+        <button className='rounded bg-red-500 px-2 py-1 text-white'>Delete</button>
       </div>
     ),
     hideable: false

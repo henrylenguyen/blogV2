@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { SortingFn } from "@tanstack/react-table"
+import { SortingFn } from '@tanstack/react-table'
 
 // Hàm sắp xếp cho văn bản
 const sortTextFn: SortingFn<any> = (rowA, rowB, columnId) => {
@@ -22,4 +22,4 @@ const sortDateFn: SortingFn<any> = (rowA, rowB, columnId) => {
   return dateA.getTime() - dateB.getTime() // Old to new
 }
 
-export { sortTextFn, sortNumberFn, sortDateFn }
+export { sortDateFn, sortNumberFn, sortTextFn }

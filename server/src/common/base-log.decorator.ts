@@ -3,7 +3,6 @@ import { ConfigService } from '@nestjs/config'
 import httpStatus from 'src/common/base.enum'
 import { IResponseData, ResponseData } from 'src/common/base.reponse'
 import { TelegramService } from 'src/modules/telegram/telegram.service'
-// eslint-disable-next-line @typescript-eslint/no-var-requires
 
 @Catch()
 export class AllExceptionsFilter implements ExceptionFilter {

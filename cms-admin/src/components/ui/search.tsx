@@ -43,12 +43,12 @@ const Search: React.FunctionComponent<ISearchProps> = ({
     <div className={cn('relative h-full w-full', className)}>
       <div className='pointer-events-none absolute inset-y-0 start-0 flex items-center gap-2 ps-3'>
         <SearchIcon className='size-4' />
-        <div className='h-1/2 w-[1px] bg-gray-lighter' />
+        <div className='bg-gray-lighter h-1/2 w-[1px]' />
       </div>
       <input
         type='search'
         id='default-search'
-        className={cn('block w-full rounded-lg border border-gray-300 px-3 py-2.5 ps-12 text-sm  shadow-1xl')}
+        className={cn('shadow-1xl block w-full rounded-lg border border-gray-300 px-3 py-2.5 ps-12 text-sm')}
         placeholder={placeHolder}
         required
         onChange={(e) => handleOnSearch(e.target.value)}

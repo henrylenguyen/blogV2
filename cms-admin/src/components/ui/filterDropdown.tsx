@@ -5,7 +5,16 @@ import {
   DropdownMenuGroup,
   DropdownMenuTrigger
 } from '@/components/ui/dropdown-menu'
-import { ArrowDown01, ArrowDown10, ArrowDownAZ, ArrowDownWideNarrow, ArrowDownZA, ArrowUpNarrowWide, Filter, X } from 'lucide-react'
+import {
+  ArrowDown01,
+  ArrowDown10,
+  ArrowDownAZ,
+  ArrowDownWideNarrow,
+  ArrowDownZA,
+  ArrowUpNarrowWide,
+  Filter,
+  X
+} from 'lucide-react'
 import React, { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 
@@ -39,12 +48,7 @@ interface IFilterSelectProps {
  * />
  * ```
  */
-const FilterDropdown: React.FunctionComponent<IFilterSelectProps> = ({
-  optionFilter,
-  onChange,
-  isSort,
-  sortType
-}) => {
+const FilterDropdown: React.FunctionComponent<IFilterSelectProps> = ({ optionFilter, onChange, isSort, sortType }) => {
   const [value, setValue] = useState<{
     id: number | null
     checked: boolean
@@ -53,13 +57,13 @@ const FilterDropdown: React.FunctionComponent<IFilterSelectProps> = ({
     checked: false
   })
   const [open, setOpen] = useState(false)
-    const [sortValue, setSortValue] = useState<{
-      id: number | null
-      checked: boolean
-    }>({
-      id: null,
-      checked: false
-    })
+  const [sortValue, setSortValue] = useState<{
+    id: number | null
+    checked: boolean
+  }>({
+    id: null,
+    checked: false
+  })
   let sortOptions: { value: string; label: string; icon: React.ReactNode }[] = []
   const { t } = useTranslation()
   switch (sortType) {
@@ -88,7 +92,7 @@ const FilterDropdown: React.FunctionComponent<IFilterSelectProps> = ({
       ]
   }
   const handleFilterChange = (value: { checked: boolean; value: string; id: number }) => {
-    console.log("value:", value)
+    console.log('value:', value)
     if (onChange) {
       if (value.checked) {
         onChange(value.value)
@@ -126,12 +130,12 @@ const FilterDropdown: React.FunctionComponent<IFilterSelectProps> = ({
     <div className='flex items-center gap-2'>
       <DropdownMenu open={open} onOpenChange={setOpen}>
         <DropdownMenuTrigger asChild>
-          <div className='flex-shrink-0 w-[18px] flex items-center h-full justify-center outline-none border-none '>
+          <div className='flex h-full w-[18px] flex-shrink-0 items-center justify-center border-none outline-none'>
             <Filter className='h-[18px] w-[18px] cursor-pointer' onClick={() => setOpen(true)} />
           </div>
         </DropdownMenuTrigger>
         <DropdownMenuContent className='w-[300px]'>
-          <DropdownMenuGroup className='py-3 flex flex-col gap-3 text-[16px]'>
+          <DropdownMenuGroup className='flex flex-col gap-3 py-3 text-[16px]'>
             {optionFilter &&
               !isSort &&
               optionFilter?.length > 0 &&

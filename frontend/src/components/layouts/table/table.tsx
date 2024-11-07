@@ -128,8 +128,8 @@ const Table: React.FC<TableProps> = ({ data, columns }) => {
 
   return (
     <div className='p-2'>
-      <div className='inline-block border border-black shadow rounded'>
-        <div className='px-1 border-b border-black'>
+      <div className='inline-block rounded border border-black shadow'>
+        <div className='border-b border-black px-1'>
           <label>
             <input
               {...{
@@ -160,7 +160,7 @@ const Table: React.FC<TableProps> = ({ data, columns }) => {
       </div>
       <div
         style={{ direction: table.options.columnResizeDirection }}
-        className='max-w-full overflow-x-scroll overflow-y-hidden'
+        className='max-w-full overflow-y-hidden overflow-x-scroll'
       >
         <div className='w-full'>
           <div
@@ -239,24 +239,24 @@ const Table: React.FC<TableProps> = ({ data, columns }) => {
       {/* Phân trang */}
       <div className='flex items-center gap-2'>
         <button
-          className='border rounded p-1'
+          className='rounded border p-1'
           onClick={() => table.setPageIndex(0)}
           disabled={!table.getCanPreviousPage()}
         >
           {'<<'}
         </button>
         <button
-          className='border rounded p-1'
+          className='rounded border p-1'
           onClick={() => table.previousPage()}
           disabled={!table.getCanPreviousPage()}
         >
           {'<'}
         </button>
-        <button className='border rounded p-1' onClick={() => table.nextPage()} disabled={!table.getCanNextPage()}>
+        <button className='rounded border p-1' onClick={() => table.nextPage()} disabled={!table.getCanNextPage()}>
           {'>'}
         </button>
         <button
-          className='border rounded p-1'
+          className='rounded border p-1'
           onClick={() => table.setPageIndex(table.getPageCount() - 1)}
           disabled={!table.getCanNextPage()}
         >
@@ -279,7 +279,7 @@ const Table: React.FC<TableProps> = ({ data, columns }) => {
               const page = e.target.value ? Number(e.target.value) - 1 : 0
               table.setPageIndex(page)
             }}
-            className='border p-1 rounded w-16'
+            className='w-16 rounded border p-1'
           />
         </span>
         <select
@@ -348,7 +348,7 @@ function Filter({ column }: { column: Column<any, unknown> }) {
           placeholder={`Min ${
             column.getFacetedMinMaxValues()?.[0] !== undefined ? `(${column.getFacetedMinMaxValues()?.[0]})` : ''
           }`}
-          className='w-24 border shadow rounded'
+          className='w-24 rounded border shadow'
         />
         <DebouncedInput
           type='number'
@@ -357,7 +357,7 @@ function Filter({ column }: { column: Column<any, unknown> }) {
           value={(columnFilterValue as [number, number])?.[1] ?? ''}
           onChange={(value) => column.setFilterValue((old: [number, number]) => [old?.[0], value])}
           placeholder={`Max ${column.getFacetedMinMaxValues()?.[1] ? `(${column.getFacetedMinMaxValues()?.[1]})` : ''}`}
-          className='w-24 border shadow rounded'
+          className='w-24 rounded border shadow'
         />
       </div>
       <div className='h-1' />
@@ -385,7 +385,7 @@ function Filter({ column }: { column: Column<any, unknown> }) {
         value={(columnFilterValue ?? '') as string}
         onChange={(value) => column.setFilterValue(value)}
         placeholder={`Search... (${column.getFacetedUniqueValues().size})`}
-        className='w-36 border shadow rounded'
+        className='w-36 rounded border shadow'
         list={column.id + 'list'}
       />
       <div className='h-1' />

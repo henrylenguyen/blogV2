@@ -44,7 +44,7 @@ const EventDialog: React.FC<IEventDialogProps> = ({ isDialogOpen, setIsDialogOpe
   })
   useEffect(() => {
     form.reset(eventData)
-    return () => { }
+    return () => {}
   }, [eventData, form])
 
   const handleOnSubmit = useCallback(async (values: any) => {

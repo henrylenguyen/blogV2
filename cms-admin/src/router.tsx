@@ -1,7 +1,7 @@
-import { Analytics, Dashboard } from "@/page/dashboard"
-import LayoutAdmin from "@/page/layout"
-import ListRepositoryPage from "@/page/repositories/list-repositories/page"
-import { useRoutes } from "react-router-dom"
+import { Analytics, Dashboard } from '@/page/dashboard'
+import LayoutAdmin from '@/page/layout'
+import ListRepositoryPage from '@/page/repositories/list-repositories/page'
+import { useRoutes } from 'react-router-dom'
 
 export default function useRouteElement() {
   const element = useRoutes([
@@ -11,7 +11,7 @@ export default function useRouteElement() {
       children: [
         { path: '', element: <Dashboard /> }, // Route dashboard
         { path: 'dashboard/analytics', element: <Analytics /> }, // Route analytics
-        {path: 'repositories/list-repositories', element: <ListRepositoryPage/>}
+        { path: 'repositories/list-repositories', element: <ListRepositoryPage /> }
       ]
     }
   ])

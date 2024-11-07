@@ -33,7 +33,7 @@ const CalenadarContainer: React.FunctionComponent<ICalenadarContainerProps> = ()
     isOpen: false,
     data: null
   })
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+
   const { dataAppointment, dataEvents, isLoading } = useFetchAppointmentsAndEvents()
 
   return isLoading ? (

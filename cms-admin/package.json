@@ -81,7 +81,7 @@
   },
   "eslintConfig": {
     "extends": [
-      "../.eslintrc.json",
+      "../.eslintrc.cjs",
       "plugin:storybook/recommended"
     ]
   },

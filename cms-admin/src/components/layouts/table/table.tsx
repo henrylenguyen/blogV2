@@ -1,8 +1,5 @@
 import { ColumnModel, UserData } from '@/components/layouts/table/types'
 import { sortDateFn, sortNumberFn, sortTextFn } from '@/components/layouts/table/utils'
-import FilterDropdown from '@/components/ui/filterDropdown'
-import MultiFilter from '@/components/ui/multiFilter'
-import SearchDropdown from '@/components/ui/searchDropdown'
 import {
   ColumnDef,
   ColumnFiltersState,
@@ -17,10 +14,10 @@ import {
   getSortedRowModel,
   useReactTable
 } from '@tanstack/react-table'
+import { ArrowLeftToLine, ArrowRightToLine, MoveLeft, MoveRight } from 'lucide-react'
 import React, { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import './index.scss'
-import { ArrowLeftToLine, ArrowRightToLine, MoveLeft, MoveRight } from 'lucide-react'
 
 interface TableProps {
   data: UserData[]
@@ -105,7 +102,7 @@ const TableComponent: React.FC<TableProps> = ({
       return {
         accessorKey: key,
         header: () => (
-          <div className='flex gap-2 flex-shrink-0 w-full h-full justify-between items-center'>
+          <div className='flex h-full w-full flex-shrink-0 items-center justify-between gap-2'>
             <span className='flex-shrink-0'>{t(label)}</span>
             {/* Các logic điều kiện khác */}
           </div>
@@ -118,7 +115,6 @@ const TableComponent: React.FC<TableProps> = ({
 
     return selectionColumn ? [selectionColumn, ...dataColumns] : dataColumns
   }, [columns, isRowSelection])
-
 
   const calculateLeftOffset = (columnIndex: number) => {
     let leftOffset = 0
@@ -169,10 +165,10 @@ const TableComponent: React.FC<TableProps> = ({
 
   return (
     <div className='p-2'>
-      <div className='inline-block border border-black shadow rounded'>
+      <div className='inline-block rounded border border-black shadow'>
         {/* Checkboxes to lock/unlock columns */}
         {lockedable && (
-          <div className='px-1 border-b border-black'>
+          <div className='border-b border-black px-1'>
             {table.getAllLeafColumns().map((column, columnIndex) => (
               <div key={column.id} className='px-1'>
                 <label>
@@ -189,7 +185,7 @@ const TableComponent: React.FC<TableProps> = ({
         )}
         {hiddenable && (
           <>
-            <div className='px-1 border-b border-black'>
+            <div className='border-b border-black px-1'>
               <label>
                 <input
                   {...{
@@ -220,7 +216,7 @@ const TableComponent: React.FC<TableProps> = ({
           </>
         )}
       </div>
-      <div className='min-h-[500px] bg-secondary-dark rounded-xl py-6 border border-secondary-gray'>
+      <div className='min-h-[500px] rounded-xl border border-secondary-gray bg-secondary-dark py-6'>
         <div className='flex min-h-[500px]'>
           {/* Div for locked columns */}
           <div className='locked-columns min-w-fit' style={{ overflow: 'hidden', position: 'relative' }}>
@@ -288,7 +284,7 @@ const TableComponent: React.FC<TableProps> = ({
           </div>
 
           {/* Div for scrollable columns */}
-          <div className='scroll-container overflow-x-auto '>
+          <div className='scroll-container overflow-x-auto'>
             <table>
               <thead>
                 {table.getHeaderGroups().map((headerGroup) => (
@@ -345,7 +341,7 @@ const TableComponent: React.FC<TableProps> = ({
       </div>
 
       {/* Phân trang */}
-      <div className='flex items-center gap-2 mt-8 justify-between'>
+      <div className='mt-8 flex items-center justify-between gap-2'>
         <div className='flex gap-3'>
           <div className='flex items-center gap-1'>
             <span>{t('page')}</span>
@@ -364,18 +360,18 @@ const TableComponent: React.FC<TableProps> = ({
                 const page = e.target.value ? Number(e.target.value) - 1 : 0
                 table.setPageIndex(page)
               }}
-              className='border rounded-md p-2 bg-neutral-700 w-[70px] h-[30px] flex items-center justify-center '
+              className='flex h-[30px] w-[70px] items-center justify-center rounded-md border bg-neutral-700 p-2'
             />
           </div>
         </div>
-        <div className='flex gap-4 items-center'>
+        <div className='flex items-center gap-4'>
           {isShowNumberPerPage && (
-            <div className='flex gap-4 items-center'>
+            <div className='flex items-center gap-4'>
               <label>{t('rowsPerPage')}</label>
               <select
                 value={table.getState().pagination.pageSize}
                 onChange={(e) => table.setPageSize(Number(e.target.value))}
-                className='rounded-md p-2 bg-neutral-700 w-[70px] h-[40px] cursor-pointer'
+                className='h-[40px] w-[70px] cursor-pointer rounded-md bg-neutral-700 p-2'
               >
                 {[10, 20, 50, 100].map((pageSize) => (
                   <option key={pageSize} value={pageSize}>
@@ -387,32 +383,32 @@ const TableComponent: React.FC<TableProps> = ({
           )}
           <div className='flex gap-2'>
             <button
-              className='border rounded-md p-2 bg-neutral-700 w-[40px] h-[30px] flex items-center justify-center cursor-pointer'
+              className='flex h-[30px] w-[40px] cursor-pointer items-center justify-center rounded-md border bg-neutral-700 p-2'
               onClick={() => table.setPageIndex(0)}
               disabled={!table.getCanPreviousPage()}
             >
-              <ArrowLeftToLine className='w-[15px] h-[15px]' />
+              <ArrowLeftToLine className='h-[15px] w-[15px]' />
             </button>
             <button
-              className='border rounded-md p-2 bg-neutral-700 w-[40px] h-[30px] flex items-center justify-center cursor-pointer'
+              className='flex h-[30px] w-[40px] cursor-pointer items-center justify-center rounded-md border bg-neutral-700 p-2'
               onClick={() => table.previousPage()}
               disabled={!table.getCanPreviousPage()}
             >
-              <MoveLeft className='w-[15px] h-[15px]' />
+              <MoveLeft className='h-[15px] w-[15px]' />
             </button>
             <button
-              className='border rounded-md p-2 bg-neutral-700 w-[40px] h-[30px] flex items-center justify-center cursor-pointer'
+              className='flex h-[30px] w-[40px] cursor-pointer items-center justify-center rounded-md border bg-neutral-700 p-2'
               onClick={() => table.nextPage()}
               disabled={!table.getCanNextPage()}
             >
-              <MoveRight className='w-[15px] h-[15px]' />
+              <MoveRight className='h-[15px] w-[15px]' />
             </button>
             <button
-              className='border rounded-md p-2 bg-neutral-700 w-[40px] h-[30px] flex items-center justify-center cursor-pointer'
+              className='flex h-[30px] w-[40px] cursor-pointer items-center justify-center rounded-md border bg-neutral-700 p-2'
               onClick={() => table.setPageIndex(table.getPageCount() - 1)}
               disabled={!table.getCanNextPage()}
             >
-              <ArrowRightToLine className='w-[15px] h-[15px]' />
+              <ArrowRightToLine className='h-[15px] w-[15px]' />
             </button>
           </div>
         </div>

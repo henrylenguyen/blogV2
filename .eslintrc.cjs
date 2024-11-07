@@ -4,12 +4,11 @@ module.exports = {
   extends: [
     'eslint:recommended',
     'plugin:@typescript-eslint/recommended',
-    'plugin:react-hooks/recommended',
     'plugin:prettier/recommended'
   ],
   ignorePatterns: ['dist', '.eslintrc.cjs', "node_modules/", "out/", "public/", "tailwind.config.js"],
   parser: '@typescript-eslint/parser',
-  plugins: ['react-refresh', 'prettier', 'tailwindcss', 'unused-imports'],
+  plugins: [ 'prettier', 'tailwindcss', 'unused-imports'],
   rules: {
     'react-refresh/only-export-components': [
       'warn',
@@ -31,9 +30,13 @@ module.exports = {
         printWidth: 120,
         jsxSingleQuote: true,
         plugins: [
-          'prettier-plugin-tailwindcss',
-          '@ianvs/prettier-plugin-sort-imports'
-        ]
+          "prettier-plugin-sort-json",
+          "@ianvs/prettier-plugin-sort-imports",
+          "prettier-plugin-packagejson",
+          "prettier-plugin-css-order",
+          "prettier-plugin-organize-imports",
+          "prettier-plugin-tailwindcss"
+        ],
       }
     ]
   },

@@ -6,9 +6,9 @@ interface ILayoutAdminProps {}
 
 const LayoutAdmin: React.FunctionComponent<ILayoutAdminProps> = ({ children }) => {
   return (
-    <div className='relative container w-full min-h-screen mx-auto flex bg-neutral-800 text-white'>
+    <div className='container relative mx-auto flex min-h-screen w-full bg-neutral-800 text-white'>
       <NavbarAdmin />
-      <main className='p-6 w-full h-screen overflow-x-hidden'>
+      <main className='h-screen w-full overflow-x-hidden p-6'>
         <Outlet />
       </main>
     </div>

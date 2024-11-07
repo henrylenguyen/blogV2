@@ -1,4 +1,4 @@
-import http from "@/utils/http";
+import http from '@/utils/http'
 
 const repositoryAPI = {
   getAllSiteCollection: async () => {
@@ -8,9 +8,8 @@ const repositoryAPI = {
         return res.data.data
       }
     } catch (error) {
-      throw new Error(error as string);
-      
+      throw new Error(error as string)
     }
   }
 }
-export default repositoryAPI;
+export default repositoryAPI

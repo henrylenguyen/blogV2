@@ -60,7 +60,7 @@
     "wait-on": "^8.0.1"
   },
   "eslintConfig": {
-    "extends": "../.eslintrc.json"
+    "extends": "../.eslintrc.cjs"
   },
   "prettier": "../.prettierrc.json"
 }

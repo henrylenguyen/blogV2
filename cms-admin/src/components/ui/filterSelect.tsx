@@ -1,6 +1,6 @@
 import { Select, SelectContent, SelectGroup, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
 import { cn } from '@/lib/utils'
-import { Filter, X } from 'lucide-react'
+import { Filter } from 'lucide-react'
 import * as React from 'react'
 import { isDesktop } from 'react-device-detect'
 
@@ -60,7 +60,7 @@ const FilterSelect: React.FunctionComponent<IFilterSelectProps> = ({
       >
         <SelectTrigger
           className={cn(
-            'relative flex-shrink-0 w-[18px] p-0 h-full justify-center outline-none border-none focus:ring-0',
+            'relative h-full w-[18px] flex-shrink-0 justify-center border-none p-0 outline-none focus:ring-0',
             triggerClassName
           )}
         >
@@ -68,7 +68,7 @@ const FilterSelect: React.FunctionComponent<IFilterSelectProps> = ({
 
           {/* Hiển thị value */}
           {value && isDesktop && isShowValue && (
-            <p className='text-[16px] text-black-main xs:hidden sm:flex'>
+            <p className='text-black-main xs:hidden text-[16px] sm:flex'>
               {option.find((otp) => otp.value === value)?.label}
             </p>
           )}
@@ -87,7 +87,6 @@ const FilterSelect: React.FunctionComponent<IFilterSelectProps> = ({
           </SelectGroup>
         </SelectContent>
       </Select>
-      
     </div>
   )
 }

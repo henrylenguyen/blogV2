@@ -1,6 +1,6 @@
 import createMiddleware from 'next-intl/middleware'
-import { routing } from './i18n/routing'
 import { NextRequest } from 'next/server'
+import { routing } from './i18n/routing'
 
 export default async function middleware(request: NextRequest) {
   // Step 1: Use the incoming request
